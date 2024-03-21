@@ -1,0 +1,5 @@
+Datumstand: 21.3.2024
+
+1, gof_df not present (cell 17, 23)
+2, streamflow not present (cell 33)
+3, Naming Inconsistency: SWE/initial_SWE, SMS/initial_SMS (cell 12)

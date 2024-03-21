@@ -1,0 +1,8 @@
+\begin{thebibliography}{Gra17}
+
+\bibitem[Gra17]{gratl17task}
+Fabio~Alexander Gratl.
+\newblock Task based parallelization of the fast multipole method implementation of ls1-mardyn via quicksched.
+\newblock Master's thesis, Institut für Informatik 5, Technische Universität München, Garching, November 2017.
+
+\end{thebibliography}
