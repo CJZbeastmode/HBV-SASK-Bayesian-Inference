@@ -8,3 +8,5 @@ def likelihood_normmeasured(y_model, y_observed):
     if np.isnan(logp):
         logp = -np.inf
     return logp
+
+# independant

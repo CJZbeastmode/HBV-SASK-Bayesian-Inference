@@ -16,7 +16,7 @@ model = get_model()
 if __name__ == "__main__": 
     start = time.time()
     separate_chain = False
-    run_mcmc = run_mcmc_dream
+    run_mcmc = run_mcmc_gpmh
     sampled_params, total_iterations = run_mcmc()
     end = time.time()
     print("Time needed: " + str(end - start))
@@ -63,11 +63,11 @@ if __name__ == "__main__":
         np.savetxt('mcmc_sep_data.out', samples, delimiter=',', header=header) 
     else:
         #if mode == 'MH':
-        #    np.savetxt('mcmc_data.out', old_samples[burnin:], delimiter=',', header='TT,C0,beta,ETF,FC,FRAC,K2') 
+        np.savetxt('mcmc_data.out', old_samples[burnin:], delimiter=',', header='TT,C0,beta,ETF,FC,FRAC,K2') 
         #else:
-        samples = np.concatenate((old_samples[0][burnin:, :], old_samples[1][burnin:, :], old_samples[2][burnin:, :],
-                                            old_samples[3][burnin:, :], old_samples[4][burnin:, :]))
-        np.savetxt('mcmc_data.out', samples, delimiter=',', header='TT,C0,beta,ETF,FC,FRAC,K2') 
+        #samples = np.concatenate((old_samples[0][burnin:, :], old_samples[1][burnin:, :], old_samples[2][burnin:, :],
+        #                                    old_samples[3][burnin:, :], old_samples[4][burnin:, :]))
+        #np.savetxt('mcmc_data.out', samples, delimiter=',', header='TT,C0,beta,ETF,FC,FRAC,K2') 
 
     """
     if save_image:

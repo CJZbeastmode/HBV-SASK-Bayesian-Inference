@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Homebrew) (preloaded format=pdflatex 2024.3.20)  21 MAR 2024 15:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Homebrew) (preloaded format=pdflatex 2024.3.20)  3 MAY 2024 14:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/Users/jay/Desktop/studentstarterclues/ThesisTemplate/main.tex
-(/Users/jay/Desktop/studentstarterclues/ThesisTemplate/main.tex
+**/Users/jay/Desktop/Bachelorarbeit/Thesis/main.tex
+(/Users/jay/Desktop/Bachelorarbeit/Thesis/main.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
 (/opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/koma-script/scrbook.cls
@@ -1385,84 +1385,92 @@ Class scrbook Warning: \float@addtolists detected!
 (scrbook)              a package that still implements the
 (scrbook)              deprecated \float@addtolist interface.
 
+(./chapters/MCMC.tex [2
+
+]
+chapter 2.
+) [3
+
+]
+chapter 3.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-[2
+[4
 
 {/opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-<figures/scenario_clip_rot.png, id=135, 4621.265pt x 3248.135pt>
+<figures/scenario_clip_rot.png, id=147, 4621.265pt x 3248.135pt>
 File: figures/scenario_clip_rot.png Graphic file (type png)
 <use figures/scenario_clip_rot.png>
-Package pdftex.def Info: figures/scenario_clip_rot.png  used on input line 236.
+Package pdftex.def Info: figures/scenario_clip_rot.png  used on input line 241.
 (pdftex.def)             Requested size: 181.5096pt x 127.57384pt.
 File: figures/scenario_clip_rot.png Graphic file (type png)
 <use figures/scenario_clip_rot.png>
-Package pdftex.def Info: figures/scenario_clip_rot.png  used on input line 247.
+Package pdftex.def Info: figures/scenario_clip_rot.png  used on input line 252.
 (pdftex.def)             Requested size: 181.5096pt x 127.57384pt.
-<example-image-a.pdf, id=138, 321.2pt x 240.9pt>
+<example-image-a.pdf, id=150, 321.2pt x 240.9pt>
 File: example-image-a.pdf Graphic file (type pdf)
 <use example-image-a.pdf>
-Package pdftex.def Info: example-image-a.pdf  used on input line 263.
+Package pdftex.def Info: example-image-a.pdf  used on input line 268.
 (pdftex.def)             Requested size: 143.00873pt x 107.25713pt.
-<example-image-b.pdf, id=139, 321.2pt x 240.9pt>
+<example-image-b.pdf, id=151, 321.2pt x 240.9pt>
 File: example-image-b.pdf Graphic file (type pdf)
 <use example-image-b.pdf>
-Package pdftex.def Info: example-image-b.pdf  used on input line 268.
+Package pdftex.def Info: example-image-b.pdf  used on input line 273.
 (pdftex.def)             Requested size: 143.00873pt x 107.25713pt.
-<example-image-c.pdf, id=140, 321.2pt x 240.9pt>
+<example-image-c.pdf, id=152, 321.2pt x 240.9pt>
 File: example-image-c.pdf Graphic file (type pdf)
 <use example-image-c.pdf>
-Package pdftex.def Info: example-image-c.pdf  used on input line 273.
+Package pdftex.def Info: example-image-c.pdf  used on input line 278.
 (pdftex.def)             Requested size: 143.00873pt x 107.25713pt.
- [3
+ [5
 
- <./figures/scenario_clip_rot.png (PNG copy)> </opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/mwe/example-image-a.pdf> </opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/mwe/example-image-b.pdf> </opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/mwe/example-image-c.pdf>] [4] (/opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/listings/lstlang1.sty
+ <./figures/scenario_clip_rot.png (PNG copy)> </opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/mwe/example-image-a.pdf> </opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/mwe/example-image-b.pdf> </opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/mwe/example-image-c.pdf>] [6] (/opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2024/02/21 1.10 listings language file
 ) (/opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2024/02/21 1.10 listings language file
 ) (/opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2024/02/21 1.10 (Carsten Heinz)
 )
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 324.
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 329.
  (/opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 324.
- [5
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 329.
+ [7
 
 ]
 part II.
 Package scrkbase Info: You've told me to use the font selection of the element
 (scrkbase)             `partprefix' that is an alias of element `partnumber'
-(scrkbase)              on input line 349.
-[6
+(scrkbase)              on input line 354.
+[8
 
 ]
 chapter A.
-[7
+[9
 
 ]
-Package tocbasic Info: character protrusion at lof deactivated on input line 354.
+Package tocbasic Info: character protrusion at lof deactivated on input line 359.
  (./main.lof)
 \tf@lof=\write5
 \openout5 = `main.lof'.
 
- [8
+ [10
 
 ]
-Package tocbasic Info: character protrusion at lot deactivated on input line 356.
+Package tocbasic Info: character protrusion at lot deactivated on input line 361.
  (./main.lot)
 \tf@lot=\write6
 \openout6 = `main.lot'.
 
- (./main.bbl [9
+ (./main.bbl [11
 
 ]
 chapter without number
-) [10
+) [12
 
 ] (./main.aux)
  ***********
@@ -1471,18 +1479,18 @@ L3 programming layer <2024-02-20>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 43976 strings out of 474116
- 1000257 string characters out of 5733619
+ 43991 strings out of 474116
+ 1000409 string characters out of 5733619
  1967187 words of memory out of 5000000
- 65470 multiletter control sequences out of 15000+600000
- 576229 words of font info for 151 fonts, out of 8000000 for 9000
+ 65475 multiletter control sequences out of 15000+600000
+ 576286 words of font info for 152 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 110i,20n,112p,10953b,1547s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 110i,20n,112p,10940b,1547s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/lm/lmss17.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></opt/homebrew/Cellar/texlive/20240312/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb>
-Output written on main.pdf (24 pages, 4347984 bytes).
+Output written on main.pdf (26 pages, 4351531 bytes).
 PDF statistics:
- 391 PDF objects out of 1000 (max. 8388607)
- 312 compressed objects within 4 object streams
- 77 named destinations out of 1000 (max. 500000)
- 54446 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 411 PDF objects out of 1000 (max. 8388607)
+ 330 compressed objects within 4 object streams
+ 81 named destinations out of 1000 (max. 500000)
+ 54462 words of extra memory for PDF output out of 61914 (max. 10000000)
 

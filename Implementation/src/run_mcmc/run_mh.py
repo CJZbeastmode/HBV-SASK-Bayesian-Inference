@@ -35,5 +35,5 @@ def run_mcmc_mh():
         return likelihood_function(y_model, y_observed)
 
     parameters_to_sample = tfp.distributions.Uniform(low=param_lower, high=param_upper)
-    x = MH(parameters_to_sample.prob, None, likelihood_kernel, [1, 2.5, 2.5, 0.5, 475, 0.5, 0.05], 100000, param_lower, param_upper)
-    return x, 100000
+    x = MH(parameters_to_sample.prob, None, likelihood_kernel, [1, 2.5, 2.5, 0.5, 475, 0.5, 0.05], 10000, param_lower, param_upper)
+    return x, 10000

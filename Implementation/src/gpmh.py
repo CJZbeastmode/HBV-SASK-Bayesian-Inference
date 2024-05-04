@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-def GPMH(target, kernel, likelihood_kernel, init_state, n, N = 8):
+def GPMH(target, kernel, likelihood_kernel, init_state, n, N, lower_bound, upper_bound):
 
     d = len(init_state)
     I = 0
@@ -11,38 +11,44 @@ def GPMH(target, kernel, likelihood_kernel, init_state, n, N = 8):
     Y = np.zeros((N + 1, d))
     Y[0] = init_state
 
-    for i in range(1, N + 1):
-        Y[i] = kernel(X[0])
-
-    log_posterior = np.zeros(N + 1)
     A = np.zeros(N + 1)
     K = np.zeros(N + 1)
 
     for i in range(n):
-        for j in range(N + 1):
-            #log_post_prob = likelihood_kernel(Y[j]) + target(Y[j])
-            #log_posterior[j] = 0 if log_post_prob == float('-inf') or log_post_prob == float('inf') else log_post_prob
-            for k in range(N + 1):
-                K[k] = likelihood_kernel(Y[j], Y[k])
-            tg = target(Y[j])
-            prod_tg = 1
-            for l in range(len(tg)):
-                prod_tg *= tg[l]
-            A[j] = np.prod(K[:j]) * np.prod(K[j + 1:]) * prod_tg
-            #A[j] = 0 if A[j] == float('-inf') or A[j] == float('inf') else A[j]
+        for j in range(1, N + 1):
+            samp = kernel(Y[0])
 
+            for ind in range(len(samp)):
+                if samp[ind] < lower_bound[ind] or samp[ind] > upper_bound[ind]:
+                    samp = Y[0]
+                    break
+            Y[j] = samp
+    
+        # to parallel
+        for j in range(N + 1):
+            K = np.zeros(N + 1)
+            for k in range(N + 1):
+                if j == k:
+                    K[k] = 1
+                else:
+                    a = Y[j]
+                    b = Y[k]
+                    K[k] = np.mean(target(b) * likelihood_kernel(b) / (target(a) * likelihood_kernel(a)))
+            A[j] = 1
+            for k in range(N + 1):
+                A[j] *= K[k]
            
-        start_index = (i - 1) * N + i
-        end_index = i * (N + 1) + 1
+        start_index = i * N
+        end_index = (i + 1) * N
         A = A / np.sum(A)
-        sample_indices = np.random.choice(np.arange(0, N + 1), size=(end_index - start_index), replace=True, p=A)
-        for ind in range(end_index - start_index):
+        sample_indices = np.random.choice(np.arange(0, N + 1), size=N, replace=True, p=A)
+        
+        for ind in range(N):
             X[start_index + ind] = Y[sample_indices[ind]]
 
-        I = np.random.choice(np.arange(start_index, end_index))
-        Y[0] = X[I]
-        for j in np.arange(1, N):
-            Y[j] = kernel(X[I])
+        I = np.random.choice(np.arange(1, N + 1))
+        
+        Y[0] = Y[I]
         print(f'{i} done')
 
     return X
