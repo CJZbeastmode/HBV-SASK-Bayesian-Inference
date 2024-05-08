@@ -1,5 +1,18 @@
 import numpy as np
-import math
+from multiprocessing import Process
+
+def compute_likelihood(j, A, Y, N, target, likelihood_kernel):
+    K = np.zeros(N + 1)
+    for k in range(N + 1):
+        if j == k:
+            K[k] = 1
+        else:
+            a = Y[j]
+            b = Y[k]
+            K[k] = np.mean(target(b) * likelihood_kernel(b) / (target(a) * likelihood_kernel(a)))
+    A[j] = 1
+    for k in range(N + 1):
+        A[j] *= K[k]
 
 def GPMH(target, kernel, likelihood_kernel, init_state, n, N, lower_bound, upper_bound):
 
@@ -39,7 +52,6 @@ def GPMH(target, kernel, likelihood_kernel, init_state, n, N, lower_bound, upper
                 A[j] *= K[k]
            
         start_index = i * N
-        end_index = (i + 1) * N
         A = A / np.sum(A)
         sample_indices = np.random.choice(np.arange(0, N + 1), size=N, replace=True, p=A)
         

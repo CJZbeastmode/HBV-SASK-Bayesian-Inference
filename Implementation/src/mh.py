@@ -6,7 +6,7 @@ def MH(target, kernel, likelihood_kernel, init_state, n, p1, p2):
     for _ in range(n):
         #sample candidate from normal distribution
         a = samples[-1]
-        b = np.random.normal(a, [0.5, 2.5, 2.5, 0.5, 475, 0.5, 0.05])
+        b = np.random.normal(a, [8/6, 5/6, 3/6, 1/6, 950/6, 0.8/6, 0.1/6])
         p = [0, 0, 0, 0, 0, 0, 0]
         
         #calculate probability of accepting this candidate

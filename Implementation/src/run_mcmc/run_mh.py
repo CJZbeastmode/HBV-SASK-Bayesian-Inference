@@ -5,7 +5,6 @@ import sys
 sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation/src')
 from execute_model import run_model_single_parameter_node
 from likelihood.ll_normmeasured import likelihood_normmeasured
-from gpmh import GPMH
 from mh import MH
 from src.construct_model import get_model
 
@@ -35,5 +34,5 @@ def run_mcmc_mh():
         return likelihood_function(y_model, y_observed)
 
     parameters_to_sample = tfp.distributions.Uniform(low=param_lower, high=param_upper)
-    x = MH(parameters_to_sample.prob, None, likelihood_kernel, [1, 2.5, 2.5, 0.5, 475, 0.5, 0.05], 10000, param_lower, param_upper)
-    return x, 10000
+    x = MH(parameters_to_sample.prob, None, likelihood_kernel, [1, 2.5, 2.5, 0.5, 475, 0.5, 0.05], 50000, param_lower, param_upper)
+    return x, 50000

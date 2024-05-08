@@ -7,7 +7,7 @@ sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation')
 from dependencies.hbv_sask.model import HBVSASKModel as hbvmodel
 from dependencies.PyDREAM.pydream.convergence import Gelman_Rubin
 from src.run_mcmc.run_dream import run_mcmc_dream
-from src.run_mcmc.run_gpmh import run_mcmc_gpmh
+from src.run_mcmc.run_gpmh_parallel import run_mcmc_gpmh
 from src.run_mcmc.run_mh import run_mcmc_mh
 from src.construct_model import get_model
 
@@ -54,7 +54,7 @@ if __name__ == "__main__":
         #         converged = True
 
         # Plot output
-    burnin = int(total_iterations / 2)
+    burnin = int(total_iterations / 5)
 
     if separate_chain:
         samples = np.hstack((old_samples[0][burnin:, :], old_samples[1][burnin:, :], old_samples[2][burnin:, :],

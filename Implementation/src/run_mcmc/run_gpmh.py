@@ -3,7 +3,7 @@ import sys
 sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation/src')
 from execute_model import run_model_single_parameter_node
 from likelihood.ll_normmeasured import likelihood_normmeasured
-from gpmh_aggregation import GPMH
+from Implementation.src.run_mcmc.run_gpmh_parallel import GPMH
 from construct_model import get_model
 import tensorflow_probability as tfp
 import numpy as np
