@@ -32,7 +32,10 @@ def run_mcmc_mh():
     def likelihood_kernel(param_vec):
         _, y_model, y_observed, _ = run_model_single_parameter_node(model, param_vec)
         return likelihood_function(y_model, y_observed)
+    
+    def sample_kernel(x):
+        return np.random.normal(x, [8/6, 5/6, 3/6, 1/6, 950/6, 0.8/6, 0.1/6])
 
     parameters_to_sample = tfp.distributions.Uniform(low=param_lower, high=param_upper)
-    x = MH(parameters_to_sample.prob, None, likelihood_kernel, [1, 2.5, 2.5, 0.5, 475, 0.5, 0.05], 50000, param_lower, param_upper)
-    return x, 50000
+    x = MH(parameters_to_sample.prob, sample_kernel, likelihood_kernel, [1, 2.5, 2.5, 0.5, 475, 0.5, 0.05], 10000, param_lower, param_upper)
+    return x, 10000

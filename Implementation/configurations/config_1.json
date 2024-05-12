@@ -64,14 +64,14 @@
       "name": "C0",
       "distribution": "Uniform",
       "lower": 0.0,
-      "upper": 5.0,
+      "upper": 10.0,
       "default": 2.0
     },
     {
       "name": "beta",
       "distribution": "Uniform",
       "lower": 1.0,
-      "upper": 4.0,
+      "upper": 3.0,
       "default": 2.0
     },
     {
@@ -85,7 +85,7 @@
       "name": "FC",
       "distribution": "Uniform",
       "lower": 50.0,
-      "upper": 1000.0,
+      "upper": 500.0,
       "default": 250
     },
     {
@@ -99,7 +99,7 @@
       "name": "K2",
       "distribution": "Uniform",
       "lower": 0.0,
-      "upper": 0.1,
+      "upper": 0.05,
       "default": 0.025
     }
   ],

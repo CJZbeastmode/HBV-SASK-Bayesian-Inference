@@ -1,12 +1,12 @@
 import numpy as np
 
-def MH(target, kernel, likelihood_kernel, init_state, n, p1, p2):
+def MH(target, sample_kernel, likelihood_kernel, init_state, n, lower_bounds, upper_bounds):
     samples = [np.array(init_state)]
     num_accept = 0
     for _ in range(n):
         #sample candidate from normal distribution
         a = samples[-1]
-        b = np.random.normal(a, [8/6, 5/6, 3/6, 1/6, 950/6, 0.8/6, 0.1/6])
+        b = sample_kernel(a)
         p = [0, 0, 0, 0, 0, 0, 0]
         
         #calculate probability of accepting this candidate
@@ -15,7 +15,7 @@ def MH(target, kernel, likelihood_kernel, init_state, n, p1, p2):
         reject = False
 
         for i in range(len(b)):
-            if b[i] < p1[i] or b[i] > p2[i]:
+            if b[i] < lower_bounds[i] or b[i] > upper_bounds[i]:
                 invalid = True
                 break
         
