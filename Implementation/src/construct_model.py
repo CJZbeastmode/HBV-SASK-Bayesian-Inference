@@ -3,25 +3,30 @@ import pathlib
 
 sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation')
 from dependencies.hbv_sask.model import HBVSASKModel as hbvmodel
-from dependencies.PyDREAM.pydream.convergence import Gelman_Rubin
 
+#configurationObject = pathlib.Path('/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_1.json')
+#basis = "Oldman_Basin"
 hbv_model_data_path = pathlib.Path("/Users/jay/Desktop/Bachelorarbeit/Implementation/dependencies/hbv_sask/data")
-configurationObject = pathlib.Path('/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_1.json')
 inputModelDir = hbv_model_data_path
-basis = "Oldman_Basin"  # 'Banff_Basin'
-workingDir = hbv_model_data_path / basis / "model_runs" / "running_the_model_parallel_simple"
 
-writing_results_to_a_file = False
-plotting = False
-createNewFolder = False  # create a separate folder to save results for each model run
-model = hbvmodel.HBVSASKModel(
-    configurationObject=configurationObject,
-    inputModelDir=inputModelDir,
-    workingDir=workingDir,
-    basis=basis,
-    writing_results_to_a_file=writing_results_to_a_file,
-    plotting=plotting
-)
+def get_model(configurationPath, basis):
+    model = hbvmodel.HBVSASKModel(
+        configurationObject=pathlib.Path(configurationPath),
+        inputModelDir=inputModelDir,
+        workingDir=hbv_model_data_path / basis / "model_runs" / "running_the_model_parallel_simple",
+        basis=basis,
+        writing_results_to_a_file=False,
+        plotting=False
+    )
+    print(f"start_date: {model.start_date}")
+    print(f"start_date_predictions: {model.start_date_predictions}")
+    print(f"end_date: {model.end_date}")
+    print(f"simulation length: {model.simulation_length}")
+    print(f"full_data_range is {len(model.full_data_range)} "
+        f"hours including spin_up_length of {model.spin_up_length} hours")
+    print(f"simulation_range is of length {len(model.simulation_range)} hours")
+    return model
+
 
 """
 start_date = '2006-03-30 00:00:00'
@@ -42,13 +47,3 @@ model.set_simulation_length(simulation_length)
 model.set_date_ranges()
 model.redo_input_and_measured_data_setup()
 """
-
-def get_model():
-    print(f"start_date: {model.start_date}")
-    print(f"start_date_predictions: {model.start_date_predictions}")
-    print(f"end_date: {model.end_date}")
-    print(f"simulation length: {model.simulation_length}")
-    print(f"full_data_range is {len(model.full_data_range)} "
-        f"hours including spin_up_length of {model.spin_up_length} hours")
-    print(f"simulation_range is of length {len(model.simulation_range)} hours")
-    return model

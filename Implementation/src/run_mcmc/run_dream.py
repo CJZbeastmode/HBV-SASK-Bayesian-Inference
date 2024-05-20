@@ -9,7 +9,10 @@ from likelihood.ll_normmeasured import likelihood_normmeasured
 from dependencies.PyDREAM.pydream.core import run_dream
 from src.construct_model import get_model
 
-model = get_model()
+configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_short.json"
+basis = "Oldman_Basin"
+
+model = get_model(configPath, basis)
 
 # Define Likelihood
 def likelihood_kernel(param_vec):
@@ -37,8 +40,6 @@ def run_mcmc_dream():
 
     # Run
     niterations = 10000
-    converged = False
-    total_iterations = niterations
     nchains = 5
     parameters_to_sample = SampledParam(tfp.distributions.Uniform, low=param_lower, high=param_upper)
     #The run_dream function expects a list rather than a single variable

@@ -1,5 +1,4 @@
 import time
-import pandas as pd
 import numpy as np
 import sys
 
@@ -7,11 +6,13 @@ sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation')
 from dependencies.hbv_sask.model import HBVSASKModel as hbvmodel
 from dependencies.PyDREAM.pydream.convergence import Gelman_Rubin
 from src.run_mcmc.run_dream import run_mcmc_dream
-from src.run_mcmc.run_gpmh_parallel import run_mcmc_gpmh
+from src.run_mcmc.run_gpmh import run_mcmc_gpmh
 from src.run_mcmc.run_mh import run_mcmc_mh
 from src.construct_model import get_model
 
-model = get_model()
+configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_short.json"
+basis = "Oldman_Basin"
+model = get_model(configPath, basis)
 
 if __name__ == "__main__": 
     start = time.time()

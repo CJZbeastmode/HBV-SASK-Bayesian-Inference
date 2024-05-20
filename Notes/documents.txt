@@ -1,7 +1,0 @@
-Documents
-
-Template: https://gitlab.lrz.de/tum-i05/public/studentstarterclues
-
-MUQ (General MCMC): https://mituq.bitbucket.io/source/_site/index.html
-DAKOTA (DREAM): https://dakota.sandia.gov/
-PyApprox: https://sandialabs.github.io/pyapprox/index.html

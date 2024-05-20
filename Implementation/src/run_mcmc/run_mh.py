@@ -2,13 +2,16 @@ import tensorflow_probability as tfp
 import numpy as np
 import sys
 
-sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation/src')
-from execute_model import run_model_single_parameter_node
-from likelihood.ll_normmeasured import likelihood_normmeasured
-from mh import MH
+sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation')
+from src.execute_model import run_model_single_parameter_node
+from src.likelihood.ll_normmeasured import likelihood_normmeasured
+from dependencies.mh.mh import MH
 from src.construct_model import get_model
 
-model = get_model()
+configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_short.json"
+basis = "Oldman_Basin"
+
+model = get_model(configPath, basis)
 
 def run_mcmc_mh():
     # Construct Params
@@ -34,8 +37,9 @@ def run_mcmc_mh():
         return likelihood_function(y_model, y_observed)
     
     def sample_kernel(x):
-        return np.random.normal(x, [8/6, 5/6, 3/6, 1/6, 950/6, 0.8/6, 0.1/6])
+        return np.random.normal(x, (param_upper - param_lower) / 6)
 
     parameters_to_sample = tfp.distributions.Uniform(low=param_lower, high=param_upper)
-    x = MH(parameters_to_sample.prob, sample_kernel, likelihood_kernel, [1, 2.5, 2.5, 0.5, 475, 0.5, 0.05], 10000, param_lower, param_upper)
+    init_state = np.random.uniform(low=param_lower, high=param_upper)
+    x = MH(parameters_to_sample.prob, sample_kernel, likelihood_kernel, init_state, 10000, param_lower, param_upper)
     return x, 10000
