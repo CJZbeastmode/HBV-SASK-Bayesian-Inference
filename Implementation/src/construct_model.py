@@ -1,11 +1,9 @@
 import sys
 import pathlib
 
-sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation')
-from dependencies.hbv_sask.model import HBVSASKModel as hbvmodel
+sys.path.append('/Users/jay/Desktop/Bachelorarbeit')
+from Implementation.dependencies.hbv_sask.model import HBVSASKModel as hbvmodel
 
-#configurationObject = pathlib.Path('/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_1.json')
-#basis = "Oldman_Basin"
 hbv_model_data_path = pathlib.Path("/Users/jay/Desktop/Bachelorarbeit/Implementation/dependencies/hbv_sask/data")
 inputModelDir = hbv_model_data_path
 

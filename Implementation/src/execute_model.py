@@ -1,5 +1,3 @@
-
-
 TIME_COLUMN_NAME = 'TimeStamp'
 INDEX_COLUMN_NAME = "Index_run"
 PLOT_FORCING_DATA = True

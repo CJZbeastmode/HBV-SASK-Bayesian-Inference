@@ -1,11 +1,8 @@
 import sys
 
 sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation/src')
-from execute_model import run_model_single_parameter_node
-from likelihood.ll_normmeasured import likelihood_normmeasured
 from dependencies.gpmh.gpmh import *
 from construct_model import get_model
-import tensorflow_probability as tfp
 import numpy as np
 
 configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_short.json"
@@ -28,17 +25,6 @@ def run_mcmc_gpmh():
     param_lower = np.array(param_lower)
     param_upper = np.array(param_upper)
 
-    # Define likelihood
-    likelihood_function = likelihood_normmeasured
-    def likelihood_kernel(param_vec):
-        _, y_model, y_observed, _ = run_model_single_parameter_node(model, param_vec)
-        return likelihood_function(y_model, y_observed)
-    
-    target = tfp.distributions.Uniform(low=param_lower, high=param_upper).prob
-
-    def kernel(base):
-        return tfp.distributions.Normal(loc=base, scale=(param_upper - param_lower) / 6).sample().numpy()
-    
 
     num_proposals = 100
     num_accepted = 50
