@@ -17,7 +17,7 @@ model = get_model(configPath, basis)
 if __name__ == "__main__": 
     start = time.time()
     separate_chain = False
-    run_mcmc = run_mcmc_gpmh
+    run_mcmc = run_mcmc_mh
     sampled_params, total_iterations = run_mcmc()
     end = time.time()
     print("Time needed: " + str(end - start))
