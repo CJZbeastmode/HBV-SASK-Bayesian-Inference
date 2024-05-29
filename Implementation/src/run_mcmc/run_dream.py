@@ -5,18 +5,18 @@ import sys
 sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation/src')
 from execute_model import run_model_single_parameter_node
 from dependencies.PyDREAM.pydream.parameters import SampledParam
-from likelihood.ll_normmeasured import likelihood_normmeasured
+from likelihood.likelihood_independent import likelihood_independent
 from dependencies.PyDREAM.pydream.core import run_dream
 from src.construct_model import get_model
 
-configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_short.json"
+configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_train_oldman.json"
 basis = "Oldman_Basin"
 
 model = get_model(configPath, basis)
 
 # Define Likelihood
 def likelihood_kernel(param_vec):
-    likelihood_function = likelihood_normmeasured
+    likelihood_function = likelihood_independent
     _, y_model, y_observed, _ = run_model_single_parameter_node(model, param_vec)
     return likelihood_function(y_model, y_observed)
 

@@ -1,10 +1,9 @@
 import numpy as np
-import math
 
-def MH(proposal, sample_kernel, likelihood_kernel, init_state, n, lower_bound, upper_bound):
+def MH_RB(proposal, sample_kernel, likelihood_kernel, init_state, n, lower_bound, upper_bound, max_sampling=False):
     samples = [np.array(init_state)]
     num_accept = 0
-    for _ in range(n):
+    for ind in range(n):
         #sample candidate from normal distribution
         a = samples[-1]
         b = sample_kernel(a)
@@ -16,12 +15,16 @@ def MH(proposal, sample_kernel, likelihood_kernel, init_state, n, lower_bound, u
                 temp = 2 * a[i] - b[i]
                 b[i] = temp
     
-        p = np.log(proposal(b)) - np.log(proposal(a)) + likelihood_kernel(b) - likelihood_kernel(a)
-        prob = min(1, math.e ** np.mean(p)) #max, min
+        p = proposal(b) * np.exp(likelihood_kernel(b)) / (proposal(a) * np.exp(likelihood_kernel(a)))
+        if max_sampling:
+            prob = min(1, np.max(p))
+        else:
+            prob = min(1, np.mean(p))
         if np.random.random() >= prob:
             samples.append(samples[-1])         
         else:
             samples.append(b)
             num_accept += 1
+        print(f'{ind} done')
             
     return samples

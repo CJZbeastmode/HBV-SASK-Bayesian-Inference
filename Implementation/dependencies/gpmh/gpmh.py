@@ -5,7 +5,7 @@ tfd = tfp.distributions
 import sys
 sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation/src')
 from execute_model import run_model_single_parameter_node
-from likelihood.ll_normmeasured import likelihood_normmeasured
+from likelihood.likelihood_independent import likelihood_independent
 from construct_model import get_model
 
 class SamplingState:
@@ -53,7 +53,7 @@ class AbstractSamplingProblem:
         if state is None:
             return -np.inf
         _, y_model, y_observed, _ = run_model_single_parameter_node(self.model, state.state)
-        likelihood_function = likelihood_normmeasured
+        likelihood_function = likelihood_independent
         return likelihood_function(y_model, y_observed)
 
 class GMHKernel:

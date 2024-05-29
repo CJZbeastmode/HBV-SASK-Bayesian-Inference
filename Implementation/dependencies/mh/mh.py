@@ -1,7 +1,6 @@
 import numpy as np
-import math
 
-def MH(proposal, sample_kernel, likelihood_kernel, init_state, n, lower_bounds, upper_bounds):
+def MH(proposal, sample_kernel, likelihood_kernel, init_state, n, lower_bounds, upper_bounds, max_sampling=False):
     samples = [np.array(init_state)]
     num_accept = 0
     for _ in range(n):
@@ -23,8 +22,12 @@ def MH(proposal, sample_kernel, likelihood_kernel, init_state, n, lower_bounds, 
         if invalid:
             reject = True
         else:
-            p = np.log(proposal(b)) - np.log(proposal(a)) + likelihood_kernel(b) - likelihood_kernel(a)
-            prob = min(1, math.e ** np.mean(p)) #max, min
+            #log_p = np.log(proposal(b)) - np.log(proposal(a)) + likelihood_kernel(b) - likelihood_kernel(a)
+            p = proposal(b) * np.exp(likelihood_kernel(b)) / (proposal(a) * np.exp(likelihood_kernel(a)))
+            if max_sampling:
+                prob = min(1, np.max(p))
+            else:
+                prob = min(1, np.mean(p))
             if np.random.random() >= prob:
                 reject = True
             

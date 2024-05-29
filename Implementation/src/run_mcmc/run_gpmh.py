@@ -5,7 +5,7 @@ from dependencies.gpmh.gpmh import *
 from construct_model import get_model
 import numpy as np
 
-configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_short.json"
+configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_train_oldman.json"
 basis = "Oldman_Basin"
 model = get_model(configPath, basis)
 
@@ -30,7 +30,7 @@ def run_mcmc_gpmh():
     num_accepted = 50
     # Simulation configuration
     config = {"NumProposals": num_proposals, "NumAccepted": num_accepted}
-    configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_short.json"
+    configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_train_oldman.json"
     basis = "Oldman_Basin"
     problem = AbstractSamplingProblem(configPath, basis)
     gmh_kernel = GMHKernel(config, problem)

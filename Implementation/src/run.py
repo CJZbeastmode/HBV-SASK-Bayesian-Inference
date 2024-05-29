@@ -10,7 +10,7 @@ from src.run_mcmc.run_gpmh import run_mcmc_gpmh
 from src.run_mcmc.run_mh import run_mcmc_mh
 from src.construct_model import get_model
 
-configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_short.json"
+configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_train_oldman.json"
 basis = "Oldman_Basin"
 model = get_model(configPath, basis)
 
@@ -61,25 +61,14 @@ if __name__ == "__main__":
         samples = np.hstack((old_samples[0][burnin:, :], old_samples[1][burnin:, :], old_samples[2][burnin:, :],
                                         old_samples[3][burnin:, :], old_samples[4][burnin:, :]))
         header = 'TT_1,C0_1,beta_1,ETF_1,FC_1,FRAC_1,K2_1,TT_2,C0_2,beta_2,ETF_2,FC_2,FRAC_2,K2_2,TT_3,C0_3,beta_3,ETF_3,FC_3,FRAC_3,K2_3,TT_4,C0_4,beta_4,ETF_4,FC_4,FRAC_4,K2_4,TT_5,C0_5,beta_5,ETF_5,FC_5,FRAC_5,K2_5'
-        np.savetxt('mcmc_sep_data.out', samples, delimiter=',', header=header) 
+        np.savetxt('mcmc_sep_data.out', samples, delimiter=',', header=header, comments='') 
     else:
         #if mode == 'MH':
-        np.savetxt('mcmc_data.out', old_samples[burnin:], delimiter=',', header='TT,C0,beta,ETF,FC,FRAC,K2') 
+        np.savetxt('mcmc_data.out', old_samples[burnin:], delimiter=',', header='TT,C0,beta,ETF,FC,FRAC,K2', comments='') 
         #else:
         #samples = np.concatenate((old_samples[0][burnin:, :], old_samples[1][burnin:, :], old_samples[2][burnin:, :],
         #                                    old_samples[3][burnin:, :], old_samples[4][burnin:, :]))
         #np.savetxt('mcmc_data.out', samples, delimiter=',', header='TT,C0,beta,ETF,FC,FRAC,K2') 
-
-    """
-    if save_image:
-        ndims = len(old_samples[0][0])
-        colors = sns.color_palette(n_colors=ndims)
-        for dim in range(ndims):
-            fig = plt.figure()
-            sns.histplot(samples[:, dim], color=colors[dim], kde=True)
-            fig.savefig('hydrological' + str(dim))
-    """
-    
 
 else:
     pass
