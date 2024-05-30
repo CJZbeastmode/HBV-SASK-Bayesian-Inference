@@ -25,7 +25,6 @@ def run_mcmc_gpmh():
     param_lower = np.array(param_lower)
     param_upper = np.array(param_upper)
 
-
     num_proposals = 100
     num_accepted = 50
     # Simulation configuration

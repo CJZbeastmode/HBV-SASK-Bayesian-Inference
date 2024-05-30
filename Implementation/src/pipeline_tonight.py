@@ -15,7 +15,7 @@ model = get_model(configPath, basis)
 #sampling_otb = ['ignoring', 'refl_bound', 'aggr']
 #sensitivity_transition = [6, 8, 10, 12, 18, 24]
 #sensitivity_likelihood_independent = [1, 3, 5, 8]
-sensitivity_likelihood_dependent = [0.2, 0.4]
+sensitivity_likelihood_dependent = [0.6, 0.8]
 #max_sampling = [False, True]
 #iteration = [5000, 10000, 20000, 40000, 80000]
 #burnin_factor = [2, 3, 5]
@@ -109,6 +109,9 @@ if __name__ == "__main__":
             mae_mean = mae(posterior_mean, measured_data)
             mae_max = mae(posterior_max, measured_data)
             results.append([str(case), rmse_mean, rmse_max, mae_mean, mae_max, timed])
+
+            fmt = '%s,%s,%s,%s,%s,%s'
+            np.savetxt(f'tonight/{test_name}_{case}.txt', results, delimiter=',', fmt=fmt, header='Test_Case, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time', comments='')
 
         fmt = '%s,%s,%s,%s,%s,%s'
         np.savetxt(f'{test_name}.txt', results, delimiter=',', fmt=fmt, header='Test_Case, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time', comments='')
