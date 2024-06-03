@@ -13,9 +13,6 @@ configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/co
 basis = "Oldman_Basin"
 model = get_model(configPath, basis)
 
-
-benchmark_data = ['sampling_otb', 'sensitivity_transition', 'sensitivity_likelihood_independent', 'sensitivity_likelihood_dependent', 'max_sampling', 'iteration', 'burnin_factor', 'init_method']
-
 def rmse(result, target):
     diff = result - target
     aggr = 0
@@ -29,7 +26,7 @@ def mae(result, target):
 
 if __name__ == "__main__": 
 
-    test_cases = [[1, 10000], [2, 5000], [4, 2500], [5, 2000], [8, 1250], [10, 1000], [20, 500], [50, 200], [100, 100]]
+    test_cases = [[1, 10000], [2, 5000], [4, 2500], [5, 2000], [8, 1250], [10, 1000], [20, 500], [50, 200]]
     res = []
 
     for case in test_cases:

@@ -57,3 +57,8 @@ def run_mcmc_mh_parallel(num_chains=4, sd_transition_factor=6, likelihood_depend
 
     # results will be a list of arrays (chains)
     return results
+
+
+if __name__ == '__main__':
+    results = run_mcmc_mh_parallel(num_chains=20)
+    print(results)

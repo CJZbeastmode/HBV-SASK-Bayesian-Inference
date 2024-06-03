@@ -4,7 +4,7 @@ import pandas as pd
 import sys
 
 sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation')
-from src.run_mcmc.run_mh import run_mcmc_mh
+from src.run_mcmc.run_gpmh import run_mcmc_gpmh
 from src.construct_model import get_model
 from src.execute_model import run_model_single_parameter_node
 
@@ -12,20 +12,16 @@ configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/co
 basis = "Oldman_Basin"
 model = get_model(configPath, basis)
 
-#sampling_otb = ['ignoring', 'refl_bound', 'aggr']
-#sensitivity_transition = [6, 8, 10, 12, 18, 24]
-#sensitivity_likelihood_independent = [1, 3, 5, 8]
-#sensitivity_likelihood_dependent = [0.2, 0.4, 0.6, 0.8]
-#max_sampling = [False, True]
-#iteration = [5000, 10000, 20000, 40000, 80000]
-#burnin_factor = [2, 3, 5]
-#effective_sample_size = [1, 2, 3, 4, 5]
-#init_method = ['random', 'min', 'max', 'q1_prior', 'mean_prior', 'q3_prior', 'q1_posterior', 'median_posterior', 'q3_posterior']
-#to_benchmark = [sampling_otb, sensitivity_transition, sensitivity_likelihood_independent, sensitivity_likelihood_dependent, max_sampling, iteration, burnin_factor, effective_sample_size, init_method]
-#benchmark_data = ['sampling_otb', 'sensitivity_transition', 'sensitivity_likelihood_independent', 'sensitivity_likelihood_dependent', 'max_sampling', 'iteration', 'burnin_factor', 'effective_sample_size', 'init_method']
-sampling_otb = ['refl_bound']
-to_benchmark = [sampling_otb]
-benchmark_data = ['sampling_otb']
+sampling_otb = ['ignoring', 'refl_bound', 'aggr']
+sensitivity_transition = [6, 8, 10, 12, 18, 24]
+sensitivity_likelihood_independent = [1, 3, 5, 8]
+sensitivity_likelihood_dependent = [0.2, 0.4, 0.6, 0.8]
+iteration = [5000, 10000, 20000, 40000, 80000]
+burnin_factor = [2, 3, 5]
+effective_sample_size = [1, 2, 3, 4, 5]
+init_method = ['random', 'q1_prior', 'mean_prior', 'q3_prior', 'q1_posterior', 'median_posterior', 'q3_posterior']
+to_benchmark = [sampling_otb, sensitivity_transition, sensitivity_likelihood_independent, sensitivity_likelihood_dependent, iteration, burnin_factor, effective_sample_size, init_method]
+benchmark_data = ['sampling_otb', 'sensitivity_transition', 'sensitivity_likelihood_independent', 'sensitivity_likelihood_dependent', 'iteration', 'burnin_factor', 'effective_sample_size','init_method']
 
 def rmse(result, target):
     diff = result - target
@@ -41,6 +37,8 @@ def mae(result, target):
 if __name__ == "__main__": 
 
     results = []
+    num_proposals = 2 #TODO
+    num_accepted = 1 #TODO
 
     for item in range(len(to_benchmark)):
         test_case = to_benchmark[item]
@@ -49,36 +47,33 @@ if __name__ == "__main__":
         for case in test_case:
             start = time.time()
             separate_chain = False
-            run_mcmc = run_mcmc_mh
+            run_mcmc = run_mcmc_gpmh
 
-            # sd_transition_factor=6, sd_likelihood=1, max_probability=False, iteration=10000
-            dictionary = ['ignoring', 6, False, 1, False, 10000, 'random']
+            dictionary = [False, 1, 6, 'ignoring', 'random']
             
-            if test_name == 'sampling_otb':
-                dictionary[0] = case
-            if test_name == 'sensitivity_transition':
-                dictionary[1] = case
             if test_name == 'sensitivity_likelihood_independent':
-                dictionary[2] = False
-                dictionary[3] = case
+                dictionary[0] = False
+                dictionary[1] = case
             if test_name == 'sensitivity_likelihood_dependent':
-                dictionary[2] = True
+                dictionary[0] = True
+                dictionary[1] = case
+            if test_name == 'sensitivity_transition':
+                dictionary[2] = case
+            if test_name == 'sampling_otb':
                 dictionary[3] = case
-            if test_name == 'max_sampling':
+            if test_name == 'init_method':
                 dictionary[4] = case
             if test_name == 'iteration':
                 dictionary[5] = case
-            if test_name == 'init_method':
-                dictionary[6] = case
-
-            sampled_params, _ = run_mcmc(version=dictionary[0], \
-                                                        sd_transition_factor=dictionary[1], \
-                                                        likelihood_dependence=dictionary[2], \
-                                                        sd_likelihood=dictionary[3], \
-                                                        max_probability=dictionary[4], \
-                                                        iteration=dictionary[5], \
-                                                        init_method=dictionary[6])
-            total_iterations = dictionary[5]
+            
+            results, total_iterations = run_mcmc_gpmh(num_proposals=num_proposals, \
+                                        num_accepted=num_accepted, \
+                                        likelihood_dependence=dictionary[0], \
+                                        sd_likelihood=dictionary[1], \
+                                        sd_sampling=dictionary[2], \
+                                        version=dictionary[3], \
+                                        init_method=dictionary[4], \
+                                        iterations=dictionary[5])
             end = time.time()
             timed = end - start
             print(f'Time needed for test case {case}: {str(timed)}')
@@ -87,15 +82,15 @@ if __name__ == "__main__":
             if test_name == 'burnin_factor':
                 burnin_fac = case
             burnin = int(total_iterations / burnin_fac)
-            sampled_params = np.array(sampled_params)[burnin:]
-
+            results = np.array(results)[burnin:, :]
+            
             ess = 1
             if test_name == 'effective_sample_size':
                 ess = case
             if ess != 1:
-                sampled_params = sampled_params[::ess]
+                results = results[::ess]
 
-            samples = pd.DataFrame(sampled_params, columns=['TT','C0','beta','ETF','FC','FRAC','K2'])
+            samples = pd.DataFrame(results, columns=['TT','C0','beta','ETF','FC','FRAC','K2'])
 
             # Sampling Max
             param_vec = []
@@ -124,15 +119,15 @@ if __name__ == "__main__":
 
             # Backup
             fmt = '%s,%s,%s,%s,%s,%s,%s'
-            np.savetxt(f'{test_name}.txt', results, delimiter=',', fmt=fmt, header='Test_Name, Test_Case, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time', comments='')
+            np.savetxt(f'{test_name}_{test_case}.txt', results, delimiter=',', fmt=fmt, header='Test_Name, Test_Case, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time', comments='')
 
         # Backup
         fmt = '%s,%s,%s,%s,%s,%s,%s'
-        np.savetxt(f'{test_name}.txt', results, delimiter=',', fmt=fmt, header='Test_Name, Test_Case, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time', comments='')
+        np.savetxt(f'{test_name}_done.txt', results, delimiter=',', fmt=fmt, header='Test_Name, Test_Case, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time', comments='')
     
     # Overall
     fmt = '%s,%s,%s,%s,%s,%s,%s'
-    np.savetxt(f'benchmark_mh.txt', results, delimiter=',', fmt=fmt, header='Test_Name, Test_Case, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time', comments='')
+    np.savetxt(f'benchmark_gpmh.txt', results, delimiter=',', fmt=fmt, header='Test_Name, Test_Case, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time', comments='')
 
 else:
     pass

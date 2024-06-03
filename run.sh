@@ -1,0 +1,2 @@
+/Users/jay/miniconda3/envs/hbv_uq_env/bin/python /Users/jay/Desktop/Bachelorarbeit/Implementation/src/benchmark/benchmark_mh.py;
+/Users/jay/miniconda3/envs/hbv_uq_env/bin/python /Users/jay/Desktop/Bachelorarbeit/Implementation/src/benchmark/benchmark_gpmh/amount_test.py
