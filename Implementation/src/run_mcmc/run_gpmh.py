@@ -59,6 +59,10 @@ def run_mcmc_gpmh(num_proposals=8, num_accepted=4, likelihood_dependence=False, 
         for _ in range(1000):
             state += np.random.uniform(low=param_lower, high=param_upper)
         state /= 1000
+    elif init_method == 'min':
+        state = param_lower
+    elif init_method == 'max':
+        state = param_upper
     elif init_method == 'q1_prior':
         state = param_lower + ((param_upper - param_lower) / 4)
     elif init_method == 'mean_prior':

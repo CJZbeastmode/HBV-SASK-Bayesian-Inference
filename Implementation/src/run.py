@@ -17,8 +17,8 @@ model = get_model(configPath, basis)
 if __name__ == "__main__": 
     start = time.time()
     separate_chain = False
-    run_mcmc = run_mcmc_gpmh
-    sampled_params, total_iterations = run_mcmc()
+    run_mcmc = run_mcmc_mh
+    sampled_params, total_iterations = run_mcmc(likelihood_dependence=False, sd_likelihood=1)
     end = time.time()
     print("Time needed: " + str(end - start))
 
@@ -56,6 +56,8 @@ if __name__ == "__main__":
 
         # Plot output
     burnin = int(total_iterations / 5)
+    old_samples = np.array(old_samples)[burnin:]
+    old_samples = old_samples[::3]
 
     if separate_chain:
         samples = np.hstack((old_samples[0][burnin:, :], old_samples[1][burnin:, :], old_samples[2][burnin:, :],
@@ -64,7 +66,7 @@ if __name__ == "__main__":
         np.savetxt('mcmc_sep_data.out', samples, delimiter=',', header=header, comments='') 
     else:
         #if mode == 'MH':
-        np.savetxt('mcmc_data.out', old_samples[burnin:], delimiter=',', header='TT,C0,beta,ETF,FC,FRAC,K2', comments='') 
+        np.savetxt('mcmc_data.out', old_samples, delimiter=',', header='TT,C0,beta,ETF,FC,FRAC,K2', comments='') 
         #else:
         #samples = np.concatenate((old_samples[0][burnin:, :], old_samples[1][burnin:, :], old_samples[2][burnin:, :],
         #                                    old_samples[3][burnin:, :], old_samples[4][burnin:, :]))

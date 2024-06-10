@@ -32,7 +32,7 @@ def run_single_chain(init_state, iterations, param_lower, param_upper, likelihoo
     parameters_to_sample = tfp.distributions.Uniform(low=param_lower, high=param_upper)
     return MH(parameters_to_sample.prob, sample_kernel, likelihood_kernel, init_state, iterations, param_lower, param_upper, max_sampling=max_probability)
 
-def run_mcmc_mh_parallel(num_chains=4, sd_transition_factor=6, likelihood_dependence=False, sd_likelihood=1, max_probability=False, iterations=2500):
+def run_mcmc_mh_parallel(num_chains=4, sd_transition_factor=6, likelihood_dependence=False, sd_likelihood=1, max_probability=False, iterations=2500, init_method='default', custom_init_states=None):
     # Construct Params
     configurationObject = model.configurationObject
     param_names = []
@@ -49,7 +49,10 @@ def run_mcmc_mh_parallel(num_chains=4, sd_transition_factor=6, likelihood_depend
     param_upper = np.array(param_upper)
 
     # Initialize random states for each chain
-    init_states = [np.random.uniform(low=param_lower, high=param_upper) for _ in range(num_chains)]
+    if init_method != 'default':
+        init_states = custom_init_states
+    else:
+        init_states = [np.random.uniform(low=param_lower, high=param_upper) for _ in range(num_chains)]
     
     # Set up a multiprocessing pool
     with mp.Pool(num_chains) as pool:

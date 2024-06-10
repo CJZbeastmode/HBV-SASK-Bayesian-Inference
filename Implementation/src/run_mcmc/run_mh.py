@@ -18,7 +18,7 @@ posterior_rudimentary = pd.read_csv('/Users/jay/Desktop/Bachelorarbeit/Implement
 
 model = get_model(configPath, basis)
 
-def run_mcmc_mh(version='ignoring', sd_transition_factor=6, likelihood_dependence=False, sd_likelihood=1, max_probability=False, iteration=10000, init_method='random'):
+def run_mcmc_mh(version='ignoring', sd_transition_factor=6, likelihood_dependence=True, sd_likelihood=0.2, max_probability=False, iteration=10000, init_method='median_posterior'):
     
     # Construct Params
     configurationObject = model.configurationObject

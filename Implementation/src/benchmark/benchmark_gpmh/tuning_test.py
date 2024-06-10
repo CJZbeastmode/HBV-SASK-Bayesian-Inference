@@ -12,16 +12,18 @@ configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/co
 basis = "Oldman_Basin"
 model = get_model(configPath, basis)
 
-sampling_otb = ['ignoring', 'refl_bound', 'aggr']
-sensitivity_transition = [6, 8, 10, 12, 18, 24]
-sensitivity_likelihood_independent = [1, 3, 5, 8]
-sensitivity_likelihood_dependent = [0.2, 0.4, 0.6, 0.8]
-iteration = [5000, 10000, 20000, 40000, 80000]
-burnin_factor = [2, 3, 5]
-effective_sample_size = [1, 2, 3, 4, 5]
-init_method = ['random', 'q1_prior', 'mean_prior', 'q3_prior', 'q1_posterior', 'median_posterior', 'q3_posterior']
-to_benchmark = [sampling_otb, sensitivity_transition, sensitivity_likelihood_independent, sensitivity_likelihood_dependent, iteration, burnin_factor, effective_sample_size, init_method]
-benchmark_data = ['sampling_otb', 'sensitivity_transition', 'sensitivity_likelihood_independent', 'sensitivity_likelihood_dependent', 'iteration', 'burnin_factor', 'effective_sample_size','init_method']
+#sampling_otb = ['ignoring', 'refl_bound', 'aggr']
+#sensitivity_transition = [6, 8, 10, 12, 18, 24]
+#sensitivity_likelihood_independent = [1, 3, 5, 8]
+#sensitivity_likelihood_dependent = [0.2, 0.4, 0.6, 0.8]
+#burnin_factor = [2, 3, 5]
+#effective_sample_size = [1, 2, 3, 4, 5]
+#init_method = ['random', 'q1_prior', 'mean_prior', 'q3_prior', 'q1_posterior', 'median_posterior', 'q3_posterior']
+#to_benchmark = [sampling_otb, sensitivity_transition, sensitivity_likelihood_independent, sensitivity_likelihood_dependent, burnin_factor, effective_sample_size, init_method]
+#benchmark_data = ['sampling_otb', 'sensitivity_transition', 'sensitivity_likelihood_independent', 'sensitivity_likelihood_dependent', 'burnin_factor', 'effective_sample_size','init_method']
+init_method = ['min', 'max']
+to_benchmark = [init_method]
+benchmark_data = ['init_method']
 
 def rmse(result, target):
     diff = result - target
@@ -37,8 +39,8 @@ def mae(result, target):
 if __name__ == "__main__": 
 
     results = []
-    num_proposals = 2 #TODO
-    num_accepted = 1 #TODO
+    num_proposals = 40
+    num_accepted = 20
 
     for item in range(len(to_benchmark)):
         test_case = to_benchmark[item]
@@ -49,7 +51,7 @@ if __name__ == "__main__":
             separate_chain = False
             run_mcmc = run_mcmc_gpmh
 
-            dictionary = [False, 1, 6, 'ignoring', 'random']
+            dictionary = [False, 1, 6, 'ignoring', 'random', 500]
             
             if test_name == 'sensitivity_likelihood_independent':
                 dictionary[0] = False
@@ -63,10 +65,8 @@ if __name__ == "__main__":
                 dictionary[3] = case
             if test_name == 'init_method':
                 dictionary[4] = case
-            if test_name == 'iteration':
-                dictionary[5] = case
             
-            results, total_iterations = run_mcmc_gpmh(num_proposals=num_proposals, \
+            mcmc_samples, total_iterations = run_mcmc_gpmh(num_proposals=num_proposals, \
                                         num_accepted=num_accepted, \
                                         likelihood_dependence=dictionary[0], \
                                         sd_likelihood=dictionary[1], \
@@ -82,15 +82,15 @@ if __name__ == "__main__":
             if test_name == 'burnin_factor':
                 burnin_fac = case
             burnin = int(total_iterations / burnin_fac)
-            results = np.array(results)[burnin:, :]
+            mcmc_samples = np.array(mcmc_samples)[burnin:, :]
             
             ess = 1
             if test_name == 'effective_sample_size':
                 ess = case
             if ess != 1:
-                results = results[::ess]
+                mcmc_samples = mcmc_samples[::ess]
 
-            samples = pd.DataFrame(results, columns=['TT','C0','beta','ETF','FC','FRAC','K2'])
+            samples = pd.DataFrame(mcmc_samples, columns=['TT','C0','beta','ETF','FC','FRAC','K2'])
 
             # Sampling Max
             param_vec = []
