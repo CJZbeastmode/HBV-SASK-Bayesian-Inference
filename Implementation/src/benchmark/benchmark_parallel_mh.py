@@ -25,26 +25,47 @@ def mae(result, target):
     return np.absolute(result - target).mean()
 
 if __name__ == "__main__": 
+
     test_cases = [[1, 10000], [2, 5000], [4, 2500], [5, 2000], [8, 1250], [10, 1000]]
-
+    
     for case in test_cases:
-
+    
         num_chains = case[0]
         iterations = case[1]
 
         start = time.time()
         results = run_mcmc_mh_parallel(num_chains=num_chains, iterations=iterations, max_probability=False, sd_transition_factor=6, likelihood_dependence=False, sd_likelihood=1)
+        results = np.array(results)
         end = time.time()
         timed = end - start
         print("Time needed: " + str(timed))
 
+        # Convergence
+        gr = np.array(Gelman_Rubin(np.array(results)))
+        gr_reps = 1
+
+        while np.any(gr > 1.2):
+            toResampleIndex = []
+            for i in range(7):
+                if gr[i] > 1.2:
+                    toResampleIndex.append(i)
+            start = time.time()
+            temp_res = run_mcmc_mh_parallel(num_chains=num_chains, iterations=int(iterations/5), max_probability=False, sd_transition_factor=6, likelihood_dependence=False, sd_likelihood=1, init_method='custom', custom_init_states=results[:, -1])
+            end = time.time()
+            timed = timed + (end - start)
+
+            results = np.hstack([results, np.array(temp_res)])
+            results = results[:, int(iterations/5):]
+            gr = np.array(Gelman_Rubin(np.array(results)))
+            gr_reps += 1
+
+
+        gr = np.vstack([np.array(['TT','C0','beta','ETF','FC','FRAC','K2']), gr]).T
+        fmt = '%s,%s'
+        np.savetxt(f'{num_chains}_chains_gr.txt', gr, fmt=fmt, delimiter=',', header='Parameter,GR', comments='')
+
         for i in range(num_chains):
             np.savetxt(f'{num_chains}_chains_result_{i + 1}.txt', results[i], delimiter=',', header='TT,C0,beta,ETF,FC,FRAC,K2', comments='')
-
-        # Convergence
-        gr = Gelman_Rubin(np.array(results).T)
-        gr = np.vstack([np.array(range(num_chains)) + 1, gr]).T
-        np.savetxt(f'{num_chains}_chains_gr.txt', gr, delimiter=',', header='Chain,GR', comments='')
 
         MAEs_mean = []
         MAEs_max = []
@@ -92,6 +113,8 @@ if __name__ == "__main__":
             burned_in = burned_in[::ess]
             combined_results.append(burned_in)
         combined_results = np.concatenate(combined_results)
+        np.savetxt(f'{num_chains}_chains_result_combined.txt', combined_results, delimiter=',', header='TT,C0,beta,ETF,FC,FRAC,K2', comments='')
+
 
         # Sampling Max
         samples = pd.DataFrame(combined_results)
@@ -118,8 +141,8 @@ if __name__ == "__main__":
         mae_mean_combined = mae(posterior_mean, measured_data)
         mae_max_combined = mae(posterior_max, measured_data)
 
-        res = np.vstack([num_chains, rmse_mean_combined, rmse_max_combined, mae_mean_combined, mae_max_combined, timed]).T
-        np.savetxt(f'{num_chains}_chains_analysis.txt', res, delimiter=',', header='Num_Chains,RMSE_Mean_Combined,RMSE_Max_Combined,MAE_Mean_Combined,MAE_Max_Combined,Time', comments='')
+        res = np.vstack([num_chains, rmse_mean_combined, rmse_max_combined, mae_mean_combined, mae_max_combined, timed, gr_reps]).T
+        np.savetxt(f'{num_chains}_chains_analysis.txt', res, delimiter=',', header='Num_Chains,RMSE_Mean_Combined,RMSE_Max_Combined,MAE_Mean_Combined,MAE_Max_Combined,Time,GR_Reps', comments='')
 
 else:
     pass

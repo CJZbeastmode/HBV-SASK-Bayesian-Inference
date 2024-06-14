@@ -12,9 +12,9 @@ configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/co
 basis = "Oldman_Basin"
 model = get_model(configPath, basis)
 
-niterations = 20 #TODO
-nchains = 5 #TODO 8
-monte_carlo_number = 2 #TODO 1000
+niterations = 1250 #TODO
+nchains = 8 #TODO 8
+monte_carlo_number = 1000 #TODO 1000
 
 DEpairs = [1, 2, 3]
 multitry = [False, 3, 5, 7, 10]
@@ -29,13 +29,11 @@ sensitivity_likelihood_dependent = [0.2, 0.4, 0.6, 0.8]
 burnin_factor = [2, 3, 5]
 effective_sample_size = [1, 2, 3, 4, 5]
 init_method = ['random', 'min', 'max', 'q1_prior', 'mean_prior', 'q3_prior', 'q1_posterior', 'median_posterior', 'q3_posterior']
-
-init_method = ['min', 'max', 'q1_prior', 'mean_prior', 'q3_prior', 'q1_posterior', 'median_posterior', 'q3_posterior']
 #to_benchmark = [DEpairs, multitry, hardboundaries, crossover_burnin, adapt_crossover, nCR, snooker, p_gamma_unity, sensitivity_likelihood_independent, sensitivity_likelihood_dependent, burnin_factor, effective_sample_size, init_method]
 #benchmark_data = ['DEpairs', 'multitry', 'hardboundaries', 'crossover_burnin', 'adapt_crossover', 'nCR', 'snooker', 'p_gamma_unity', 'sensitivity_likelihood_independent', 'sensitivity_likelihood_dependent', 'burnin_factor', 'effective_sample_size', 'init_method']
-
-to_benchmark = [init_method]
-benchmark_data = ['init_method']
+multitry = [5, 7, 10]
+to_benchmark = [multitry]
+benchmark_data = ['multitry']
 
 
 def rmse(result, target):
