@@ -112,7 +112,7 @@ def run_mcmc_mh_parallel(
         )
 
     # results will be a list of arrays (chains)
-    return results
+    return results, iterations * num_chains
 
 
 if __name__ == "__main__":

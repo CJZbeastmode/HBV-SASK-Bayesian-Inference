@@ -1,4 +1,10 @@
 {
     "configPath": "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_train_oldman.json",
-    "basis": "Oldman_Basin"
+    "basis": "Oldman_Basin",
+    "mode": "dream",
+    "kwargs": {
+        "niterations": 3,
+        "nchains": 4
+    },
+    "seperate_chain": true
 }
