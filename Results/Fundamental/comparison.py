@@ -1,16 +1,25 @@
 import pandas as pd
 import numpy as np
 import sys
+import json
 
-primary_output = pd.read_csv('/Users/jay/Desktop/Bachelorarbeit/Results/Fundamental/primary_output.out')
-tuned_output = pd.read_csv('/Users/jay/Desktop/Bachelorarbeit/Results/Fundamental/tuned_output.out')
+primary_output = pd.read_csv(
+    "/Users/jay/Desktop/Bachelorarbeit/Results/Fundamental/primary_output.out"
+)
+tuned_output = pd.read_csv(
+    "/Users/jay/Desktop/Bachelorarbeit/Results/Fundamental/tuned_output.out"
+)
 
-sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation/src')
+sys.path.append("/Users/jay/Desktop/Bachelorarbeit/Implementation/src")
 from execute_model import run_model_single_parameter_node
 from construct_model import get_model
 
-configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_test_oldman.json"
-basis = "Oldman_Basin"
+testConfigPath = "/Users/jay/Desktop/Bachelorarbeit/test_config.json"
+with open(testConfigPath, "r") as file:
+    run_config = json.load(file)
+
+configPath = run_config["configPath"]
+basis = run_config["basis"]
 model = get_model(configPath, basis)
 
 
@@ -22,8 +31,10 @@ def rmse(result, target):
     rmse = (aggr / (len(diff))) ** 0.5
     return rmse
 
+
 def mae(result, target):
     return np.absolute(result - target).mean()
+
 
 def calculate(samples):
     sample_param = []
@@ -33,10 +44,13 @@ def calculate(samples):
 
     posterior = []
     for _, vec in enumerate(sample_param):
-        _, y_model, measured_data, _ = run_model_single_parameter_node(model, np.array(vec))
+        _, y_model, measured_data, _ = run_model_single_parameter_node(
+            model, np.array(vec)
+        )
         posterior.append(y_model)
 
-    return np.mean(np.array(posterior), axis=0) 
+    return np.mean(np.array(posterior), axis=0)
+
 
 _, _, measured_data, _ = run_model_single_parameter_node(model, primary_output.iloc[0])
 
@@ -60,10 +74,10 @@ for _ in range(100):
     tuned_mae.append(mae_val)
 
 
-print(f'RMSE of Primary Posterior Mean: {np.array(primary_rmse).mean()}')
-print(f'MAE of Primary Posterior Mean: {np.array(primary_mae).mean()}')
-print(f'RMSE of Tuned Posterior Mean: {np.array(tuned_rmse).mean()}')
-print(f'MAE of Tuned Posterior Mean: {np.array(tuned_mae).mean()}')
+print(f"RMSE of Primary Posterior Mean: {np.array(primary_rmse).mean()}")
+print(f"MAE of Primary Posterior Mean: {np.array(primary_mae).mean()}")
+print(f"RMSE of Tuned Posterior Mean: {np.array(tuned_rmse).mean()}")
+print(f"MAE of Tuned Posterior Mean: {np.array(tuned_mae).mean()}")
 
 
 """

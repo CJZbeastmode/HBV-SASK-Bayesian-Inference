@@ -18,64 +18,116 @@ from common import utility
 #####################################
 
 epsilon = sys.float_info.epsilon
-DEFAULT_PAR_VALUES_DICT = {'TT': 0.0, 'C0': 0.5, 'ETF': 0.2, 'FC': 250,
-                           'beta': 2.0, 'FRAC': 0.3, 'K2': 0.05,  'LP': 0.5,
-                           'K1': 0.5, 'alpha': 2.0, 
-                           'UBAS': 1, 'PM': 1, "M": 1.0, "VAR_M": 1e-4}
-
-DEFAULT_PAR_VALUES_DICT_EXTEND = {'TT': 0.0, 'C0': 0.5, 'ETF': 0.2, 'LP': 0.5, 'FC': 250,
-                           'beta': 2.0, 'FRAC': 0.3, 'K1': 0.5, 'alpha': 2.0, 'K2': 0.05,
-                           'UBAS': 1, 'PM': 1, "M": 1.0, "VAR_M": 1e-4}
-
-DEFAULT_PAR_INFO_DICT = {
-    'TT': {"lower": -4.0, "upper": 4.0, "default": 0.0},
-    'C0': {"lower": 0.0, "upper": 5.0, "default": 0.5},
-    'ETF': {"lower": 0.0, "upper": 1.0, "default": 0.2},
-    'LP': {"lower": 0.0, "upper": 1.0, "default": 0.5},
-    'FC': {"lower": 50.0, "upper": 1000.0, "default": 250.0},
-    'beta': {"lower": 1.0, "upper": 3.0, "default": 2.0},
-    'FRAC': {"lower": 0.1, "upper": 0.9, "default": 0.3},
-    'K1': {"lower": 0.05, "upper": 1.0, "default": 0.5},
-    'alpha': {"lower": 1.0, "upper": 3.0, "default": 2.0},
-    'K2': {"lower": 0.0, "upper": 0.1, "default": 0.05},
-    'UBAS': {"lower": 1.0, "upper": 3.0, "default": 1.0},
-    'PM':{"lower": 0.5, "upper": 2.0, "default": 1.0},
-    'M':{"lower": 0.9, "upper": 1.0, "default": 1.0},
-    'VAR_M':{"lower": 1e-5, "upper": 1e-3, "default": 1e-4}
+DEFAULT_PAR_VALUES_DICT = {
+    "TT": 0.0,
+    "C0": 0.5,
+    "ETF": 0.2,
+    "FC": 250,
+    "beta": 2.0,
+    "FRAC": 0.3,
+    "K2": 0.05,
+    "LP": 0.5,
+    "K1": 0.5,
+    "alpha": 2.0,
+    "UBAS": 1,
+    "PM": 1,
+    "M": 1.0,
+    "VAR_M": 1e-4,
 }
 
-HBV_PARAMS_LIST = ['TT', 'C0', 'ETF', 'LP', 'FC',
-                   'beta', 'FRAC', 'K1', 'alpha', 'K2',
-                   'UBAS', 'PM']
+DEFAULT_PAR_VALUES_DICT_EXTEND = {
+    "TT": 0.0,
+    "C0": 0.5,
+    "ETF": 0.2,
+    "LP": 0.5,
+    "FC": 250,
+    "beta": 2.0,
+    "FRAC": 0.3,
+    "K1": 0.5,
+    "alpha": 2.0,
+    "K2": 0.05,
+    "UBAS": 1,
+    "PM": 1,
+    "M": 1.0,
+    "VAR_M": 1e-4,
+}
+
+DEFAULT_PAR_INFO_DICT = {
+    "TT": {"lower": -4.0, "upper": 4.0, "default": 0.0},
+    "C0": {"lower": 0.0, "upper": 5.0, "default": 0.5},
+    "ETF": {"lower": 0.0, "upper": 1.0, "default": 0.2},
+    "LP": {"lower": 0.0, "upper": 1.0, "default": 0.5},
+    "FC": {"lower": 50.0, "upper": 1000.0, "default": 250.0},
+    "beta": {"lower": 1.0, "upper": 3.0, "default": 2.0},
+    "FRAC": {"lower": 0.1, "upper": 0.9, "default": 0.3},
+    "K1": {"lower": 0.05, "upper": 1.0, "default": 0.5},
+    "alpha": {"lower": 1.0, "upper": 3.0, "default": 2.0},
+    "K2": {"lower": 0.0, "upper": 0.1, "default": 0.05},
+    "UBAS": {"lower": 1.0, "upper": 3.0, "default": 1.0},
+    "PM": {"lower": 0.5, "upper": 2.0, "default": 1.0},
+    "M": {"lower": 0.9, "upper": 1.0, "default": 1.0},
+    "VAR_M": {"lower": 1e-5, "upper": 1e-3, "default": 1e-4},
+}
+
+HBV_PARAMS_LIST = [
+    "TT",
+    "C0",
+    "ETF",
+    "LP",
+    "FC",
+    "beta",
+    "FRAC",
+    "K1",
+    "alpha",
+    "K2",
+    "UBAS",
+    "PM",
+]
 
 
 def _plot_time_series(df, column_to_plot):
     fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        name=column_to_plot,
-        x=df.index,
-        y=df[column_to_plot],
-        mode="lines"
-    ))
+    fig.add_trace(
+        go.Scatter(name=column_to_plot, x=df.index, y=df[column_to_plot], mode="lines")
+    )
     fig.update_xaxes(showgrid=True, ticklabelmode="period")
     fig.show()
 
 
-def _plot_output_data_and_precipitation(input_data_df, simulated_data_df=None, input_data_time_column=None,
-                                        simulated_time_column=None, measured_data_column="streamflow",
-                                        simulated_column="Q_cms", precipitation_columns="precipitation",
-                                        additional_columns=None, plot_measured_data=False):
+def _plot_output_data_and_precipitation(
+    input_data_df,
+    simulated_data_df=None,
+    input_data_time_column=None,
+    simulated_time_column=None,
+    measured_data_column="streamflow",
+    simulated_column="Q_cms",
+    precipitation_columns="precipitation",
+    additional_columns=None,
+    plot_measured_data=False,
+):
     reset_index_of_input_data_df = False
-    if input_data_time_column is not None and input_data_time_column != "index" and input_data_time_column in input_data_df.columns:
+    if (
+        input_data_time_column is not None
+        and input_data_time_column != "index"
+        and input_data_time_column in input_data_df.columns
+    ):
         reset_index_of_input_data_df = True
         input_data_df = input_data_df.set_index(input_data_time_column)
 
     # filter input_data_df based on time steps which occure in simulated_data_df
-    if simulated_time_column is None or not simulated_time_column in simulated_data_df.columns:
-        input_data_df = input_data_df.loc[simulated_data_df.index.min():simulated_data_df.index.max()]
+    if (
+        simulated_time_column is None
+        or not simulated_time_column in simulated_data_df.columns
+    ):
+        input_data_df = input_data_df.loc[
+            simulated_data_df.index.min() : simulated_data_df.index.max()
+        ]
     else:
         input_data_df = input_data_df.loc[
-                        simulated_data_df[simulated_time_column].min():simulated_data_df[simulated_time_column].max()]
+            simulated_data_df[simulated_time_column]
+            .min() : simulated_data_df[simulated_time_column]
+            .max()
+        ]
 
     N_max = input_data_df[precipitation_columns].max()
     timesteps_min = input_data_df.index.min()
@@ -84,25 +136,44 @@ def _plot_output_data_and_precipitation(input_data_df, simulated_data_df=None, i
     fig = go.Figure()
 
     if plot_measured_data:
-        fig.add_trace(go.Scatter(x=input_data_df.index,
-                                 y=input_data_df[measured_data_column],
-                                 name=measured_data_column
-                                 ))
+        fig.add_trace(
+            go.Scatter(
+                x=input_data_df.index,
+                y=input_data_df[measured_data_column],
+                name=measured_data_column,
+            )
+        )
 
     if simulated_data_df is not None:
-        if simulated_time_column is None or not simulated_time_column in simulated_data_df.columns:
-            fig.add_trace(go.Scatter(x=simulated_data_df.index,
-                                     y=simulated_data_df[simulated_column],
-                                     name=simulated_column
-                                     ))
+        if (
+            simulated_time_column is None
+            or not simulated_time_column in simulated_data_df.columns
+        ):
+            fig.add_trace(
+                go.Scatter(
+                    x=simulated_data_df.index,
+                    y=simulated_data_df[simulated_column],
+                    name=simulated_column,
+                )
+            )
         else:
-            fig.add_trace(go.Scatter(x=simulated_data_df[simulated_time_column],
-                                     y=simulated_data_df[simulated_column],
-                                     name=simulated_column
-                                     ))
+            fig.add_trace(
+                go.Scatter(
+                    x=simulated_data_df[simulated_time_column],
+                    y=simulated_data_df[simulated_column],
+                    name=simulated_column,
+                )
+            )
 
-    fig.add_trace(go.Scatter(x=input_data_df.index, y=input_data_df[precipitation_columns],
-                             text=input_data_df[precipitation_columns], name="Precipitation", yaxis="y2", ))
+    fig.add_trace(
+        go.Scatter(
+            x=input_data_df.index,
+            y=input_data_df[precipitation_columns],
+            text=input_data_df[precipitation_columns],
+            name="Precipitation",
+            yaxis="y2",
+        )
+    )
 
     if reset_index_of_input_data_df:
         input_data_df.reset_index(inplace=True)
@@ -110,11 +181,7 @@ def _plot_output_data_and_precipitation(input_data_df, simulated_data_df=None, i
 
     # Update axes
     fig.update_layout(
-        xaxis=dict(
-            autorange=True,
-            range=[timesteps_min, timesteps_max],
-            type="date"
-        ),
+        xaxis=dict(autorange=True, range=[timesteps_min, timesteps_max], type="date"),
         yaxis=dict(
             side="left",
             domain=[0, 0.7],
@@ -131,36 +198,49 @@ def _plot_output_data_and_precipitation(input_data_df, simulated_data_df=None, i
             mirror=True,
             range=[N_max, 0],
             side="right",
-            tickfont={"color": '#1f77b4'},
+            tickfont={"color": "#1f77b4"},
             nticks=3,
             tickmode="auto",
             ticks="inside",
-            titlefont={"color": '#1f77b4'},
+            titlefont={"color": "#1f77b4"},
             title="N [mm/h]",
             type="linear",
-        )
+        ),
     )
-    fig.update_layout(legend=dict(
-        yanchor="bottom",
-        y=0.01,
-        xanchor="right",
-        x=1.21
-    ))
+    fig.update_layout(legend=dict(yanchor="bottom", y=0.01, xanchor="right", x=1.21))
     return fig
 
 
-def _plot_streamflow_and_precipitation(input_data_df, simulated_data_df=None, input_data_time_column=None,
-                                       simulated_time_column=None, observed_streamflow_column="streamflow",
-                                       simulated_streamflow_column="Q_cms", precipitation_columns="precipitation",
-                                       additional_columns=None):
-    if input_data_time_column is not None and input_data_time_column != "index" and input_data_time_column in input_data_df.columns:
+def _plot_streamflow_and_precipitation(
+    input_data_df,
+    simulated_data_df=None,
+    input_data_time_column=None,
+    simulated_time_column=None,
+    observed_streamflow_column="streamflow",
+    simulated_streamflow_column="Q_cms",
+    precipitation_columns="precipitation",
+    additional_columns=None,
+):
+    if (
+        input_data_time_column is not None
+        and input_data_time_column != "index"
+        and input_data_time_column in input_data_df.columns
+    ):
         input_data_df = input_data_df.set_index(input_data_time_column)
 
-    if simulated_time_column is None or not simulated_time_column in simulated_data_df.columns:
-        input_data_df = input_data_df.loc[simulated_data_df.index.min():simulated_data_df.index.max()]
+    if (
+        simulated_time_column is None
+        or not simulated_time_column in simulated_data_df.columns
+    ):
+        input_data_df = input_data_df.loc[
+            simulated_data_df.index.min() : simulated_data_df.index.max()
+        ]
     else:
         input_data_df = input_data_df.loc[
-                        simulated_data_df[simulated_time_column].min():simulated_data_df[simulated_time_column].max()]
+            simulated_data_df[simulated_time_column]
+            .min() : simulated_data_df[simulated_time_column]
+            .max()
+        ]
 
     N_max = input_data_df[precipitation_columns].max()
     timesteps_min = input_data_df.index.min()
@@ -168,37 +248,56 @@ def _plot_streamflow_and_precipitation(input_data_df, simulated_data_df=None, in
 
     fig = go.Figure()
 
-    fig.add_trace(go.Scatter(x=input_data_df.index,
-                             y=input_data_df[observed_streamflow_column],
-                             name="Observed Streamflow"
-                             ))
+    fig.add_trace(
+        go.Scatter(
+            x=input_data_df.index,
+            y=input_data_df[observed_streamflow_column],
+            name="Observed Streamflow",
+        )
+    )
 
     if simulated_data_df is not None:
-        if simulated_time_column is None or not simulated_time_column in simulated_data_df.columns:
-            fig.add_trace(go.Scatter(x=simulated_data_df.index,
-                                     y=simulated_data_df[simulated_streamflow_column],
-                                     name="Simulated Streamflow"
-                                     ))
+        if (
+            simulated_time_column is None
+            or not simulated_time_column in simulated_data_df.columns
+        ):
+            fig.add_trace(
+                go.Scatter(
+                    x=simulated_data_df.index,
+                    y=simulated_data_df[simulated_streamflow_column],
+                    name="Simulated Streamflow",
+                )
+            )
         else:
-            fig.add_trace(go.Scatter(x=simulated_data_df[simulated_time_column],
-                                     y=simulated_data_df[simulated_streamflow_column],
-                                     name="Simulated Streamflow"
-                                     ))
+            fig.add_trace(
+                go.Scatter(
+                    x=simulated_data_df[simulated_time_column],
+                    y=simulated_data_df[simulated_streamflow_column],
+                    name="Simulated Streamflow",
+                )
+            )
 
-    fig.add_trace(go.Scatter(x=input_data_df.index, y=input_data_df[precipitation_columns],
-                             text=input_data_df[precipitation_columns], name="Precipitation", yaxis="y2", ))
+    fig.add_trace(
+        go.Scatter(
+            x=input_data_df.index,
+            y=input_data_df[precipitation_columns],
+            text=input_data_df[precipitation_columns],
+            name="Precipitation",
+            yaxis="y2",
+        )
+    )
 
-    if input_data_time_column is not None and input_data_time_column != "index" and input_data_time_column in input_data_df.columns:
+    if (
+        input_data_time_column is not None
+        and input_data_time_column != "index"
+        and input_data_time_column in input_data_df.columns
+    ):
         input_data_df.reset_index(inplace=True)
         input_data_df.rename(columns={"index": input_data_time_column}, inplace=True)
 
     # Update axes
     fig.update_layout(
-        xaxis=dict(
-            autorange=True,
-            range=[timesteps_min, timesteps_max],
-            type="date"
-        ),
+        xaxis=dict(autorange=True, range=[timesteps_min, timesteps_max], type="date"),
         yaxis=dict(
             side="left",
             domain=[0, 0.7],
@@ -215,32 +314,30 @@ def _plot_streamflow_and_precipitation(input_data_df, simulated_data_df=None, in
             mirror=True,
             range=[N_max, 0],
             side="right",
-            tickfont={"color": '#1f77b4'},
+            tickfont={"color": "#1f77b4"},
             nticks=3,
             tickmode="auto",
             ticks="inside",
-            titlefont={"color": '#1f77b4'},
+            titlefont={"color": "#1f77b4"},
             title="N [mm/h]",
             type="linear",
-        )
+        ),
     )
-    fig.update_layout(legend=dict(
-        yanchor="bottom",
-        y=0.01,
-        xanchor="right",
-        x=1.21
-    ))
+    fig.update_layout(legend=dict(yanchor="bottom", y=0.01, xanchor="right", x=1.21))
     return fig
+
 
 #####################################
 # Now comes the set of functiones copied from https://github.com/vars-tool/vars-tool/blob/master/tutorials/hbv.py
 # Original authors: Saman Razavi, Hoshin Gupta, Kasra Keshavarz, and Cordell Blanchard
 #####################################
 
+
 # Calculate Change in storage:
 def DeltaS(state, start, end):
-    S = np.zeros(len(state['SWE']))
-    for n in state: S = S + state[n]
+    S = np.zeros(len(state["SWE"]))
+    for n in state:
+        S = S + state[n]
     S = S[start:end]
     S = S - S[0]
     return S
@@ -248,57 +345,58 @@ def DeltaS(state, start, end):
 
 def WaterBalancePlot(flux, state, forcing, start, end):
     # Do a nice water balance plot
-    t = flux['PET'][start:end].index
+    t = flux["PET"][start:end].index
     S = DeltaS(state, start, end)
-    P = forcing['P'][start:end].cumsum()
-    AET = flux['AET'][start:end].cumsum()
-    Q = flux['Q_mm'][start:end].cumsum()
+    P = forcing["P"][start:end].cumsum()
+    AET = flux["AET"][start:end].cumsum()
+    Q = flux["Q_mm"][start:end].cumsum()
 
     pl.figure(figsize=(10, 5))
-    pl.fill_between(t, Q + AET + S, 0., color='darkgreen', label='cumulative Q')
-    pl.fill_between(t, S + AET, 0., color='forestgreen', label='cumulative AET')
-    pl.fill_between(t, S, 0., color='lightgreen', label='$\Delta S$')
-    pl.plot(forcing['P'][start:end].cumsum(), label='cumulative P', color='b')
+    pl.fill_between(t, Q + AET + S, 0.0, color="darkgreen", label="cumulative Q")
+    pl.fill_between(t, S + AET, 0.0, color="forestgreen", label="cumulative AET")
+    pl.fill_between(t, S, 0.0, color="lightgreen", label="$\Delta S$")
+    pl.plot(forcing["P"][start:end].cumsum(), label="cumulative P", color="b")
     # pl.fill_between(flux['Q_mm'][start:end].cumsum()+flux['AET'][start:end].cumsum()+S,label='Streamflow',color='r')
     # pl.plot(flux['AET'][start:end].cumsum(),label='AET',color='darkgreen')
 
     pl.legend(fontsize=13)
-    pl.ylabel('Water balance (mm)', fontsize=13);
+    pl.ylabel("Water balance (mm)", fontsize=13)
     pl.grid()
 
 
 def PlotEverything(flux, state, forcing, start, end, freq):
     # Do a nice plot of model outputs:
-    tS = state['SWE'].resample(freq).mean()[start:end].index
-    SWE = (state['SWE'].resample(freq).mean())[start:end]
-    SMS = (state['SMS'].resample(freq).mean())[start:end]
-    S1 = (state['S1'].resample(freq).mean())[start:end]
-    S2 = (state['S2'].resample(freq).mean())[start:end]
+    tS = state["SWE"].resample(freq).mean()[start:end].index
+    SWE = (state["SWE"].resample(freq).mean())[start:end]
+    SMS = (state["SMS"].resample(freq).mean())[start:end]
+    S1 = (state["S1"].resample(freq).mean())[start:end]
+    S2 = (state["S2"].resample(freq).mean())[start:end]
 
-    t = flux['PET'][start:end].resample(freq).sum().index
-    P = forcing['P'][start:end].resample(freq).sum()
-    AET = flux['AET'][start:end].resample(freq).sum()
-    PET = flux['PET'][start:end].resample(freq).sum()
-    Q = flux['Q_mm'][start:end].resample(freq).sum()
+    t = flux["PET"][start:end].resample(freq).sum().index
+    P = forcing["P"][start:end].resample(freq).sum()
+    AET = flux["AET"][start:end].resample(freq).sum()
+    PET = flux["PET"][start:end].resample(freq).sum()
+    Q = flux["Q_mm"][start:end].resample(freq).sum()
 
     pl.figure(figsize=(10, 7))
     pl.subplot(2, 1, 1)
-    pl.fill_between(t, PET, 0., color='lightgreen', label='PET', step='pre')
-    pl.step(t, P, label='P', color='b')
-    pl.step(t, Q, label='Q', color='m')
-    pl.step(t, AET, label='AET', color='g')
+    pl.fill_between(t, PET, 0.0, color="lightgreen", label="PET", step="pre")
+    pl.step(t, P, label="P", color="b")
+    pl.step(t, Q, label="Q", color="m")
+    pl.step(t, AET, label="AET", color="g")
     pl.legend(fontsize=13)
-    pl.ylabel('Fluxes (mm)', fontsize=13);
+    pl.ylabel("Fluxes (mm)", fontsize=13)
     pl.grid()
 
     pl.subplot(2, 1, 2)
-    pl.step(tS, SWE, label='SWE', color='tab:cyan')
-    pl.step(tS, SMS, label='SMS', color='tab:grey')
-    pl.step(tS, S1, label='S1', color='tab:olive')
-    pl.step(tS, S2, label='S2', color='tab:brown')
+    pl.step(tS, SWE, label="SWE", color="tab:cyan")
+    pl.step(tS, SMS, label="SMS", color="tab:grey")
+    pl.step(tS, S1, label="S1", color="tab:olive")
+    pl.step(tS, S2, label="S2", color="tab:brown")
     pl.legend(fontsize=13)
-    pl.ylabel('States (mm)', fontsize=13);
+    pl.ylabel("States (mm)", fontsize=13)
     pl.grid()
+
 
 # #####################################
 #
@@ -484,23 +582,33 @@ def PlotEverything(flux, state, forcing, start, end, freq):
 #####################################
 
 
-def read_streamflow(streamflow_inp, time_column_name="TimeStamp", streamflow_column_name="streamflow"):
+def read_streamflow(
+    streamflow_inp, time_column_name="TimeStamp", streamflow_column_name="streamflow"
+):
     streamflow_dict = dict()
     with open(streamflow_inp, "r") as file:
         for line in file.readlines():
             line = line.strip()
             date, value = line.split()
             streamflow_dict[date] = float(value)
-    streamflow_df = pd.DataFrame.from_dict(streamflow_dict, orient='index', columns=[streamflow_column_name, ])
+    streamflow_df = pd.DataFrame.from_dict(
+        streamflow_dict,
+        orient="index",
+        columns=[
+            streamflow_column_name,
+        ],
+    )
     streamflow_df.index = pd.to_datetime(streamflow_df.index)
     streamflow_df.index.name = time_column_name
     return streamflow_df
 
 
-def read_precipitation_temperature(precipitation_temperature_inp,
-                                   time_column_name="TimeStamp",
-                                   precipitation_column_name="precipitation",
-                                   temperature_column_name="temperature"):
+def read_precipitation_temperature(
+    precipitation_temperature_inp,
+    time_column_name="TimeStamp",
+    precipitation_column_name="precipitation",
+    temperature_column_name="temperature",
+):
     precipitation_temperature_inp_dict = defaultdict(list)
     precipitation_temperature_inp_dict[time_column_name] = []
     precipitation_temperature_inp_dict[precipitation_column_name] = []
@@ -511,19 +619,29 @@ def read_precipitation_temperature(precipitation_temperature_inp,
             line = line.strip()
             date, prec, temp = line.split()
             precipitation_temperature_inp_dict[time_column_name].append(date)
-            precipitation_temperature_inp_dict[precipitation_column_name].append(float(prec))
-            precipitation_temperature_inp_dict[temperature_column_name].append(float(temp))
+            precipitation_temperature_inp_dict[precipitation_column_name].append(
+                float(prec)
+            )
+            precipitation_temperature_inp_dict[temperature_column_name].append(
+                float(temp)
+            )
 
     precipitation_temperature_df = pd.DataFrame(precipitation_temperature_inp_dict)
-    precipitation_temperature_df[time_column_name] = pd.to_datetime(precipitation_temperature_df[time_column_name])
+    precipitation_temperature_df[time_column_name] = pd.to_datetime(
+        precipitation_temperature_df[time_column_name]
+    )
     precipitation_temperature_df.set_index(time_column_name, inplace=True)
 
     return precipitation_temperature_df
 
 
-def read_initial_conditions(initial_condition_file, return_dict_or_df="dict", timestamp=None,
-                            time_column_name="TimeStamp"):
-    if str(initial_condition_file).endswith('.inp'):
+def read_initial_conditions(
+    initial_condition_file,
+    return_dict_or_df="dict",
+    timestamp=None,
+    time_column_name="TimeStamp",
+):
+    if str(initial_condition_file).endswith(".inp"):
         initial_condition_dict = defaultdict(list)
         initial_condition_dict["WatershedArea_km2"] = []
         initial_condition_dict["SWE"] = []
@@ -536,7 +654,9 @@ def read_initial_conditions(initial_condition_file, return_dict_or_df="dict", ti
                 line = line.strip()
                 list_of_values_per_line = line.split()
                 if len(list_of_values_per_line) == 2:
-                    initial_condition_dict[list_of_values_per_line[0]].append(float(list_of_values_per_line[1]))
+                    initial_condition_dict[list_of_values_per_line[0]].append(
+                        float(list_of_values_per_line[1])
+                    )
 
         if return_dict_or_df == "dict":
             return initial_condition_dict
@@ -544,16 +664,26 @@ def read_initial_conditions(initial_condition_file, return_dict_or_df="dict", ti
             initial_condition_df = pd.DataFrame(initial_condition_dict)
             return initial_condition_df
     else:
-        initial_condition_df = pd.read_pickle(initial_condition_file, compression="gzip")
+        initial_condition_df = pd.read_pickle(
+            initial_condition_file, compression="gzip"
+        )
         if timestamp is None:
-            timestamp = initial_condition_df[time_column_name].min()  # initial_condition_df.loc[0].TimeStamp
+            timestamp = initial_condition_df[
+                time_column_name
+            ].min()  # initial_condition_df.loc[0].TimeStamp
         else:
             timestamp = pd.Timestamp(timestamp)
-        return initial_condition_df.loc[initial_condition_df[time_column_name] == timestamp]
+        return initial_condition_df.loc[
+            initial_condition_df[time_column_name] == timestamp
+        ]
 
 
-def read_long_term_data(monthly_data_inp, time_column_name="month", precipitation_column_name="monthly_average_PE",
-                                   temperature_column_name="monthly_average_T"):
+def read_long_term_data(
+    monthly_data_inp,
+    time_column_name="month",
+    precipitation_column_name="monthly_average_PE",
+    temperature_column_name="monthly_average_T",
+):
     precipitation_temperature_monthly = defaultdict(list)
     precipitation_temperature_monthly[time_column_name] = []
     precipitation_temperature_monthly[precipitation_column_name] = []
@@ -566,30 +696,55 @@ def read_long_term_data(monthly_data_inp, time_column_name="month", precipitatio
             if len(line.split()) == 2:
                 temp, prec = line.split()
                 precipitation_temperature_monthly[time_column_name].append(int(inx))
-                precipitation_temperature_monthly[precipitation_column_name].append(float(prec))
-                precipitation_temperature_monthly[temperature_column_name].append(float(temp))
-    precipitation_temperature_monthly_df = pd.DataFrame(precipitation_temperature_monthly)
+                precipitation_temperature_monthly[precipitation_column_name].append(
+                    float(prec)
+                )
+                precipitation_temperature_monthly[temperature_column_name].append(
+                    float(temp)
+                )
+    precipitation_temperature_monthly_df = pd.DataFrame(
+        precipitation_temperature_monthly
+    )
     precipitation_temperature_monthly_df.set_index(time_column_name, inplace=True)
     return precipitation_temperature_monthly_df
 
 
 def read_param_setup_dict(factorSpace_txt):
     par_values_dict = defaultdict(dict)
-    number_of_parameters = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+    number_of_parameters = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+    ]
     with open(factorSpace_txt, "r", encoding="ISO-8859-15") as file:
         for line in file.readlines():
             line = line.strip()
             elements_in_one_line = line.split()
             if elements_in_one_line[0] in number_of_parameters:
-                par_values_dict[elements_in_one_line[3]]["lower"] = elements_in_one_line[1]
-                par_values_dict[elements_in_one_line[3]]["upper"] = elements_in_one_line[2]
+                par_values_dict[elements_in_one_line[3]]["lower"] = (
+                    elements_in_one_line[1]
+                )
+                par_values_dict[elements_in_one_line[3]]["upper"] = (
+                    elements_in_one_line[2]
+                )
     return par_values_dict
 
 
 #####################################
 
 
-def soil_storage_routing_module(ponding, SMS, S1, S2, AET, FC, beta, FRAC, K1, alpha, K2):
+def soil_storage_routing_module(
+    ponding, SMS, S1, S2, AET, FC, beta, FRAC, K1, alpha, K2
+):
     """
     The function should return SMS_new, S1_new, S2_new, Q1, Q2
     *****  ponding: at time t*****
@@ -624,7 +779,7 @@ def soil_storage_routing_module(ponding, SMS, S1, S2, AET, FC, beta, FRAC, K1, a
     soil_release_to_slow_reservoir = (1 - FRAC) * soil_release
 
     # Q1 = K1 * (S1 ** alpha)  # TODO make sure that it is not (K1 * S1) ** alpha np.pow(S1, alpha)
-    Q1 = K1 * (S1 ** alpha)
+    Q1 = K1 * (S1**alpha)
     if Q1 > S1:
         Q1 = S1
 
@@ -657,7 +812,9 @@ def evapotranspiration_module(SMS, T, monthly_average_T, monthly_average_PE, ETF
     else:
         # if np.absolute(LP) < epsilon:
         # if math.isclose(LP, 0):
-        if abs(LP) < 1e-9:  # in this case both SMS and LP are close to zero lim(x/x) x->0 is 1
+        if (
+            abs(LP) < 1e-9
+        ):  # in this case both SMS and LP are close to zero lim(x/x) x->0 is 1
             AET = PET
         else:
             AET = PET * (SMS / LP)
@@ -709,11 +866,11 @@ def triangle_routing(Q, UBAS):
     else:
         # x = [0, 0.5 * UBAS, UBAS, length_triangle_base]
         # v = [0, 1, 0, 0]
-        x = np.array([0, 0.5*UBAS, UBAS, length_triangle_base])
+        x = np.array([0, 0.5 * UBAS, UBAS, length_triangle_base])
         v = np.array([0, 1, 0, 0])
 
     # weight = np.empty(shape=(length_triangle_base + 1,), dtype=np.float64)
-    weight=np.zeros(length_triangle_base)
+    weight = np.zeros(length_triangle_base)
     weight[0] = 0
 
     # np.interp(2.5, xp, fp) or f = scipy.interpolate.interp1d(x, y); f(xnew)
@@ -721,62 +878,106 @@ def triangle_routing(Q, UBAS):
         if (i - 1) < (0.5 * UBAS) and i > (0.5 * UBAS):
             # weight[i] = 0.5 * (np.interp(i - 1, x, v) + np.interp(0.5 * UBAS, x, v)) * (0.5 * UBAS - i + 1) + \
             #             0.5 * (np.interp(0.5 * UBAS, x, v) + np.interp(i, x, v)) * (i - 0.5 * UBAS)
-            weight[i-1] = 0.5 * (np.interp(i - 1, x, v) + np.interp(0.5 * UBAS, x, v)) * (0.5 * UBAS - i + 1) + \
-                        0.5 * (np.interp(0.5 * UBAS, x, v) + np.interp(i, x, v)) * (i - 0.5 * UBAS)
+            weight[i - 1] = 0.5 * (
+                np.interp(i - 1, x, v) + np.interp(0.5 * UBAS, x, v)
+            ) * (0.5 * UBAS - i + 1) + 0.5 * (
+                np.interp(0.5 * UBAS, x, v) + np.interp(i, x, v)
+            ) * (
+                i - 0.5 * UBAS
+            )
         elif i > UBAS:
             # weight[i] = 0.5 * np.interp(i - 1, x, v) * (UBAS - i + 1)
-            weight[i-1] = 0.5 * np.interp(i - 1, x, v) * (UBAS - i + 1)
+            weight[i - 1] = 0.5 * np.interp(i - 1, x, v) * (UBAS - i + 1)
         else:
             # weight[i] = np.interp(i - 0.5, x, v)
-            weight[i-1] = np.interp(i - 0.5, x, v)
+            weight[i - 1] = np.interp(i - 0.5, x, v)
 
     weight = weight / np.sum(weight)
 
     # Q_routed = np.empty_like(Q)
-    Q_routed=np.zeros(len(Q))
+    Q_routed = np.zeros(len(Q))
     # for i in range(len(Q)):
-    for i in range(1, len(Q)+1):
+    for i in range(1, len(Q) + 1):
         temp = 0
         window_len = min((i, length_triangle_base))
         for j in range(1, 1 + window_len):
             # temp += weight[j + 1] * Q[i - j - 1]  # TODO Q[i - j]
             temp += weight[j - 1] * Q[i - j]  # TODO Q[i - j]
         # Q_routed[i] = temp
-        Q_routed[i-1] = temp
+        Q_routed[i - 1] = temp
 
     return Q_routed
 
 
 #####################################
-def HBV_SASK(forcing, long_term, par_values_dict, initial_condition_df, printing=False, time_column_name="TimeStamp",
-             precipitation_column_name="precipitation", temperature_column_name="temperature",
-             long_term_precipitation_column_name="monthly_average_PE",
-             long_term_temperature_column_name="monthly_average_T", corrupt_forcing_data=False):
+def HBV_SASK(
+    forcing,
+    long_term,
+    par_values_dict,
+    initial_condition_df,
+    printing=False,
+    time_column_name="TimeStamp",
+    precipitation_column_name="precipitation",
+    temperature_column_name="temperature",
+    long_term_precipitation_column_name="monthly_average_PE",
+    long_term_temperature_column_name="monthly_average_T",
+    corrupt_forcing_data=False,
+):
     """
     HBV-SASK has 12 parameters: The first 10 ones are necessary
     to run the model, and parameters 11 and 12, if not given,
     will be set at their default values.
     :param corrupt_forcing_data:
-    :param initial_condition_df should be (subset of) a pd.DataFrame that just contains 
-    one row with the initial conditions for the current time t, 
+    :param initial_condition_df should be (subset of) a pd.DataFrame that just contains
+    one row with the initial conditions for the current time t,
     for which the forcing data is available and the predictions will be produced
     """
     if par_values_dict is None:
         par_values_dict = {
-            'TT': 0.0, 'C0': 5.0, 'ETF': 0.5, 'LP': 0.5, 'FC': 100, 'beta': 2.0, 'FRAC': 0.5,
-            'K1': 0.5, 'alpha': 2.0, 'K2': 0.025, 'UBAS': 1, 'PM': 1
+            "TT": 0.0,
+            "C0": 5.0,
+            "ETF": 0.5,
+            "LP": 0.5,
+            "FC": 100,
+            "beta": 2.0,
+            "FRAC": 0.5,
+            "K1": 0.5,
+            "alpha": 2.0,
+            "K2": 0.025,
+            "UBAS": 1,
+            "PM": 1,
         }
     try:
-        TT = par_values_dict.get("TT", DEFAULT_PAR_VALUES_DICT["TT"])  # float(par_values_dict["TT"])
-        C0 = par_values_dict.get("C0", DEFAULT_PAR_VALUES_DICT["C0"])  # float(par_values_dict["C0"])
-        ETF = par_values_dict.get("ETF", DEFAULT_PAR_VALUES_DICT["ETF"])  # float(par_values_dict["ETF"])
-        LP = par_values_dict.get("LP", DEFAULT_PAR_VALUES_DICT["LP"])  # float(par_values_dict["LP"])
-        FC = par_values_dict.get("FC", DEFAULT_PAR_VALUES_DICT["FC"])  # float(par_values_dict["FC"])
-        beta = par_values_dict.get("beta", DEFAULT_PAR_VALUES_DICT["beta"])  # float(par_values_dict["beta"])
-        FRAC = par_values_dict.get("FRAC", DEFAULT_PAR_VALUES_DICT["FRAC"])  # float(par_values_dict["FRAC"])
-        K1 = par_values_dict.get("K1", DEFAULT_PAR_VALUES_DICT["K1"])  # float(par_values_dict["K1"])
-        alpha = par_values_dict.get("alpha", DEFAULT_PAR_VALUES_DICT["alpha"])  # float(par_values_dict["alpha"])
-        K2 = par_values_dict.get("K2", DEFAULT_PAR_VALUES_DICT["K2"])  # float(par_values_dict["K2"])
+        TT = par_values_dict.get(
+            "TT", DEFAULT_PAR_VALUES_DICT["TT"]
+        )  # float(par_values_dict["TT"])
+        C0 = par_values_dict.get(
+            "C0", DEFAULT_PAR_VALUES_DICT["C0"]
+        )  # float(par_values_dict["C0"])
+        ETF = par_values_dict.get(
+            "ETF", DEFAULT_PAR_VALUES_DICT["ETF"]
+        )  # float(par_values_dict["ETF"])
+        LP = par_values_dict.get(
+            "LP", DEFAULT_PAR_VALUES_DICT["LP"]
+        )  # float(par_values_dict["LP"])
+        FC = par_values_dict.get(
+            "FC", DEFAULT_PAR_VALUES_DICT["FC"]
+        )  # float(par_values_dict["FC"])
+        beta = par_values_dict.get(
+            "beta", DEFAULT_PAR_VALUES_DICT["beta"]
+        )  # float(par_values_dict["beta"])
+        FRAC = par_values_dict.get(
+            "FRAC", DEFAULT_PAR_VALUES_DICT["FRAC"]
+        )  # float(par_values_dict["FRAC"])
+        K1 = par_values_dict.get(
+            "K1", DEFAULT_PAR_VALUES_DICT["K1"]
+        )  # float(par_values_dict["K1"])
+        alpha = par_values_dict.get(
+            "alpha", DEFAULT_PAR_VALUES_DICT["alpha"]
+        )  # float(par_values_dict["alpha"])
+        K2 = par_values_dict.get(
+            "K2", DEFAULT_PAR_VALUES_DICT["K2"]
+        )  # float(par_values_dict["K2"])
     except KeyError:
         print(f"Error while reading parameter values from param dictionary!")
         raise
@@ -818,8 +1019,10 @@ def HBV_SASK(forcing, long_term, par_values_dict, initial_condition_df, printing
 
     if printing:
         print(f" watershed_area={watershed_area}")
-        print(f" initial_SWE={initial_SWE} \n initial_SMS={initial_SMS} "
-              f"\n initial_S1={initial_S1} \n initial_S2={initial_S2} \n")
+        print(
+            f" initial_SWE={initial_SWE} \n initial_SMS={initial_SMS} "
+            f"\n initial_S1={initial_S1} \n initial_S2={initial_S2} \n"
+        )
         print(f"period_length={period_length}")
 
     SWE = np.zeros(shape=(period_length + 1,), dtype=np.float64)
@@ -839,9 +1042,15 @@ def HBV_SASK(forcing, long_term, par_values_dict, initial_condition_df, printing
 
     for t in range(period_length):
         # iteratively over time steps computing the state for the next time step and the current model output
-        month = time_series[t].month  # the current month number - for Jan=1, ..., Dec=12
-        single_monthly_average_PE = long_term.loc[month][long_term_precipitation_column_name]
-        single_monthly_average_T = long_term.loc[month][long_term_temperature_column_name]
+        month = time_series[
+            t
+        ].month  # the current month number - for Jan=1, ..., Dec=12
+        single_monthly_average_PE = long_term.loc[month][
+            long_term_precipitation_column_name
+        ]
+        single_monthly_average_T = long_term.loc[month][
+            long_term_temperature_column_name
+        ]
 
         SWE[t + 1], ponding[t] = precipitation_module(SWE[t], P[t], T[t], TT, C0)
 
@@ -858,25 +1067,25 @@ def HBV_SASK(forcing, long_term, par_values_dict, initial_condition_df, printing
     Q_cms = (Q * watershed_area * 1000) / (24 * 3600)
     Q_cms[Q_cms < 1e-4] = 1e-4
     AET[AET < 1e-5] = 1e-5
-    flux["Q_cms"] = Q_cms #.conjugate()
+    flux["Q_cms"] = Q_cms  # .conjugate()
     # Make sure flows will never get negative values because of numerical errors
     # flux["Q_cms"][flux["Q_cms"] < 10 ** -5] = 10 ** -5
     # flux["Q_cms"] = flux["Q_cms"].apply(lambda x: 1e-4 if x < 1e-4 else x)
 
-    flux["Q_mm"] = Q #.conjugate()
-    flux["AET"] = AET #.conjugate()
-    flux["PET"] = PET #.conjugate()
-    flux["Q1"] = Q1 #.conjugate()
-    flux["Q1_routed"] = Q1_routed #.conjugate()
-    flux["Q2"] = Q2 #.conjugate()
-    flux["ponding"] = ponding #.conjugate()
+    flux["Q_mm"] = Q  # .conjugate()
+    flux["AET"] = AET  # .conjugate()
+    flux["PET"] = PET  # .conjugate()
+    flux["Q1"] = Q1  # .conjugate()
+    flux["Q1_routed"] = Q1_routed  # .conjugate()
+    flux["Q2"] = Q2  # .conjugate()
+    flux["ponding"] = ponding  # .conjugate()
     if corrupt_forcing_data:
         flux["precipitation"] = precipitation_array
 
-    state["SWE"] = SWE #.conjugate()
-    state["SMS"] = SMS #.conjugate()
-    state["S1"] = S1 #.conjugate()
-    state["S2"] = S2 #.conjugate()
+    state["SWE"] = SWE  # .conjugate()
+    state["SMS"] = SMS  # .conjugate()
+    state["S1"] = S1  # .conjugate()
+    state["S2"] = S2  # .conjugate()
 
     return flux, state
 
@@ -885,12 +1094,12 @@ def HBV_SASK(forcing, long_term, par_values_dict, initial_condition_df, printing
 
 
 def _get_full_time_span(basis):
-    if basis == 'Banff_Basin':
-        start_date = pd.Timestamp('1950-01-01 00:00:00')
-        end_date = pd.Timestamp('2011-12-31 00:00:00')
-    elif basis == 'Oldman_Basin':
-        start_date = pd.Timestamp('1979-01-01 00:00:00')
-        end_date = pd.Timestamp('2008-12-31 00:00:00')
+    if basis == "Banff_Basin":
+        start_date = pd.Timestamp("1950-01-01 00:00:00")
+        end_date = pd.Timestamp("2011-12-31 00:00:00")
+    elif basis == "Oldman_Basin":
+        start_date = pd.Timestamp("1979-01-01 00:00:00")
+        end_date = pd.Timestamp("2008-12-31 00:00:00")
     else:
         start_date = None
         end_date = None
@@ -898,8 +1107,17 @@ def _get_full_time_span(basis):
 
 
 # TODO Change the function such that less is pre-assumed about the structure of different dfs
-def run_the_model(hbv_model_path, config_file, par_values_dict, run_full_timespan=False, basis='Oldman_Basin',
-                  plotting=False, writing_results_to_a_file=False, output_path=None, **kwargs):
+def run_the_model(
+    hbv_model_path,
+    config_file,
+    par_values_dict,
+    run_full_timespan=False,
+    basis="Oldman_Basin",
+    plotting=False,
+    writing_results_to_a_file=False,
+    output_path=None,
+    **kwargs,
+):
     # Preparing paths
     path_to_input = hbv_model_path / basis
     # initial_condition_file = path_to_input / "initial_condition.inp"
@@ -921,13 +1139,13 @@ def run_the_model(hbv_model_path, config_file, par_values_dict, run_full_timespa
                 year=configuration_object["time_settings"]["start_year"],
                 month=configuration_object["time_settings"]["start_month"],
                 day=configuration_object["time_settings"]["start_day"],
-                hour=configuration_object["time_settings"]["start_hour"]
+                hour=configuration_object["time_settings"]["start_hour"],
             )
             end_date = pd.Timestamp(
                 year=configuration_object["time_settings"]["end_year"],
                 month=configuration_object["time_settings"]["end_month"],
                 day=configuration_object["time_settings"]["end_day"],
-                hour=configuration_object["time_settings"]["end_hour"]
+                hour=configuration_object["time_settings"]["end_hour"],
             )
         except KeyError:
             start_date, end_date = _get_full_time_span(basis)
@@ -944,16 +1162,24 @@ def run_the_model(hbv_model_path, config_file, par_values_dict, run_full_timespa
         simulation_length = kwargs["simulation_length"]
     else:
         try:
-            simulation_length = configuration_object["time_settings"]["simulation_length"]
+            simulation_length = configuration_object["time_settings"][
+                "simulation_length"
+            ]
         except KeyError:
             simulation_length = (end_date - start_date).days - spin_up_length
             if simulation_length <= 0:
                 simulation_length = 365
 
-    start_date_predictions = pd.to_datetime(start_date) + pd.DateOffset(days=spin_up_length)
-    end_date = pd.to_datetime(start_date_predictions) + pd.DateOffset(days=simulation_length)
+    start_date_predictions = pd.to_datetime(start_date) + pd.DateOffset(
+        days=spin_up_length
+    )
+    end_date = pd.to_datetime(start_date_predictions) + pd.DateOffset(
+        days=simulation_length
+    )
     full_data_range = pd.date_range(start=start_date, end=end_date, freq="1D")
-    simulation_range = pd.date_range(start=start_date_predictions, end=end_date, freq="1D")
+    simulation_range = pd.date_range(
+        start=start_date_predictions, end=end_date, freq="1D"
+    )
 
     # print(f"start_date-{start_date}; spin_up_length-{spin_up_length}; start_date_predictions-{start_date_predictions}")
     # print(
@@ -969,16 +1195,26 @@ def run_the_model(hbv_model_path, config_file, par_values_dict, run_full_timespa
     long_term_precipitation_column_name = "monthly_average_PE"
     long_term_temperature_column_name = "monthly_average_T"
 
-    streamflow_df = read_streamflow(streamflow_inp, time_column_name=time_column_name, streamflow_column_name=streamflow_column_name)
-    precipitation_temperature_df = read_precipitation_temperature(precipitation_temperature_inp,
-                                                                  time_column_name=time_column_name,
-                                                                  precipitation_column_name=precipitation_column_name,
-                                                                  temperature_column_name=temperature_column_name)
-    time_series_data_df = pd.merge(streamflow_df, precipitation_temperature_df, left_index=True, right_index=True)
-    precipitation_temperature_monthly_df = read_long_term_data(monthly_data_inp,
-                                                               time_column_name=time_column_name,
-                                                               precipitation_column_name=long_term_precipitation_column_name,
-                                                               temperature_column_name=long_term_temperature_column_name)
+    streamflow_df = read_streamflow(
+        streamflow_inp,
+        time_column_name=time_column_name,
+        streamflow_column_name=streamflow_column_name,
+    )
+    precipitation_temperature_df = read_precipitation_temperature(
+        precipitation_temperature_inp,
+        time_column_name=time_column_name,
+        precipitation_column_name=precipitation_column_name,
+        temperature_column_name=temperature_column_name,
+    )
+    time_series_data_df = pd.merge(
+        streamflow_df, precipitation_temperature_df, left_index=True, right_index=True
+    )
+    precipitation_temperature_monthly_df = read_long_term_data(
+        monthly_data_inp,
+        time_column_name=time_column_name,
+        precipitation_column_name=long_term_precipitation_column_name,
+        temperature_column_name=long_term_temperature_column_name,
+    )
     param_setup_dict = read_param_setup_dict(factorSpace_txt)
 
     # Parse input based on some timeframe
@@ -987,55 +1223,112 @@ def run_the_model(hbv_model_path, config_file, par_values_dict, run_full_timespa
 
     if time_column_name in time_series_data_df.columns:
         time_series_data_df = time_series_data_df.loc[
-            (time_series_data_df[time_column_name] >= start_date) & (time_series_data_df[time_column_name] <= end_date)]
+            (time_series_data_df[time_column_name] >= start_date)
+            & (time_series_data_df[time_column_name] <= end_date)
+        ]
     else:
         time_series_data_df = time_series_data_df[start_date:end_date]
     # initial_condition_df = read_initial_conditions(initial_condition_file, return_dict_or_df="df")
-    initial_condition_df = read_initial_conditions(initial_condition_file, timestamp=start_date, time_column_name=time_column_name)
+    initial_condition_df = read_initial_conditions(
+        initial_condition_file, timestamp=start_date, time_column_name=time_column_name
+    )
     # print(initial_condition_df)
 
     if plotting:
         fig = make_subplots(rows=3, cols=1)
         fig.add_trace(
-            go.Scatter(x=time_series_data_df.index, y=time_series_data_df[precipitation_column_name], name="P"),
-            row=1, col=1)
+            go.Scatter(
+                x=time_series_data_df.index,
+                y=time_series_data_df[precipitation_column_name],
+                name="P",
+            ),
+            row=1,
+            col=1,
+        )
         fig.add_trace(
-            go.Scatter(x=time_series_data_df.index, y=time_series_data_df[temperature_column_name], name="T"),
-            row=2, col=1)
+            go.Scatter(
+                x=time_series_data_df.index,
+                y=time_series_data_df[temperature_column_name],
+                name="T",
+            ),
+            row=2,
+            col=1,
+        )
         fig.add_trace(
-            go.Scatter(x=time_series_data_df.index, y=time_series_data_df[streamflow_column_name], name="Q_cms"),
-            row=3, col=1)
+            go.Scatter(
+                x=time_series_data_df.index,
+                y=time_series_data_df[streamflow_column_name],
+                name="Q_cms",
+            ),
+            row=3,
+            col=1,
+        )
         plot_filename = output_path / f"forcing_data.html"
         plot(fig, filename=str(plot_filename), auto_open=False)
 
     #############################
 
     # Running the model
-    flux, state = HBV_SASK(forcing=time_series_data_df, long_term=precipitation_temperature_monthly_df,
-                           par_values_dict=par_values_dict, initial_condition_df=initial_condition_df, printing=True,
-                           time_column_name=time_column_name, precipitation_column_name=precipitation_column_name,
-                           temperature_column_name=temperature_column_name,
-                           long_term_precipitation_column_name=long_term_precipitation_column_name,
-                           long_term_temperature_column_name=long_term_temperature_column_name)
+    flux, state = HBV_SASK(
+        forcing=time_series_data_df,
+        long_term=precipitation_temperature_monthly_df,
+        par_values_dict=par_values_dict,
+        initial_condition_df=initial_condition_df,
+        printing=True,
+        time_column_name=time_column_name,
+        precipitation_column_name=precipitation_column_name,
+        temperature_column_name=temperature_column_name,
+        long_term_precipitation_column_name=long_term_precipitation_column_name,
+        long_term_temperature_column_name=long_term_temperature_column_name,
+    )
 
     # Create a final df - flux
     time_series_list = list(full_data_range)  # list(simulation_range)
     assert len(list(full_data_range)) == len(flux["Q_cms"])
 
     flux_df = pd.DataFrame(
-        list(zip(time_series_list, flux["Q_cms"], flux["Q_mm"], flux["AET"], flux["PET"], flux["Q1"], flux["Q1_routed"],
-                 flux["Q2"], flux["ponding"])),
-        columns=[time_column_name, 'Q_cms', 'Q_mm', 'AET', 'PET', 'Q1', 'Q1_routed', 'Q2', "ponding"]
+        list(
+            zip(
+                time_series_list,
+                flux["Q_cms"],
+                flux["Q_mm"],
+                flux["AET"],
+                flux["PET"],
+                flux["Q1"],
+                flux["Q1_routed"],
+                flux["Q2"],
+                flux["ponding"],
+            )
+        ),
+        columns=[
+            time_column_name,
+            "Q_cms",
+            "Q_mm",
+            "AET",
+            "PET",
+            "Q1",
+            "Q1_routed",
+            "Q2",
+            "ponding",
+        ],
     )
 
     # Create a final df - state
     last_date = time_series_list[-1]
     time_series_list.append(pd.to_datetime(last_date) + pd.DateOffset(days=1))
     state_df = pd.DataFrame(
-        list(zip(time_series_list, state["SWE"], state["SMS"], state["S1"], state["S2"])),
-        columns=[time_column_name, 'SWE', 'SMS', 'S1', 'S2', ]
+        list(
+            zip(time_series_list, state["SWE"], state["SMS"], state["S1"], state["S2"])
+        ),
+        columns=[
+            time_column_name,
+            "SWE",
+            "SMS",
+            "S1",
+            "S2",
+        ],
     )
-    state_df['WatershedArea_km2'] = initial_condition_df["WatershedArea_km2"].values[0]
+    state_df["WatershedArea_km2"] = initial_condition_df["WatershedArea_km2"].values[0]
 
     # Parse flux_df between start_date_predictions, end_date
     flux_df.set_index(time_column_name, inplace=True)
@@ -1043,7 +1336,15 @@ def run_the_model(hbv_model_path, config_file, par_values_dict, run_full_timespa
 
     # Append measured streamflow to flux_df, i.e., merge flux_df and time_series_data_df[streamflow_column_name]
     # df3 = pd.merge(flux_df, time_series_data_df[[streamflow_column_name]], left_index=True, right_index=True)
-    flux_df = flux_df.merge(time_series_data_df[[streamflow_column_name, ]], left_index=True, right_index=True)
+    flux_df = flux_df.merge(
+        time_series_data_df[
+            [
+                streamflow_column_name,
+            ]
+        ],
+        left_index=True,
+        right_index=True,
+    )
 
     # Parse state_df between start_date_predictions, end_date + 1
     state_df.set_index(time_column_name, inplace=True)
@@ -1065,13 +1366,16 @@ def run_the_model(hbv_model_path, config_file, par_values_dict, run_full_timespa
         state_df.to_pickle(file_path, compression="gzip")
 
     if plotting:
-        fig = _plot_streamflow_and_precipitation(input_data_df=time_series_data_df, simulated_data_df=flux_df,
-                                                 input_data_time_column=time_column_name,
-                                                 simulated_time_column=time_column_name,
-                                                 observed_streamflow_column=streamflow_column_name,
-                                                 simulated_streamflow_column="Q_cms",
-                                                 precipitation_columns=precipitation_column_name,
-                                                 additional_columns=None)
+        fig = _plot_streamflow_and_precipitation(
+            input_data_df=time_series_data_df,
+            simulated_data_df=flux_df,
+            input_data_time_column=time_column_name,
+            simulated_time_column=time_column_name,
+            observed_streamflow_column=streamflow_column_name,
+            simulated_streamflow_column="Q_cms",
+            precipitation_columns=precipitation_column_name,
+            additional_columns=None,
+        )
         # fig.add_trace(go.Scatter(x=flux_df.index, y=flux_df["Q_cms"], name="Q_cms"))
         plot_filename = output_path / f"hbv_sask_{basis}.html"
         plot(fig, filename=str(plot_filename), auto_open=False)
@@ -1084,8 +1388,10 @@ if __name__ == "__main__":
     # Path definitions - change them accordingly
     hbv_model_path = pathlib.Path("/work/ga45met/Hydro_Models/HBV-SASK-data")
     # basis = 'Oldman_Basin'  # to read in data for the Oldman Basin
-    basis = 'Banff_Basin'  # to read in data for the Banff Basin
-    config_file = pathlib.Path("/work/ga45met/mnt/linux_cluster_2/UQEFPP/configurations/configuration_hbv.json")
+    basis = "Banff_Basin"  # to read in data for the Banff Basin
+    config_file = pathlib.Path(
+        "/work/ga45met/mnt/linux_cluster_2/UQEFPP/configurations/configuration_hbv.json"
+    )
     output_path = hbv_model_path / basis / "model_runs" / "temp_7_constant_ic"
     output_path.mkdir(parents=True, exist_ok=True)
 
@@ -1098,31 +1404,70 @@ if __name__ == "__main__":
 
     # parameter dictionaries
     par_values_dict_extreme_lower = {
-        'TT': -4.0, 'C0': 0.0, 'ETF': 0.0, 'LP': 0.0, 'FC': 50, 'beta': 1.0, 'FRAC': 0.1,
-        'K1': 0.05, 'alpha': 1.0, 'K2': 0.025, 'UBAS': 1, 'PM': 1
+        "TT": -4.0,
+        "C0": 0.0,
+        "ETF": 0.0,
+        "LP": 0.0,
+        "FC": 50,
+        "beta": 1.0,
+        "FRAC": 0.1,
+        "K1": 0.05,
+        "alpha": 1.0,
+        "K2": 0.025,
+        "UBAS": 1,
+        "PM": 1,
     }
 
     par_values_dict_extreme_upper = {
-        'TT': 0.0, 'C0': 5.0, 'ETF': 0.5, 'LP': 0.5, 'FC': 100, 'beta': 2.0, 'FRAC': 0.5,
-        'K1': 0.5, 'alpha': 2.0, 'K2': 0.025, 'UBAS': 1, 'PM': 1
+        "TT": 0.0,
+        "C0": 5.0,
+        "ETF": 0.5,
+        "LP": 0.5,
+        "FC": 100,
+        "beta": 2.0,
+        "FRAC": 0.5,
+        "K1": 0.5,
+        "alpha": 2.0,
+        "K2": 0.025,
+        "UBAS": 1,
+        "PM": 1,
     }
 
     par_values_dict_mean = {
-        'TT': 0.0, 'C0': 5.0, 'ETF': 0.5, 'LP': 0.5, 'FC': 100, 'beta': 2.0, 'FRAC': 0.5,
-        'K1': 0.5, 'alpha': 2.0, 'K2': 0.025, 'UBAS': 1, 'PM': 1
+        "TT": 0.0,
+        "C0": 5.0,
+        "ETF": 0.5,
+        "LP": 0.5,
+        "FC": 100,
+        "beta": 2.0,
+        "FRAC": 0.5,
+        "K1": 0.5,
+        "alpha": 2.0,
+        "K2": 0.025,
+        "UBAS": 1,
+        "PM": 1,
     }
 
     simulation_time_start = time.time()
     print(f"simulation_time_start-{simulation_time_start}")
 
     flux, state = run_the_model(
-        hbv_model_path, config_file, par_values_dict_mean, run_full_timespan=run_full_timespan, basis=basis,
-        plotting=plotting, writing_results_to_a_file=writing_results_to_a_file, output_path=output_path)  # spin_up_length=0
+        hbv_model_path,
+        config_file,
+        par_values_dict_mean,
+        run_full_timespan=run_full_timespan,
+        basis=basis,
+        plotting=plotting,
+        writing_results_to_a_file=writing_results_to_a_file,
+        output_path=output_path,
+    )  # spin_up_length=0
 
     simulation_time_end = time.time()
     simulation_time = simulation_time_end - simulation_time_start
-    print("Total time (date preprocessing, simulation time, data postprocessing): "
-          "{} sec; timesteps={}".format(simulation_time, len(flux["Q_cms"])))
+    print(
+        "Total time (date preprocessing, simulation time, data postprocessing): "
+        "{} sec; timesteps={}".format(simulation_time, len(flux["Q_cms"]))
+    )
     # For the full simulation it prints: simulation time: 1.3676586151123047 sec; timesteps=10958
 
     Q = flux["Q_cms"]

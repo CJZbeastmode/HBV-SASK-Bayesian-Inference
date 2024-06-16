@@ -2,15 +2,21 @@ import time
 import numpy as np
 import pandas as pd
 import sys
+import json
 
-sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation')
+sys.path.append("/Users/jay/Desktop/Bachelorarbeit/Implementation")
 from src.run_mcmc.run_gpmh import run_mcmc_gpmh
 from src.construct_model import get_model
 from src.execute_model import run_model_single_parameter_node
 
-configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_train_oldman.json"
-basis = "Oldman_Basin"
+runConfigPath = "/Users/jay/Desktop/Bachelorarbeit/run_config.json"
+with open(runConfigPath, "r") as file:
+    run_config = json.load(file)
+
+configPath = run_config["configPath"]
+basis = run_config["basis"]
 model = get_model(configPath, basis)
+
 
 def rmse(result, target):
     diff = result - target
@@ -20,10 +26,12 @@ def rmse(result, target):
     rmse = (aggr / (len(diff))) ** 0.5
     return rmse
 
+
 def mae(result, target):
     return np.absolute(result - target).mean()
 
-if __name__ == "__main__": 
+
+if __name__ == "__main__":
     # 1, Ratio Test
     test_cases = [[5, 5], [10, 5], [20, 5], [40, 5], [80, 5]]
     iterations = 2000
@@ -33,16 +41,22 @@ if __name__ == "__main__":
         num_proposals = case[0]
         num_accepted = case[1]
         start = time.time()
-        results, _ = run_mcmc_gpmh(num_proposals=num_proposals, num_accepted=num_accepted, \
-                                likelihood_dependence=False, sd_likelihood=1, \
-                                sd_sampling=6, version='ignoring', init_method='random', iterations=iterations)
+        results, _ = run_mcmc_gpmh(
+            num_proposals=num_proposals,
+            num_accepted=num_accepted,
+            likelihood_dependence=False,
+            sd_likelihood=1,
+            sd_sampling=6,
+            version="ignoring",
+            init_method="random",
+            iterations=iterations,
+        )
         end = time.time()
         timed = end - start
         print("Time needed: " + str(timed))
 
         burnin = int(iterations * num_accepted / 2)
         results = np.array(results)[burnin:, :]
-        
 
         # Sampling Max
         samples = pd.DataFrame(results)
@@ -51,7 +65,9 @@ if __name__ == "__main__":
             values, counts = np.unique(samples.iloc[:, i], return_counts=True)
             ind = np.argmax(counts)
             param_vec.append(values[ind])
-        _, posterior_max, measured_data, _ = run_model_single_parameter_node(model, param_vec)
+        _, posterior_max, measured_data, _ = run_model_single_parameter_node(
+            model, param_vec
+        )
 
         # Sampling Mean
         param_vec = []
@@ -70,14 +86,37 @@ if __name__ == "__main__":
         mae_max = mae(posterior_max, measured_data)
         ratio = num_proposals / num_accepted
 
-        res.append([num_proposals / num_accepted, rmse_mean, rmse_max, mae_mean, mae_max, timed])
+        res.append(
+            [
+                num_proposals / num_accepted,
+                rmse_mean,
+                rmse_max,
+                mae_mean,
+                mae_max,
+                timed,
+            ]
+        )
 
         # Backup
-        fmt = '%s,%s,%s,%s,%s,%s'
-        np.savetxt(f'ratio_{ratio}.txt', res, delimiter=',', fmt=fmt, header='Ratio, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time', comments='')
+        fmt = "%s,%s,%s,%s,%s,%s"
+        np.savetxt(
+            f"ratio_{ratio}.txt",
+            res,
+            delimiter=",",
+            fmt=fmt,
+            header="Ratio, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time",
+            comments="",
+        )
 
-    fmt = '%s,%s,%s,%s,%s,%s'
-    np.savetxt('ratio_test_parallel_gpmh.txt', res, delimiter=',', fmt=fmt, header='Ratio, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time', comments='')
+    fmt = "%s,%s,%s,%s,%s,%s"
+    np.savetxt(
+        "ratio_test_parallel_gpmh.txt",
+        res,
+        delimiter=",",
+        fmt=fmt,
+        header="Ratio, RMSE_Mean, RMSE_Max, MAE_Mean, MAE_Max, Time",
+        comments="",
+    )
 
 else:
     pass

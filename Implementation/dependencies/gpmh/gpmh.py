@@ -1,13 +1,15 @@
 import numpy as np
 import tensorflow_probability as tfp
+
 tfd = tfp.distributions
 
 import sys
-sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation/src')
+
+sys.path.append("/Users/jay/Desktop/Bachelorarbeit/Implementation/src")
 from execute_model import run_model_single_parameter_node
 from likelihood.likelihood_independent import likelihood_independent
 from likelihood.likelihood_dependent import likelihood_dependent
-from construct_model import get_model
+
 
 class SamplingState:
     def __init__(self, state, meta=None):
@@ -17,11 +19,14 @@ class SamplingState:
     def has_meta(self, key):
         return key in self.meta
 
+
 class AbstractSamplingProblem:
     def __init__(self, model, likelihood_dependence, sd_likelihood):
         self.model = model
         self.param_bounds = self.get_param_bounds()
-        self.uniform_distribution = tfd.Uniform(low=self.param_bounds['lower'], high=self.param_bounds['upper'])
+        self.uniform_distribution = tfd.Uniform(
+            low=self.param_bounds["lower"], high=self.param_bounds["upper"]
+        )
         self.likelihood_dependence = likelihood_dependence
         self.sd_likelihood = sd_likelihood
 
@@ -34,19 +39,24 @@ class AbstractSamplingProblem:
                 param_lower.append(param["lower"])
                 param_upper.append(param["upper"])
             else:
-                raise NotImplementedError(f"Sorry, the distribution {param['distribution']} is not supported yet")
-        return {'lower': np.array(param_lower), 'upper': np.array(param_upper)}
+                raise NotImplementedError(
+                    f"Sorry, the distribution {param['distribution']} is not supported yet"
+                )
+        return {"lower": np.array(param_lower), "upper": np.array(param_upper)}
 
     def log_density(self, state):
         if state is None:
             return -np.inf
-        _, y_model, y_observed, _ = run_model_single_parameter_node(self.model, state.state)
+        _, y_model, y_observed, _ = run_model_single_parameter_node(
+            self.model, state.state
+        )
         if self.likelihood_dependence:
             likelihood_function = likelihood_dependent
         else:
             likelihood_function = likelihood_independent
         return likelihood_function(y_model, y_observed, sd=self.sd_likelihood)
-    
+
+
 class GMHKernel:
     def __init__(self, num_proposals, num_accepted, problem, sampling_kernel):
         self.problem = problem
@@ -66,7 +76,9 @@ class GMHKernel:
                 new_state.meta["LogTarget"] = self.problem.log_density(new_state)
             self.proposed_states.append(new_state)
 
-        r = np.array([s.meta["LogTarget"] if s else -np.inf for s in self.proposed_states])
+        r = np.array(
+            [s.meta["LogTarget"] if s else -np.inf for s in self.proposed_states]
+        )
         self.acceptance_density(r)
 
     def acceptance_density(self, r):
@@ -81,7 +93,7 @@ class GMHKernel:
 
     def compute_stationary_acceptance(self, a):
         mat = np.zeros((self.num_proposals + 2, self.num_proposals + 1))
-        mat[:self.num_proposals + 1, :] = a.T - np.eye(self.num_proposals + 1)
+        mat[: self.num_proposals + 1, :] = a.T - np.eye(self.num_proposals + 1)
         mat[-1, :] = 1
         rhs = np.zeros(self.num_proposals + 2)
         rhs[-1] = 1
@@ -93,5 +105,11 @@ class GMHKernel:
 
     def sample_stationary(self):
         probability = self.stationary_acceptance / np.sum(self.stationary_acceptance)
-        indices = np.random.choice(self.num_proposals + 1, self.num_accepted, p=probability)
-        return [self.proposed_states[i].state for i in indices if self.proposed_states[i] is not None]
+        indices = np.random.choice(
+            self.num_proposals + 1, self.num_accepted, p=probability
+        )
+        return [
+            self.proposed_states[i].state
+            for i in indices
+            if self.proposed_states[i] is not None
+        ]

@@ -4,32 +4,49 @@ by calculating different likelihood values.
 
 @author: Ivana Jovanovic
 """
+
 import pandas as pd
 import os
 import numpy as np
 import sys
 
 
-def _prepare_data_to_calculate_likelihood(DF, column_name='Value') -> np.ndarray:
-    #TODO-Ivana check when DF only contains TimeStampas as index column and Value column
+def _prepare_data_to_calculate_likelihood(DF, column_name="Value") -> np.ndarray:
+    # TODO-Ivana check when DF only contains TimeStampas as index column and Value column
     if isinstance(DF, pd.core.frame.DataFrame):
         if column_name in DF.columns:
             return DF[column_name].to_numpy()  # .values
         else:
-            raise Exception(f'You want to calculate likelihood using data from the following type {type(DF)}, \
-                            and extracting the column - {column_name} that does not exist')
+            raise Exception(
+                f"You want to calculate likelihood using data from the following type {type(DF)}, \
+                            and extracting the column - {column_name} that does not exist"
+            )
     elif isinstance(DF, pd.core.series.Series):
         return DF.to_numpy()  # values
     elif isinstance(DF, np.ndarray):
         return DF
     else:
-        raise Exception('You want to calculate likelihood using data from the following type {}, which is not accepted! \
-        Accepted are: pandas.DataFrame, pandas.Series and numpy.ndarray()'.format(type(DF)))
+        raise Exception(
+            "You want to calculate likelihood using data from the following type {}, which is not accepted! \
+        Accepted are: pandas.DataFrame, pandas.Series and numpy.ndarray()".format(
+                type(DF)
+            )
+        )
 
 
-def MAE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value', **kwargs):
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+def MAE(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     if measuredDF.size == simulatedDF.size:
         return np.mean(np.abs(measuredDF - simulatedDF))
@@ -37,21 +54,41 @@ def MAE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_col
         return np.nan
 
 
-def MSE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value', **kwargs):
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+def MSE(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     if measuredDF.size == simulatedDF.size:
-        #squared_error = np.square(np.subtract(measuredDF, simulatedDF))
-        squared_error = (measuredDF - simulatedDF)**2
+        # squared_error = np.square(np.subtract(measuredDF, simulatedDF))
+        squared_error = (measuredDF - simulatedDF) ** 2
         return np.nanmean(squared_error)
     else:
         return np.nan
 
 
-def RMSE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value', **kwargs):
-    measured_values = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulated_values = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+def RMSE(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
+    measured_values = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulated_values = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     if measured_values.size == simulated_values.size:
         squared_error = np.square(np.subtract(measured_values, simulated_values))
@@ -60,21 +97,38 @@ def RMSE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_co
         return np.nan
 
 
-def NRMSE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value', **kwargs):
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+def NRMSE(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     if measuredDF.size == simulatedDF.size:
         try:
-            return RMSE(measuredDF, simulatedDF, measuredDF_column_name, simulatedDF_column_name) \
-                   / (np.max(measuredDF) - np.min(measuredDF))
+            return RMSE(
+                measuredDF, simulatedDF, measuredDF_column_name, simulatedDF_column_name
+            ) / (np.max(measuredDF) - np.min(measuredDF))
         except ZeroDivisionError:
             return np.nan
     else:
         return np.nan
 
 
-def RSR(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value', **kwargs):
+def RSR(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
     """
     RMSE-observations standard deviation ratio
     Corresponding paper:
@@ -82,20 +136,31 @@ def RSR(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_col
     output:
         rsr: RMSE-observations standard deviation ratio
     """
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     if measuredDF.size == simulatedDF.size:
         try:
-            return RMSE(measuredDF, simulatedDF, measuredDF_column_name, simulatedDF_column_name) / np.std(
-                measuredDF)
+            return RMSE(
+                measuredDF, simulatedDF, measuredDF_column_name, simulatedDF_column_name
+            ) / np.std(measuredDF)
         except ZeroDivisionError:
             return np.nan
     else:
         return np.nan
 
 
-def BIAS(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value', **kwargs):
+def BIAS(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
     """
     Bias
         .. math::
@@ -107,25 +172,41 @@ def BIAS(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_co
     :return: Bias
     :rtype: float
     """
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     if measuredDF.size == simulatedDF.size:
         residual = np.subtract(measuredDF, simulatedDF)
         # return float(np.nansum(residual) / len(measuredDF))
-        return float(np.abs(np.nanmean(residual)))  # float(np.abs(residual.sum()/measuredDF.sum()))
+        return float(
+            np.abs(np.nanmean(residual))
+        )  # float(np.abs(residual.sum()/measuredDF.sum()))
     else:
         return np.nan
 
 
-def PBIAS(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value', **kwargs):
+def PBIAS(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
     """
     Bias
         .. math::
          Bias=sum_{i=1}^{N}(e_{i}-s_{i})/sum_{i=1}^{N}()*100
     """
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     if measuredDF.size == simulatedDF.size:
         residual = np.subtract(measuredDF, simulatedDF)
@@ -137,19 +218,37 @@ def PBIAS(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_c
         return np.nan
 
 
-def ROCE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value', **kwargs):
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+def ROCE(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
     if measuredDF.size == simulatedDF.size:
         try:
-            return np.abs(np.nansum(simulatedDF) - np.nansum(measuredDF)) / np.nansum(measuredDF)
+            return np.abs(np.nansum(simulatedDF) - np.nansum(measuredDF)) / np.nansum(
+                measuredDF
+            )
         except ZeroDivisionError:
             return np.nan
     else:
         return np.nan
 
 
-def NSE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value', **kwargs):
+def NSE(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
     """
     Nash-Sutcliffe model efficinecy
         .. math::
@@ -161,23 +260,39 @@ def NSE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_col
     :return: Nash-Sutcliff model efficiency
     :rtype: float
     """
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     if measuredDF.size == simulatedDF.size:
-        #numerator = np.square(np.subtract(measuredDF, simulatedDF))
-        #denominator = np.square(np.subtract(measuredDF, np.mean(measuredDF)))
-        numerator = (measuredDF - simulatedDF)**2  # ((measuredDF - simulatedDF)**2).mean()
-        denominator = (measuredDF - np.nanmean(measuredDF))**2  # ((measuredDF - measuredDF.mean())**2).mean()
+        # numerator = np.square(np.subtract(measuredDF, simulatedDF))
+        # denominator = np.square(np.subtract(measuredDF, np.mean(measuredDF)))
+        numerator = (
+            measuredDF - simulatedDF
+        ) ** 2  # ((measuredDF - simulatedDF)**2).mean()
+        denominator = (
+            measuredDF - np.nanmean(measuredDF)
+        ) ** 2  # ((measuredDF - measuredDF.mean())**2).mean()
         try:
-            return float(1 - (np.nansum(numerator) / np.nansum(denominator)))  # float(1 - numerator / denominator)
+            return float(
+                1 - (np.nansum(numerator) / np.nansum(denominator))
+            )  # float(1 - numerator / denominator)
         except ZeroDivisionError:
             return np.nan
     else:
         return np.nan
 
 
-def LogNSE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value', **kwargs):
+def LogNSE(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
     """
     log Nash-Sutcliffe model efficiency
         .. math::
@@ -192,20 +307,24 @@ def LogNSE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_
     :return: log Nash-Sutcliffe model efficiency
     :rtype: float
     """
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
-    epsilon = kwargs.get('epsilon', None)
+    epsilon = kwargs.get("epsilon", None)
     if not epsilon or epsilon is None or epsilon == 0:
         epsilon = sys.float_info.epsilon
 
     if measuredDF.size == simulatedDF.size:
         measuredDF = measuredDF + epsilon
         simulatedDF = simulatedDF + epsilon
-        #numerator = np.square(np.subtract(np.log(measuredDF), np.log(simulatedDF)))
-        #denominator = np.square(np.subtract(np.log(measuredDF), np.mean(np.log(measuredDF))))
-        numerator = (np.log(measuredDF) - np.log(simulatedDF))**2
-        denominator = (np.log(measuredDF) - np.mean(np.log(measuredDF)))**2
+        # numerator = np.square(np.subtract(np.log(measuredDF), np.log(simulatedDF)))
+        # denominator = np.square(np.subtract(np.log(measuredDF), np.mean(np.log(measuredDF))))
+        numerator = (np.log(measuredDF) - np.log(simulatedDF)) ** 2
+        denominator = (np.log(measuredDF) - np.mean(np.log(measuredDF))) ** 2
         try:
             return float(1 - np.nansum(numerator) / np.nansum(denominator))
         except ZeroDivisionError:
@@ -214,8 +333,13 @@ def LogNSE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_
         return np.nan
 
 
-def LogGaussian(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value',
-                **kwargs):
+def LogGaussian(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
     """
     Logarithmic Gaussian probability distribution of the error/residual signal
     :measuredDF: Observed data to compared with simulation data.
@@ -225,22 +349,31 @@ def LogGaussian(measuredDF, simulatedDF, measuredDF_column_name='Value', simulat
     :return: Logarithmic Gaussian (Normals) probability distribution
     :rtype: float
     """
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     scale = np.mean(measuredDF) / 10
-    if scale < .01:
-        scale = .01
+    if scale < 0.01:
+        scale = 0.01
     if measuredDF.size == simulatedDF.size:
         y = (np.array(measuredDF) - np.array(simulatedDF)) / scale
-        normpdf = -y**2 / 2 - np.log(np.sqrt(2 * np.pi))
+        normpdf = -(y**2) / 2 - np.log(np.sqrt(2 * np.pi))
         return np.mean(normpdf)
     else:
         return np.nan
 
 
-def CorrelationCoefficient(measuredDF, simulatedDF, measuredDF_column_name='Value',
-                           simulatedDF_column_name='Value', **kwargs):
+def CorrelationCoefficient(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
     """
     Correlation Coefficient
         .. math::
@@ -252,8 +385,12 @@ def CorrelationCoefficient(measuredDF, simulatedDF, measuredDF_column_name='Valu
     :return: Corelation Coefficient
     :rtype: float
     """
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     if measuredDF.size == simulatedDF.size:
         correlation_coefficient = np.corrcoef(measuredDF, simulatedDF)[0, 1]
@@ -262,7 +399,13 @@ def CorrelationCoefficient(measuredDF, simulatedDF, measuredDF_column_name='Valu
         return np.nan
 
 
-def KGE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value', **kwargs):
+def KGE(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
     """
     code from - https://github.com/thouska/spotpy/tree/master/spotpy
     Kling-Gupta Efficiency
@@ -275,10 +418,14 @@ def KGE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_col
         alpha: ratio of the standard deviation
         beta: ratio of the mean
     """
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
-    return_all = kwargs.get('return_all', False)
+    return_all = kwargs.get("return_all", False)
 
     if measuredDF.size == simulatedDF.size:
         cc = np.corrcoef(measuredDF, simulatedDF)[0, 1]
@@ -297,8 +444,13 @@ def KGE(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_col
 #####################################################
 
 
-def KGE_non_parametric(measuredDF, simulatedDF, measuredDF_column_name='Value',
-                       simulatedDF_column_name='Value', **kwargs):
+def KGE_non_parametric(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
     """
     code from - https://github.com/thouska/spotpy/tree/master/spotpy
     Non parametric Kling-Gupta Efficiency
@@ -313,15 +465,19 @@ def KGE_non_parametric(measuredDF, simulatedDF, measuredDF_column_name='Value',
         alpha: ratio of the standard deviation
         beta: ratio of the mean
     """
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
-    return_all = kwargs.get('return_all', False)
+    return_all = kwargs.get("return_all", False)
 
     if measuredDF.size == simulatedDF.size:
         ### pandas version of Separmann correlation coefficient
-        a = pd.DataFrame({'eva': measuredDF, 'sim': simulatedDF})
-        cc = a.ix[:,1].corr(a.ix[:,0], method='spearman')
+        a = pd.DataFrame({"eva": measuredDF, "sim": simulatedDF})
+        cc = a.ix[:, 1].corr(a.ix[:, 0], method="spearman")
         fdc_sim = np.sort(simulatedDF / (np.nanmean(simulatedDF) * len(simulatedDF)))
         fdc_obs = np.sort(measuredDF / (np.nanmean(measuredDF) * len(measuredDF)))
         alpha = 1 - 0.5 * np.nanmean(np.abs(fdc_sim - fdc_obs))
@@ -335,8 +491,13 @@ def KGE_non_parametric(measuredDF, simulatedDF, measuredDF_column_name='Value',
         return np.nan
 
 
-def Covariance(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value',
-               **kwargs):
+def Covariance(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
     """
     Covariance
         .. math::
@@ -348,20 +509,35 @@ def Covariance(measuredDF, simulatedDF, measuredDF_column_name='Value', simulate
     :return: Covariance
     :rtype: float
     """
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     if measuredDF.size == simulatedDF.size:
-        covariance = np.mean((measuredDF - np.mean(measuredDF))*(simulatedDF - np.mean(simulatedDF)))
+        covariance = np.mean(
+            (measuredDF - np.mean(measuredDF)) * (simulatedDF - np.mean(simulatedDF))
+        )
         return covariance
     else:
         return np.nan
 
 
-def BraviasPearson(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value',
-                   **kwargs):
-    measuredDF = _prepare_data_to_calculate_likelihood(DF=measuredDF, column_name=measuredDF_column_name)
-    simulatedDF = _prepare_data_to_calculate_likelihood(DF=simulatedDF, column_name=simulatedDF_column_name)
+def BraviasPearson(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
+    measuredDF = _prepare_data_to_calculate_likelihood(
+        DF=measuredDF, column_name=measuredDF_column_name
+    )
+    simulatedDF = _prepare_data_to_calculate_likelihood(
+        DF=simulatedDF, column_name=simulatedDF_column_name
+    )
 
     mean_measured = np.mean(measuredDF)
     mean_simulated = np.mean(simulatedDF)
@@ -371,22 +547,37 @@ def BraviasPearson(measuredDF, simulatedDF, measuredDF_column_name='Value', simu
     term4 = np.prod(term1, term2)
     term5 = np.square(term1)
     term6 = np.square(term3)
-    r_2 = np.square(np.sum(term4))/(np.sum(term5)*np.sum(term6))
+    r_2 = np.square(np.sum(term4)) / (np.sum(term5) * np.sum(term6))
     return r_2
+
 
 #####################################################
 
 
-_all_functions = [MAE, MSE,
-                  RMSE, NRMSE, RSR,
-                  BIAS, PBIAS, ROCE,
-                  NSE, LogNSE,
-                  LogGaussian, CorrelationCoefficient,
-                  KGE]
+_all_functions = [
+    MAE,
+    MSE,
+    RMSE,
+    NRMSE,
+    RSR,
+    BIAS,
+    PBIAS,
+    ROCE,
+    NSE,
+    LogNSE,
+    LogGaussian,
+    CorrelationCoefficient,
+    KGE,
+]
 
 
-def calculate_all_functions(measuredDF, simulatedDF, measuredDF_column_name='Value', simulatedDF_column_name='Value',
-                            **kwargs):
+def calculate_all_functions(
+    measuredDF,
+    simulatedDF,
+    measuredDF_column_name="Value",
+    simulatedDF_column_name="Value",
+    **kwargs,
+):
     """
     Calculates all objective functions from
     and returns the results as a list of name/value pairs
@@ -401,10 +592,16 @@ def calculate_all_functions(measuredDF, simulatedDF, measuredDF_column_name='Val
     for f in _all_functions:
         # Check if the name is not private and attr is a function but not this
         try:
-            #result.append((f.__name__, f(measuredDF, simulatedDF)))
-            result[f.__name__] = f(measuredDF, simulatedDF, measuredDF_column_name, simulatedDF_column_name, **kwargs)
+            # result.append((f.__name__, f(measuredDF, simulatedDF)))
+            result[f.__name__] = f(
+                measuredDF,
+                simulatedDF,
+                measuredDF_column_name,
+                simulatedDF_column_name,
+                **kwargs,
+            )
         except:
-            #result.append((f.__name__, np.nan))
+            # result.append((f.__name__, np.nan))
             result[f.__name__] = np.nan
 
     return result
