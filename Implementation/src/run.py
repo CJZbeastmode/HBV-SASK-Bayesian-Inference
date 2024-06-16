@@ -32,9 +32,11 @@ if __name__ == "__main__":
     elif mode == "dream":
         run_mcmc = run_mcmc_dream
         chain_algo = True
+    else:
+        print('The algorithm is not implemented. Try one of the following four options:\nmh\nparallel_mh\ngpmh\ndream')
+        sys.exit(1)
 
     start = time.time()
-    run_mcmc = run_mcmc_dream
 
     if 'kwargs' in run_config:
         kwargs = run_config["kwargs"]
@@ -75,12 +77,12 @@ if __name__ == "__main__":
     # Save Data
     output_file_name = (run_config['output_file_name'] + '.out') if 'output_file_name' in run_config else 'mcmc_data.out'
     if chain_algo:
-        if 'seperate_chain' in run_config:
-            seperate_chain = run_config['seperate_chain']
+        if 'separate_chains' in run_config:
+            separate_chains = run_config['separate_chains']
         else:
-            seperate_chain = False
+            separate_chains = False
 
-        if seperate_chain:
+        if separate_chains:
             samples = np.hstack(sampled_params)
             header = ''
             for i in range(nchains):

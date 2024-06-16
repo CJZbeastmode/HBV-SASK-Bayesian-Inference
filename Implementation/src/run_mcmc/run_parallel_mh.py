@@ -21,12 +21,13 @@ model = get_model(configPath, basis)
 
 
 def run_single_chain(
+    version,
     init_state,
     iterations,
     param_lower,
     param_upper,
     likelihood_dependence,
-    sd_likelihood,
+    likelihood_sd,
     sd_transition_factor,
     max_probability,
 ):
@@ -38,7 +39,7 @@ def run_single_chain(
 
     def likelihood_kernel(param_vec):
         _, y_model, y_observed, _ = run_model_single_parameter_node(model, param_vec)
-        return likelihood_function(y_model, y_observed, sd=sd_likelihood)
+        return likelihood_function(y_model, y_observed, sd=likelihood_sd)
 
     def sample_kernel(x):
         return np.random.normal(x, (param_upper - param_lower) / sd_transition_factor)
@@ -53,14 +54,16 @@ def run_single_chain(
         param_lower,
         param_upper,
         max_sampling=max_probability,
+        version=version
     )
 
 
 def run_mcmc_mh_parallel(
-    num_chains=4,
+    version='ignoring',
+    chains=4,
     sd_transition_factor=6,
     likelihood_dependence=False,
-    sd_likelihood=1,
+    likelihood_sd=1,
     max_probability=False,
     iterations=2500,
     init_method="default",
@@ -89,21 +92,22 @@ def run_mcmc_mh_parallel(
     else:
         init_states = [
             np.random.uniform(low=param_lower, high=param_upper)
-            for _ in range(num_chains)
+            for _ in range(chains)
         ]
 
     # Set up a multiprocessing pool
-    with mp.Pool(num_chains) as pool:
+    with mp.Pool(chains) as pool:
         results = pool.starmap(
             run_single_chain,
             [
                 (
+                    version,
                     state,
                     iterations,
                     param_lower,
                     param_upper,
                     likelihood_dependence,
-                    sd_likelihood,
+                    likelihood_sd,
                     sd_transition_factor,
                     max_probability,
                 )
@@ -112,9 +116,4 @@ def run_mcmc_mh_parallel(
         )
 
     # results will be a list of arrays (chains)
-    return results, iterations * num_chains
-
-
-if __name__ == "__main__":
-    results = run_mcmc_mh_parallel(num_chains=20)
-    print(results)
+    return results, iterations * chains

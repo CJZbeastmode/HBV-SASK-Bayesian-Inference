@@ -3,8 +3,7 @@
     "basis": "Oldman_Basin",
     "mode": "dream",
     "kwargs": {
-        "niterations": 3,
-        "nchains": 4
+
     },
-    "seperate_chain": true
+    "separate_chains": true
 }

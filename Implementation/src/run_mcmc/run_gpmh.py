@@ -12,8 +12,8 @@ def run_mcmc_gpmh(
     num_proposals=8,
     num_accepted=4,
     likelihood_dependence=False,
-    sd_likelihood=8,
-    sd_sampling=6,
+    likelihood_sd=1,
+    sd_transition_factor=6,
     version="ignoring",
     init_method="random",
     iterations=2500,
@@ -30,7 +30,7 @@ def run_mcmc_gpmh(
     basis = run_config["basis"]
     model = get_model(configPath, basis)
 
-    problem = AbstractSamplingProblem(model, likelihood_dependence, sd_likelihood)
+    problem = AbstractSamplingProblem(model, likelihood_dependence, likelihood_sd)
 
     configurationObject = model.configurationObject
     param_names = []
@@ -53,7 +53,7 @@ def run_mcmc_gpmh(
         state,
         param_lower=param_lower,
         param_upper=param_upper,
-        sd=sd_sampling,
+        sd=sd_transition_factor,
         version=version,
     ):
         new_state = np.random.normal(

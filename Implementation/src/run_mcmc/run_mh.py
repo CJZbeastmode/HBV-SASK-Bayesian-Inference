@@ -9,8 +9,6 @@ from src.execute_model import run_model_single_parameter_node
 from src.likelihood.likelihood_independent import likelihood_independent
 from src.likelihood.likelihood_dependent import likelihood_dependent
 from dependencies.mh.mh import MH
-from dependencies.mh.mh_refl_boundary import MH_RB
-from dependencies.mh.mh_aggregate import MH_A
 from src.construct_model import get_model
 
 posterior_rudimentary = pd.read_csv(
@@ -30,10 +28,10 @@ def run_mcmc_mh(
     version="ignoring",
     sd_transition_factor=6,
     likelihood_dependence=True,
-    sd_likelihood=0.2,
+    likelihood_sd=0.2,
     max_probability=False,
-    iteration=10000,
-    init_method="median_posterior",
+    iterations=10000,
+    init_method="random",
 ):
     # Construct Params
     configurationObject = model.configurationObject
@@ -61,7 +59,7 @@ def run_mcmc_mh(
 
     def likelihood_kernel(param_vec):
         _, y_model, y_observed, _ = run_model_single_parameter_node(model, param_vec)
-        return likelihood_function(y_model, y_observed, sd=sd_likelihood)
+        return likelihood_function(y_model, y_observed, sd=likelihood_sd)
 
     def sample_kernel(x):
         return np.random.normal(x, (param_upper - param_lower) / sd_transition_factor)
@@ -89,41 +87,17 @@ def run_mcmc_mh(
         init_state = np.array(posterior_rudimentary.iloc[2].values[1:])
     elif init_method == "q3_posterior":
         init_state = np.array(posterior_rudimentary.iloc[3].values[1:])
+    
+    x = MH(
+            parameters_to_sample.prob,
+            sample_kernel,
+            likelihood_kernel,
+            init_state,
+            iterations,
+            param_lower,
+            param_upper,
+            max_sampling=max_probability,
+            version=version
+        )
 
-    if version == "ignoring":
-        x = MH(
-            parameters_to_sample.prob,
-            sample_kernel,
-            likelihood_kernel,
-            init_state,
-            iteration,
-            param_lower,
-            param_upper,
-            max_sampling=max_probability,
-        )
-    elif version == "refl_bound":
-        x = MH_RB(
-            parameters_to_sample.prob,
-            sample_kernel,
-            likelihood_kernel,
-            init_state,
-            iteration,
-            param_lower,
-            param_upper,
-            max_sampling=max_probability,
-        )
-    elif version == "aggr":
-        x = MH_A(
-            parameters_to_sample.prob,
-            sample_kernel,
-            likelihood_kernel,
-            init_state,
-            iteration,
-            param_lower,
-            param_upper,
-            max_sampling=max_probability,
-        )
-    else:
-        print("This variant has not been implemented")
-
-    return x, iteration
+    return x, iterations

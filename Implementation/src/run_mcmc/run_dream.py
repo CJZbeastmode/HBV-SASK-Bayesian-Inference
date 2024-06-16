@@ -96,7 +96,7 @@ def likelihood_i8(param_vec):
     return likelihood_function(y_model, y_observed)
 
 
-def run_mcmc_dream(niterations=1250, nchains=8, **kwargs):
+def run_mcmc_dream(iterations=1250, chains=8, **kwargs):
     # Construct Params
     configurationObject = model.configurationObject
     param_names = []
@@ -126,9 +126,10 @@ def run_mcmc_dream(niterations=1250, nchains=8, **kwargs):
     init_method = kwargs["init_method"] if "init_method" in kwargs else "not specified"
 
     l_k = default_likelihood_kernel
-    if "likelihood_dependence" in kwargs:
+    if "likelihood_sd" in kwargs:
         if "likelihood_dependence" not in kwargs:
-            return "Failure"
+            print("Failure")
+            sys.exit
 
         if kwargs["likelihood_dependence"]:
             if kwargs["likelihood_sd"] == 0.2:
@@ -172,7 +173,7 @@ def run_mcmc_dream(niterations=1250, nchains=8, **kwargs):
         state = np.array(posterior_rudimentary.iloc[3].values[1:])
 
     states = []
-    for _ in range(nchains):
+    for _ in range(chains):
         states.append(state)
 
     # Run
@@ -184,8 +185,8 @@ def run_mcmc_dream(niterations=1250, nchains=8, **kwargs):
     sampled_params, _ = run_dream(
         sampled_parameter,
         l_k,
-        niterations=niterations,
-        nchains=nchains,
+        niterations=iterations,
+        nchains=chains,
         start=states,
         DEpairs=DEpairs,
         multitry=multitry,
@@ -197,4 +198,4 @@ def run_mcmc_dream(niterations=1250, nchains=8, **kwargs):
         randomStart=randomStart,
     )
 
-    return sampled_params, niterations
+    return sampled_params, chains * iterations

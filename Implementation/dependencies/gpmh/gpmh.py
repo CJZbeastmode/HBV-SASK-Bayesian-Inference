@@ -21,14 +21,14 @@ class SamplingState:
 
 
 class AbstractSamplingProblem:
-    def __init__(self, model, likelihood_dependence, sd_likelihood):
+    def __init__(self, model, likelihood_dependence, likelihood_sd):
         self.model = model
         self.param_bounds = self.get_param_bounds()
         self.uniform_distribution = tfd.Uniform(
             low=self.param_bounds["lower"], high=self.param_bounds["upper"]
         )
         self.likelihood_dependence = likelihood_dependence
-        self.sd_likelihood = sd_likelihood
+        self.likelihood_sd = likelihood_sd
 
     def get_param_bounds(self):
         configurationObject = self.model.configurationObject
@@ -54,7 +54,7 @@ class AbstractSamplingProblem:
             likelihood_function = likelihood_dependent
         else:
             likelihood_function = likelihood_independent
-        return likelihood_function(y_model, y_observed, sd=self.sd_likelihood)
+        return likelihood_function(y_model, y_observed, sd=self.likelihood_sd)
 
 
 class GMHKernel:

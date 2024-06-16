@@ -22,7 +22,7 @@ sensitivity_transition = [6, 8, 10, 12, 18, 24]
 sensitivity_likelihood_independent = [1, 3, 5, 8]
 sensitivity_likelihood_dependent = [0.2, 0.4, 0.6, 0.8]
 max_sampling = [False, True]
-iteration = [5000, 10000, 20000, 40000, 80000]
+iterations = [5000, 10000, 20000, 40000, 80000]
 burnin_factor = [2, 3, 5]
 effective_sample_size = [1, 2, 3, 4, 5]
 init_method = [
@@ -42,7 +42,7 @@ to_benchmark = [
     sensitivity_likelihood_independent,
     sensitivity_likelihood_dependent,
     max_sampling,
-    iteration,
+    iterations,
     burnin_factor,
     effective_sample_size,
     init_method,
@@ -53,7 +53,7 @@ benchmark_data = [
     "sensitivity_likelihood_independent",
     "sensitivity_likelihood_dependent",
     "max_sampling",
-    "iteration",
+    "iterations",
     "burnin_factor",
     "effective_sample_size",
     "init_method",
@@ -85,7 +85,6 @@ if __name__ == "__main__":
             separate_chain = False
             run_mcmc = run_mcmc_mh
 
-            # sd_transition_factor=6, sd_likelihood=1, max_probability=False, iteration=10000
             dictionary = ["ignoring", 6, False, 1, False, 10000, "random"]
 
             if test_name == "sampling_otb":
@@ -100,7 +99,7 @@ if __name__ == "__main__":
                 dictionary[3] = case
             if test_name == "max_sampling":
                 dictionary[4] = case
-            if test_name == "iteration":
+            if test_name == "iterations":
                 dictionary[5] = case
             if test_name == "init_method":
                 dictionary[6] = case
@@ -109,9 +108,9 @@ if __name__ == "__main__":
                 version=dictionary[0],
                 sd_transition_factor=dictionary[1],
                 likelihood_dependence=dictionary[2],
-                sd_likelihood=dictionary[3],
+                likelihood_sd=dictionary[3],
                 max_probability=dictionary[4],
-                iteration=dictionary[5],
+                iterations=dictionary[5],
                 init_method=dictionary[6],
             )
             total_iterations = dictionary[5]

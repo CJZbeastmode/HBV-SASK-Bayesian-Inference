@@ -36,17 +36,17 @@ if __name__ == "__main__":
     test_cases = [[1, 10000], [2, 5000], [4, 2500], [5, 2000], [8, 1250], [10, 1000]]
 
     for case in test_cases:
-        num_chains = case[0]
+        chains = case[0]
         iterations = case[1]
 
         start = time.time()
         results = run_mcmc_mh_parallel(
-            num_chains=num_chains,
+            chains=chains,
             iterations=iterations,
             max_probability=False,
             sd_transition_factor=6,
             likelihood_dependence=False,
-            sd_likelihood=1,
+            likelihood_sd=1,
         )
         results = np.array(results)
         end = time.time()
@@ -64,12 +64,12 @@ if __name__ == "__main__":
                     toResampleIndex.append(i)
             start = time.time()
             temp_res = run_mcmc_mh_parallel(
-                num_chains=num_chains,
+                chains=chains,
                 iterations=int(iterations / 5),
                 max_probability=False,
                 sd_transition_factor=6,
                 likelihood_dependence=False,
-                sd_likelihood=1,
+                likelihood_sd=1,
                 init_method="custom",
                 custom_init_states=results[:, -1],
             )
@@ -86,7 +86,7 @@ if __name__ == "__main__":
         ).T
         fmt = "%s,%s"
         np.savetxt(
-            f"{num_chains}_chains_gr.txt",
+            f"{chains}_chains_gr.txt",
             gr,
             fmt=fmt,
             delimiter=",",
@@ -94,9 +94,9 @@ if __name__ == "__main__":
             comments="",
         )
 
-        for i in range(num_chains):
+        for i in range(chains):
             np.savetxt(
-                f"{num_chains}_chains_result_{i + 1}.txt",
+                f"{chains}_chains_result_{i + 1}.txt",
                 results[i],
                 delimiter=",",
                 header="TT,C0,beta,ETF,FC,FRAC,K2",
@@ -108,7 +108,7 @@ if __name__ == "__main__":
         RMSEs_mean = []
         RMSEs_max = []
         # Mean Accuracy of each case
-        for i in range(num_chains):
+        for i in range(chains):
             samples = pd.DataFrame(results[i])
 
             # Sampling Max
@@ -139,7 +139,7 @@ if __name__ == "__main__":
 
         res = np.vstack(
             [
-                np.array(range(num_chains)) + 1,
+                np.array(range(chains)) + 1,
                 np.array(RMSEs_mean).T,
                 np.array(RMSEs_max).T,
                 np.array(MAEs_mean).T,
@@ -148,7 +148,7 @@ if __name__ == "__main__":
         ).T
 
         np.savetxt(
-            f"{num_chains}_sep_accuracy.txt",
+            f"{chains}_sep_accuracy.txt",
             res,
             delimiter=",",
             header="Chain,RMSE_Mean_Sep,RMSE_Max_Sep,MAE_Mean_Sep,MAE_Max_Sep",
@@ -160,13 +160,13 @@ if __name__ == "__main__":
         ess = 3
         combined_results = []
         results = np.array(results)
-        for i in range(num_chains):
+        for i in range(chains):
             burned_in = results[i][burnin:, :]
             burned_in = burned_in[::ess]
             combined_results.append(burned_in)
         combined_results = np.concatenate(combined_results)
         np.savetxt(
-            f"{num_chains}_chains_result_combined.txt",
+            f"{chains}_chains_result_combined.txt",
             combined_results,
             delimiter=",",
             header="TT,C0,beta,ETF,FC,FRAC,K2",
@@ -202,7 +202,7 @@ if __name__ == "__main__":
 
         res = np.vstack(
             [
-                num_chains,
+                chains,
                 rmse_mean_combined,
                 rmse_max_combined,
                 mae_mean_combined,
@@ -212,7 +212,7 @@ if __name__ == "__main__":
             ]
         ).T
         np.savetxt(
-            f"{num_chains}_chains_analysis.txt",
+            f"{chains}_chains_analysis.txt",
             res,
             delimiter=",",
             header="Num_Chains,RMSE_Mean_Combined,RMSE_Max_Combined,MAE_Mean_Combined,MAE_Max_Combined,Time,GR_Reps",
