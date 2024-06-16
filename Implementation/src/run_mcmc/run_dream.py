@@ -121,7 +121,7 @@ def run_mcmc_dream(niterations=1250, nchains=8, **kwargs):
     randomStart = False
     # Initial state
     if init_method == 'random' or init_method == 'not specified':
-        state = None
+        state = param_lower
         randomStart = True
     elif init_method == 'min':
         state = param_lower

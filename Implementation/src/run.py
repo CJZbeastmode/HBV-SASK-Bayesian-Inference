@@ -1,6 +1,7 @@
 import time
 import numpy as np
 import sys
+import json
 
 sys.path.append('/Users/jay/Desktop/Bachelorarbeit/Implementation')
 from dependencies.hbv_sask.model import HBVSASKModel as hbvmodel
@@ -10,8 +11,12 @@ from src.run_mcmc.run_gpmh import run_mcmc_gpmh
 from src.run_mcmc.run_mh import run_mcmc_mh
 from src.construct_model import get_model
 
-configPath = "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_train_oldman.json"
-basis = "Oldman_Basin"
+runConfigPath = '/Users/jay/Desktop/Bachelorarbeit/run_config.json'
+with open(runConfigPath, 'r') as file:
+    run_config = json.load(file)
+
+configPath = run_config['configPath']
+basis = run_config['basis']
 model = get_model(configPath, basis)
 
 if __name__ == "__main__": 
