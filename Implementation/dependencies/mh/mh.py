@@ -1,6 +1,7 @@
 import numpy as np
 import sys
 
+
 def MH(
     proposal,
     sample_kernel,
@@ -10,7 +11,7 @@ def MH(
     lower_bound,
     upper_bound,
     max_sampling=False,
-    version='ignoring'
+    version="ignoring",
 ):
     samples = [np.array(init_state)]
     num_accept = 0
@@ -52,8 +53,8 @@ def MH(
                 num_accept += 1
             else:
                 samples.append(samples[-1])
-        
-    elif version == 'refl_bound':
+
+    elif version == "refl_bound":
         for _ in range(n):
             # sample candidate from normal distribution
             a = samples[-1]
@@ -81,7 +82,7 @@ def MH(
                 samples.append(b)
                 num_accept += 1
 
-    elif version == 'aggr':
+    elif version == "aggr":
         for _ in range(n):
             # sample candidate from normal distribution
             a = samples[-1]
@@ -109,9 +110,11 @@ def MH(
             else:
                 samples.append(b)
                 num_accept += 1
-        
+
     else:
-        print("This variant has not been implemented. Try one of the following options:\nignoring\nrefl_bound\naggr")
+        print(
+            "This variant has not been implemented. Try one of the following options:\nignoring\nrefl_bound\naggr"
+        )
         sys.exit(1)
-        
+
     return samples

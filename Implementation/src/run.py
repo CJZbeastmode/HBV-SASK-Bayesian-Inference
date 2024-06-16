@@ -33,27 +33,29 @@ if __name__ == "__main__":
         run_mcmc = run_mcmc_dream
         chain_algo = True
     else:
-        print('The algorithm is not implemented. Try one of the following four options:\nmh\nparallel_mh\ngpmh\ndream')
+        print(
+            "The algorithm is not implemented. Try one of the following four options:\nmh\nparallel_mh\ngpmh\ndream"
+        )
         sys.exit(1)
 
     start = time.time()
 
-    if 'kwargs' in run_config:
+    if "kwargs" in run_config:
         kwargs = run_config["kwargs"]
         sampled_params, total_iterations = run_mcmc(**kwargs)
     else:
         sampled_params, total_iterations = run_mcmc()
     end = time.time()
     print("Time needed: " + str(end - start))
-    
+
     if chain_algo:
         nchains = len(sampled_params)
     else:
         nchains = 1
 
     # Post Processing
-    if 'burnin_fac' in run_config:
-        burnin_fac = run_config['burnin_fac']
+    if "burnin_fac" in run_config:
+        burnin_fac = run_config["burnin_fac"]
     else:
         burnin_fac = 5
     burnin = int(total_iterations / burnin_fac)
@@ -63,8 +65,8 @@ if __name__ == "__main__":
     else:
         sampled_params = np.array(sampled_params)[burnin:]
 
-    if 'effective_sample_size' in run_config:
-        ess = run_config['effective_sample_size']
+    if "effective_sample_size" in run_config:
+        ess = run_config["effective_sample_size"]
     else:
         ess = 1
     sampled_params = sampled_params[::ess]
@@ -75,20 +77,27 @@ if __name__ == "__main__":
         sampled_params = sampled_params[::ess]
 
     # Save Data
-    output_file_name = (run_config['output_file_name'] + '.out') if 'output_file_name' in run_config else 'mcmc_data.out'
+    output_file_name = (
+        (run_config["output_file_name"] + ".out")
+        if "output_file_name" in run_config
+        else "mcmc_data.out"
+    )
     if chain_algo:
-        if 'separate_chains' in run_config:
-            separate_chains = run_config['separate_chains']
+        if "separate_chains" in run_config:
+            separate_chains = run_config["separate_chains"]
         else:
             separate_chains = False
 
         if separate_chains:
             samples = np.hstack(sampled_params)
-            header = ''
+            header = ""
             for i in range(nchains):
                 if i != 0:
-                    header = header + ','
-                header = header + f'TT_{i + 1},C0_{i + 1},beta_{i + 1},ETF_{i + 1},FC_{i + 1},FRAC_{i + 1},K2_{i + 1}'
+                    header = header + ","
+                header = (
+                    header
+                    + f"TT_{i + 1},C0_{i + 1},beta_{i + 1},ETF_{i + 1},FC_{i + 1},FRAC_{i + 1},K2_{i + 1}"
+                )
             np.savetxt(
                 output_file_name, samples, delimiter=",", header=header, comments=""
             )
@@ -103,4 +112,3 @@ if __name__ == "__main__":
         np.savetxt(
             output_file_name, sampled_params, delimiter=",", header=header, comments=""
         )
-        

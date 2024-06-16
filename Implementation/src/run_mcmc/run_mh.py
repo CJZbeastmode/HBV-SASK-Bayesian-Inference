@@ -87,17 +87,17 @@ def run_mcmc_mh(
         init_state = np.array(posterior_rudimentary.iloc[2].values[1:])
     elif init_method == "q3_posterior":
         init_state = np.array(posterior_rudimentary.iloc[3].values[1:])
-    
+
     x = MH(
-            parameters_to_sample.prob,
-            sample_kernel,
-            likelihood_kernel,
-            init_state,
-            iterations,
-            param_lower,
-            param_upper,
-            max_sampling=max_probability,
-            version=version
-        )
+        parameters_to_sample.prob,
+        sample_kernel,
+        likelihood_kernel,
+        init_state,
+        iterations,
+        param_lower,
+        param_upper,
+        max_sampling=max_probability,
+        version=version,
+    )
 
     return x, iterations

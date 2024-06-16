@@ -54,12 +54,12 @@ def run_single_chain(
         param_lower,
         param_upper,
         max_sampling=max_probability,
-        version=version
+        version=version,
     )
 
 
 def run_mcmc_mh_parallel(
-    version='ignoring',
+    version="ignoring",
     chains=4,
     sd_transition_factor=6,
     likelihood_dependence=False,
@@ -91,8 +91,7 @@ def run_mcmc_mh_parallel(
         init_states = custom_init_states
     else:
         init_states = [
-            np.random.uniform(low=param_lower, high=param_upper)
-            for _ in range(chains)
+            np.random.uniform(low=param_lower, high=param_upper) for _ in range(chains)
         ]
 
     # Set up a multiprocessing pool
