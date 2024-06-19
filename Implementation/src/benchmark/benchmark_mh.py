@@ -17,46 +17,54 @@ configPath = run_config["configPath"]
 basis = run_config["basis"]
 model = get_model(configPath, basis)
 
-sampling_otb = ["ignoring", "refl_bound", "aggr"]
-sensitivity_transition = [6, 8, 10, 12, 18, 24]
-sensitivity_likelihood_independent = [1, 3, 5, 8]
-sensitivity_likelihood_dependent = [0.2, 0.4, 0.6, 0.8]
-max_sampling = [False, True]
-iterations = [5000, 10000, 20000, 40000, 80000]
-burnin_factor = [2, 3, 5]
-effective_sample_size = [1, 2, 3, 4, 5]
-init_method = [
-    "random",
-    "min",
-    "max",
-    "q1_prior",
-    "mean_prior",
-    "q3_prior",
-    "q1_posterior",
-    "median_posterior",
-    "q3_posterior",
-]
+# sampling_otb = ["ignoring", "refl_bound", "aggr"]
+# sensitivity_transition = [6, 8, 10, 12, 18, 24]
+# sensitivity_likelihood_independent = [1, 3, 5, 8]
+# sensitivity_likelihood_dependent = [0.2, 0.4, 0.6, 0.8]
+# max_sampling = [False, True]
+# iterations = [5000, 10000, 20000, 40000, 80000]
+# burnin_factor = [2, 3, 5]
+# effective_sample_size = [1, 2, 3, 4, 5]
+# init_method = [
+#     "random",
+#     "min",
+#     "max",
+#     "q1_prior",
+#     "mean_prior",
+#     "q3_prior",
+#     "q1_posterior",
+#     "median_posterior",
+#     "q3_posterior",
+# ]
+# to_benchmark = [
+#     sampling_otb,
+#     sensitivity_transition,
+#     sensitivity_likelihood_independent,
+#     sensitivity_likelihood_dependent,
+#     max_sampling,
+#     iterations,
+#     burnin_factor,
+#     effective_sample_size,
+#     init_method,
+# ]
+# benchmark_data = [
+#     "sampling_otb",
+#     "sensitivity_transition",
+#     "sensitivity_likelihood_independent",
+#     "sensitivity_likelihood_dependent",
+#     "max_sampling",
+#     "iterations",
+#     "burnin_factor",
+#     "effective_sample_size",
+#     "init_method",
+# ]
+
+sensitivity_transition = [10]
 to_benchmark = [
-    sampling_otb,
     sensitivity_transition,
-    sensitivity_likelihood_independent,
-    sensitivity_likelihood_dependent,
-    max_sampling,
-    iterations,
-    burnin_factor,
-    effective_sample_size,
-    init_method,
 ]
 benchmark_data = [
-    "sampling_otb",
     "sensitivity_transition",
-    "sensitivity_likelihood_independent",
-    "sensitivity_likelihood_dependent",
-    "max_sampling",
-    "iterations",
-    "burnin_factor",
-    "effective_sample_size",
-    "init_method",
 ]
 
 

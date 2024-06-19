@@ -1,0 +1,7 @@
+{
+    "configPath": "/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/config_test_oldman.json",
+    "basis": "Oldman_Basin",
+    "input_file": "mcmc_data.out",
+    "sep_viz": false,
+    "monte_carlo_repetition": 1000
+}

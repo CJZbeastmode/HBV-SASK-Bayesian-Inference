@@ -3,6 +3,7 @@ import numpy as np
 import sys
 import json
 
+# Change the path
 sys.path.append("/Users/jay/Desktop/Bachelorarbeit/Implementation")
 from src.run_mcmc.run_dream import run_mcmc_dream
 from src.run_mcmc.run_gpmh import run_mcmc_gpmh
@@ -10,6 +11,7 @@ from src.run_mcmc.run_mh import run_mcmc_mh
 from src.run_mcmc.run_parallel_mh import run_mcmc_mh_parallel
 from src.construct_model import get_model
 
+# Change the path
 runConfigPath = "/Users/jay/Desktop/Bachelorarbeit/run_config.json"
 with open(runConfigPath, "r") as file:
     run_config = json.load(file)
@@ -58,7 +60,7 @@ if __name__ == "__main__":
         burnin_fac = run_config["burnin_fac"]
     else:
         burnin_fac = 5
-    burnin = int(total_iterations / burnin_fac)
+    burnin = int(total_iterations / nchains / burnin_fac)
     if chain_algo:
         for i in range(nchains):
             sampled_params[i] = np.array(sampled_params[i])[burnin:]
