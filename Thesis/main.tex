@@ -15,6 +15,7 @@
 
 \include{settings}
 \usepackage{lipsum} % for filling pages with stuff
+\usepackage{algpseudocode}
 
 % -------------------------------------------------------------------------------
 % --------------------------------- Thesis Info ---------------------------------
@@ -29,12 +30,12 @@
 \def\studyProgram{Informatics}
 \def\title{Efficient Bayesian Inference of Hydrological Model Parameters: Implementation of a Parallel Markov Chain Monte Carlo Approach}
 % don't try translate every technical term if it would sound off
-\def\titleGer{Effiziente Bayesianische Inferenz der Parameter von der hydrologischen Modelle: Implementierung eines Markov-Chain-Monte-Carlo-Verfahrens im parallelen Modus}
+\def\titleGer{Effiziente Bayesschen Inferenz der Parameter von der hydrologischen Modelle: Implementierung eines Markov-Chain-Monte-Carlo-Verfahrens im parallelen Modus}
 \def\author{Chengjie Zhou}
 % Prof
 \def\supervisor{Univ.-Prof. Dr. Hans-Joachim Bungartz}
 % PhD Candidate
-\def\advisor{Ivana Jovanovic Buha, M.Sc.}
+\def\advisor{Ivana Jovanovic Buha, M.Sc. (hons)}
 \def\date{09.08.2024}
 
 \begin{document}
@@ -131,9 +132,7 @@ Munich, \date \hspace{5cm} \author
     {\Large \bf Abstract}
 \end{center}
 \vspace{1cm}
-
-\lipsum[2]
-
+\input{chapters/abstract}
 \cleardoublepage
 
 \phantomsection
@@ -143,9 +142,7 @@ Munich, \date \hspace{5cm} \author
     {\Large \bf Zusammenfassung}
 \end{center}
 \vspace{1cm}
-
-\lipsum[2]
-
+\input{chapters/zusammenfassung}
 \cleardoublepage
 
 % -------------------------------------------------------------------------------
@@ -167,6 +164,9 @@ Munich, \date \hspace{5cm} \author
 \input{chapters/Bayesian_Hydrology}
 \input{chapters/Fundamental_Implementation}
 \input{chapters/Parallel_Metropolis_Hastings}
+\input{chapters/General Parallel Metropolis Hastings}
+\input{chapters/DREAM}
+\input{chapters/Software}
 
 
 \chapter{Introduction}
