@@ -32,7 +32,7 @@ After storing the data in the root, run the Jupyter notebook from Implementation
 * mode (required): the mode of the algorithm, options: mh, parallel_mh, gpmh, dream
 * separate_chains (optional, default=false): to determine whether the output file is supposed to record the data separately by chains, only relevant for algorithms that sample data using multiple chains, including parallel_mh and dream
 * burnin_fac (optional, default=5): the burn in factor that is used for the result of the MCMC algorithm. The first 1/burnin_fac percentage of the entire data is going to be discarded
-* effective_sample_size (optional, default=1): only the every n_th data is going to be collected. Default 1: no data point is going to be discarded'
+* effective_sample_size (optional, default=1): only the every n_th data is going to be collected. Default 1: no data point is going to be discarded
 * output_file_name (optional, default="mcmc_data.out"): the file name of the saved output result
 * kwargs (optional): a dictionary in form of JSON that is used for specific algorithm input parameters
 
