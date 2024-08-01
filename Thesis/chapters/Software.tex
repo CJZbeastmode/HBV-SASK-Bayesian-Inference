@@ -1,10 +1,10 @@
-\chapter{Software Illicitation}
-In this chapter, a brief documentation of the software implementation to this thesis is given. An overview of the structure will be documented, as well as how to use the implemented framework to perform Bayesian inference using different algorithms.
+\chapter{Description of Software Implementation}
+In this chapter, a brief documentation of the software implementation of this thesis is given. An overview of the structure will be documented, as well as how to use the implemented framework to perform Bayesian inference using different algorithms.
 
 \section{Structure and Usage}
-The repository\footnote{https://github.com/CJZbeastmode/Bachelorarbeit} contains three main sub folders. "Thesis" includes the source file of the actual thesis and "result" includes the benchmarked data and visualization for the thesis. The most important folder regarding the actual software is "implementation", where the implemented algorithm and the data is stored.
+The repository\footnote{https://github.com/CJZbeastmode/HBV-SASK-Bayesian-Inference} contains three main subfolders. "Thesis" includes the source file of the actual thesis and "result" includes the benchmarked data and visualization for the thesis. The most important folder regarding the actual software is "implementation", where the implemented algorithm and the data are stored.
 
-The structure of the algorithm is as follows: the main file that is executed is called "run.py" under the src subfolder. This file is responsible for calling the selected implemented algorithm and execute the Bayesian inference with specified parameters. Specifying the arguments that configure the run time environment can be done by editing the file "run\_config.json" on the root level. This file uses the json format to configure the run time parameters of the software. The requirements or options are documented below:
+The structure of the algorithm is as follows: the main file that is executed is called "run.py" under the src subfolder. This file is responsible for calling the selected implemented algorithm and executing the Bayesian inference with specified parameters. Specifying the arguments that configure the run time environment can be done by editing the file "run\_config.json" on the root level. This file uses the JSON format to configure the run-time parameters of the software. The requirements or options are documented below:
 
 \begin{itemize}
     \item configPath (required): the config file that is used for the model
@@ -19,9 +19,9 @@ The structure of the algorithm is as follows: the main file that is executed is 
 
 The first parameter, configPath, leads to another configuration file that is used for the hydrological model instantiation. This configuration file for the hydrological model is typically stored in the configuration subfolder under implementation.
 
-After configuring the configuration file, we execute the software by running "run.py". The software then fetches the data from the configuration file, loading the model via model initialization files, which are "construction\_model.py" and "execute\_model.py", and selecting the corresponding algorithm and likelihood function. The algorithm initialization files are stored in the folder of run\_mcmc, acting as a preparation for executing the actual algorithms, all of which are stored in the dependencies subfolder on the level before. The different implementations of likelihood functions are stored in the likelihood subfolder. The samples that are generated will be stored as a csv file as output.
+After configuring the configuration file, we execute the software by running "run.py". The software then fetches the data from the configuration file, loading the model via model initialization files, which are "construction\_model.py" and "execute\_model.py", and selecting the corresponding algorithm and likelihood function. The algorithm initialization files are stored in the folder run\_mcmc, acting as a preparation for executing the actual algorithms, all of which are stored in the dependencies subfolder on the level before. The different implementations of likelihood functions are stored in the likelihood subfolder. The samples that are generated will be stored as a CSV file as output.
 
-For the visualization part, the jupyter notebook file "visualization.ipynb" is provided under the "src" folder. To configure the visualization, the file "viz\_config.json" is used. Individual parameters for configurations are listed below.
+For the visualization part, the Jupyter notebook file "visualization.ipynb" is provided under the "src" folder. To configure the visualization, the file "viz\_config.json" is used. Individual parameters for configurations are listed below.
 
 \begin{itemize}
     \item configPath (required): the config file that is used for the model
@@ -32,9 +32,9 @@ For the visualization part, the jupyter notebook file "visualization.ipynb" is p
 \end{itemize}
 
 \section{Algorithm Specification}
-As mentioned in the parameter explanation in the last section, "kwargs" indicate specific configurations for the Markov chain Monte Carlo algorithms. In this section, details regarding these specification are documented.
+As mentioned in the parameter explanation in the last section, "kwargs" indicate specific configurations for the Markov chain Monte Carlo algorithms. In this section, details regarding these specifications are documented.
 
-Configurations for the fundamental Metropolis Hastings algorithm include:
+Configurations for the fundamental Metropolis-Hastings algorithm include:
 \begin{itemize}
     \item version (optional, default="ignoring"): version of the MH algorithm. Options: ignoring, refl\_bound, aggr
     \item sd\_transition\_factor (optional, default=6): the standard deviation factor of the transition kernel. The standard deviation is given by (upper bound - lower bound) / sd\_transition\_factor
@@ -45,7 +45,7 @@ Configurations for the fundamental Metropolis Hastings algorithm include:
     \item init\_method (optional, default="random"): specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior
 \end{itemize}
 
-Configurations for the parallel Metropolis Hastings algorithm include:
+Configurations for the parallel Metropolis-Hastings algorithm include:
 \begin{itemize}
     \item version (optional, default="ignoring"): version of the MH algorithm. Options: ignoring, refl\_bound, aggr
     \item chains (optional, default=4): number of chains
@@ -58,7 +58,7 @@ Configurations for the parallel Metropolis Hastings algorithm include:
     \item init\_method (optional, default="random"): specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior
 \end{itemize}
 
-Configurations for the general parallel Metropolis Hastings algorithm include:
+Configurations for the general parallel Metropolis-Hastings algorithm include:
 \begin{itemize}
     \item num\_proposals (optional, default=8): the numbers of proposal points in each iteration
     \item num\_accepted (optional, default=4): the numbers of accepted points in each iteration

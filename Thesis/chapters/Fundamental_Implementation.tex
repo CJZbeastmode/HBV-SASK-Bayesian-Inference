@@ -140,7 +140,7 @@ After considering these parameters individually, we regard all of the parameters
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/basic_mh/default_mh/default_mh_heatmap.png}
+    \includegraphics[width=0.7\textwidth]{figures/basic_mh/default_mh/default_mh_heatmap.png}
     \captionsetup{width=.8\textwidth}
     \caption{Heatmap between parameters that are calibrated by the default Metropolis Hastings algorithm}
     \label{fig:enter-label}
@@ -152,7 +152,7 @@ After analyzing the parameters individually and as a group, the result that is c
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{figures/basic_mh/default_mh/default_mh_bayes.png}
+    \includegraphics[width=0.7\textwidth]{figures/basic_mh/default_mh/default_mh_bayes.png}
     \captionsetup{width=.8\textwidth}
     \caption{Comparison of Bayesian inference results of the default Metropolis Hastings}
     \label{fig:enter-label}
@@ -199,7 +199,7 @@ calibrated by the Metropolis Hastings algorithm that samples the bound value if 
 
 The reflect boundary method also transforms the data instead of ignoring it but in a different way than the aggregation method. Due to the symmetry of the transition kernel, the possibility of sampling an out-of-bounds sample is the same as the possibility of sampling the point symmetric over the mean of the Gaussian normal transition kernel.\cite{gaussian_distribution_property} In this case, the acceptance rate of the transformed sample point is not changed, which has no interference with the algorithm itself and future samples. For multivariate distribution, a single data point in each dimension can be handled individually and the acceptance rate does not need to be recalculated due to the symmetry of the transition kernel distribution. 
 
-We now take a look at the posterior distribution of the samples. It is shown in Figure 4.7. From the graph, we can see that the posterior distributions sampled from this version of Metropolis-Hastings look very much different from the others. All of these posterior distributions resemble normal distributions, with one peak somewhere in the middle. For some parameters like C0, beta, ETF, and TT, the boundary is shifted, which means that no samples from the region near the boundaries are generated. Since all of the samples that are out of bounds are reflected, the reflected samples compensate the holes of the nonreflected samples, so that it gives rise to a normal distribution like posterior.
+We now take a look at the posterior distribution of the samples. It is shown in Figure 4.7. From the graph, we can see that the posterior distributions sampled from this version of Metropolis-Hastings look very much different from the others. All of these posterior distributions resemble normal distributions, with one peak somewhere in the middle. For some parameters like C0, beta, ETF, and TT, the boundary is shifted, which means that no samples from the region near the boundaries are generated. Since all of the samples that are out of bounds are reflected, the reflected samples compensate the holes of the non-reflected samples, so that it gives rise to a normal distribution like posterior.
 
 \begin{figure}[H]
     \centering
@@ -230,7 +230,7 @@ The result is shown in Figure 4.9. The first impression of the bar chart is that
     \centering
     \includegraphics[width=1\textwidth]{figures/basic_mh/benchmark/sampling_otb.png}
     \captionsetup{width=.8\textwidth}
-    \caption{Comparison of the accuracy and the efficiency of different Metropolis Hastings algorithms}
+    \caption{Comparison of the accuracy and the efficiency of Metropolis Hastings algorithms based on the amount of technique of handling samples generated out of bounds}
     \label{fig:enter-label}
 \end{figure}
 
@@ -383,7 +383,7 @@ The boxplots of these parameters are shown in Figure 4.19. We can see that the r
 The heatmap of the parameter space in Figure 4.20 shows that there are still little to no correlations between each pair of parameters.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/basic_mh/tuned_mh/tuned_mh_heatmap.png}
+    \includegraphics[width=0.7\textwidth]{figures/basic_mh/tuned_mh/tuned_mh_heatmap.png}
     \captionsetup{width=.8\textwidth}
     \caption{Heatmap between parameters that are calibrated by the Metropolis Hastings algorithm with tuned input parameters}
     \label{fig:enter-label}
@@ -393,7 +393,7 @@ From these generated samples, we retrieve the following result of the Bayesian i
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth] {figures/basic_mh/tuned_mh/tuned_mh_bayes.png}
+    \includegraphics[width=0.8\textwidth] {figures/basic_mh/tuned_mh/tuned_mh_bayes.png}
     \captionsetup{width=.8\textwidth}
     \caption{Comparison of Bayesian inference results of the Metropolis Hastings with tuned input parameters}
     \label{fig:enter-label}
