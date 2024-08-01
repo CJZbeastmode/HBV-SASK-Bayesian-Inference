@@ -1,5 +1,5 @@
-# Bachelorarbeit
-This repository contains the bachelor thesis of Chengjie Zhou (Jay) from Technical University of Munich.
+# HBV-SASK Bayesian Inference
+This repository contains the bachelor thesis of Chengjie Zhou (Jay) from Technical University of Munich. The topic of the thesis is efficient Bayesian inference of hydrological model parameters: implementation of a parallel Markov chain Monte Carlo Approach
 
 ## Installation
 ### Setting-up the conda environment:
