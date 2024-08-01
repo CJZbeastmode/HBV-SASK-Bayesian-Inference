@@ -4,12 +4,15 @@ import numpy as np
 import pandas as pd
 import sys
 
-sys.path.append("/Users/jay/Desktop/Bachelorarbeit/Implementation")
+# TODO: Change root path
+root = "/Users/jay/Desktop/Bachelorarbeit"
+
+sys.path.append(f"{root}/Implementation")
 from src.run_mcmc.run_mh import run_mcmc_mh
 from src.construct_model import get_model
 from src.execute_model import run_model_single_parameter_node
 
-runConfigPath = "/Users/jay/Desktop/Bachelorarbeit/test_config.json"
+runConfigPath = f"{root}/test_config.json"
 with open(runConfigPath, "r") as file:
     run_config = json.load(file)
 

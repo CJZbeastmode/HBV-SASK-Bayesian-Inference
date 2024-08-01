@@ -2,7 +2,10 @@ import sys
 import pandas as pd
 import json
 
-sys.path.append("/Users/jay/Desktop/Bachelorarbeit/Implementation/src")
+# TODO: Change root path
+root = "/Users/jay/Desktop/Bachelorarbeit"
+
+sys.path.append(f"{root}/Implementation/src")
 from dependencies.gpmh.gpmh import *
 from src.construct_model import get_model
 import numpy as np
@@ -19,10 +22,10 @@ def run_mcmc_gpmh(
     iterations=2500,
 ):
     posterior_rudimentary = pd.read_csv(
-        "/Users/jay/Desktop/Bachelorarbeit/Implementation/src/run_mcmc/posterior_rudimentary.csv"
+        f"{root}/Implementation/src/run_mcmc/posterior_rudimentary.csv"
     ).apply(pd.to_numeric, errors="coerce")
 
-    runConfigPath = "/Users/jay/Desktop/Bachelorarbeit/run_config.json"
+    runConfigPath = f"{root}/run_config.json"
     with open(runConfigPath, "r") as file:
         run_config = json.load(file)
 

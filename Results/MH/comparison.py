@@ -3,18 +3,22 @@ import numpy as np
 import sys
 import json
 
+# TODO: Change root path
+root = "/Users/jay/Desktop/Bachelorarbeit"
+
 primary_output = pd.read_csv(
-    "/Users/jay/Desktop/Bachelorarbeit/Results/Fundamental/primary_output.out"
-)
-tuned_output = pd.read_csv(
-    "/Users/jay/Desktop/Bachelorarbeit/Results/Fundamental/tuned_output.out"
+    f"{root}/Results/Fundamental/primary_output.out"
 )
 
-sys.path.append("/Users/jay/Desktop/Bachelorarbeit/Implementation/src")
+tuned_output = pd.read_csv(
+    f"{root}/Results/Fundamental/tuned_output.out"
+)
+
+sys.path.append(f"{root}/Implementation/src")
 from execute_model import run_model_single_parameter_node
 from construct_model import get_model
 
-testConfigPath = "/Users/jay/Desktop/Bachelorarbeit/test_config.json"
+testConfigPath = f"{root}/test_config.json"
 with open(testConfigPath, "r") as file:
     run_config = json.load(file)
 

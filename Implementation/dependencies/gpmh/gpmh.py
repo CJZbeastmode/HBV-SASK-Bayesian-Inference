@@ -5,7 +5,10 @@ tfd = tfp.distributions
 
 import sys
 
-sys.path.append("/Users/jay/Desktop/Bachelorarbeit/Implementation/src")
+# TODO: Change root path
+root = "/Users/jay/Desktop/Bachelorarbeit"
+
+sys.path.append(f"{root}/Implementation/src")
 from execute_model import run_model_single_parameter_node
 from likelihood.likelihood_independent import likelihood_independent
 from likelihood.likelihood_dependent import likelihood_dependent

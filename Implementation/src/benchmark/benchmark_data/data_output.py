@@ -4,12 +4,15 @@ import numpy as np
 import pandas as pd
 import sys
 
-sys.path.append("/Users/jay/Desktop/Bachelorarbeit/Implementation")
+# TODO: Change root path
+root = "/Users/jay/Desktop/Bachelorarbeit"
+
+sys.path.append(f"{root}/Implementation")
 from src.run_mcmc.run_dream import run_mcmc_dream
 from src.construct_model import get_model
 from src.execute_model import run_model_single_parameter_node
 
-runConfigPath = "/Users/jay/Desktop/Bachelorarbeit/test_config.json"
+runConfigPath = f"{root}/test_config.json"
 with open(runConfigPath, "r") as file:
     run_config = json.load(file)
 
@@ -33,8 +36,8 @@ Training
 5, tuning phase: 25%, 50%, and 100%: 2000-08 O
 """
 
-make_file_struct_oldman = lambda filename : [f'/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/benchmark_configs/{filename}.json', 'Oldman_Basin', filename]
-make_file_struct_banff = lambda filename : [f'/Users/jay/Desktop/Bachelorarbeit/Implementation/configurations/benchmark_configs/{filename}.json', 'Banff_Basin', filename]
+make_file_struct_oldman = lambda filename : [f'{root}/Implementation/configurations/benchmark_configs/{filename}.json', 'Oldman_Basin', filename]
+make_file_struct_banff = lambda filename : [f'{root}/Implementation/configurations/benchmark_configs/{filename}.json', 'Banff_Basin', filename]
 
 short_no_floods = make_file_struct_oldman('short_no_floods')
 short_floods = make_file_struct_oldman('short_floods')

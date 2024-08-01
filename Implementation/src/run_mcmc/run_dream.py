@@ -4,7 +4,10 @@ import pandas as pd
 import sys
 import json
 
-sys.path.append("/Users/jay/Desktop/Bachelorarbeit/Implementation/")
+# TODO: Change root path
+root = "/Users/jay/Desktop/Bachelorarbeit"
+
+sys.path.append(f"{root}/Implementation/")
 from src.execute_model import run_model_single_parameter_node
 from dependencies.PyDREAM.pydream.parameters import SampledParam
 from src.likelihood.likelihood_independent import likelihood_independent
@@ -13,10 +16,10 @@ from dependencies.PyDREAM.pydream.core import run_dream
 from src.construct_model import get_model
 
 posterior_rudimentary = pd.read_csv(
-    "/Users/jay/Desktop/Bachelorarbeit/Implementation/src/run_mcmc/posterior_rudimentary.csv"
+    f"{root}/Implementation/src/run_mcmc/posterior_rudimentary.csv"
 ).apply(pd.to_numeric, errors="coerce")
 
-runConfigPath = "/Users/jay/Desktop/Bachelorarbeit/run_config.json"
+runConfigPath = f"{root}/run_config.json"
 with open(runConfigPath, "r") as file:
     run_config = json.load(file)
 

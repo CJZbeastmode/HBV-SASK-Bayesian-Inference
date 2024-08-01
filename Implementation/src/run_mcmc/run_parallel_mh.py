@@ -4,14 +4,17 @@ import sys
 import multiprocessing as mp
 import json
 
-sys.path.append("/Users/jay/Desktop/Bachelorarbeit/Implementation")
+# TODO: Change root path
+root = "/Users/jay/Desktop/Bachelorarbeit"
+
+sys.path.append(f"{root}/Implementation")
 from src.execute_model import run_model_single_parameter_node
 from src.likelihood.likelihood_independent import likelihood_independent
 from src.likelihood.likelihood_dependent import likelihood_dependent
 from dependencies.mh.mh import MH
 from src.construct_model import get_model
 
-runConfigPath = "/Users/jay/Desktop/Bachelorarbeit/run_config.json"
+runConfigPath = f"{root}/run_config.json"
 with open(runConfigPath, "r") as file:
     run_config = json.load(file)
 
