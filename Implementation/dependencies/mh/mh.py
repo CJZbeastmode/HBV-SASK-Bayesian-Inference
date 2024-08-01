@@ -18,7 +18,7 @@ def MH(
 
     if version == "ignoring":
         for _ in range(n):
-            # sample candidate from normal distribution
+            # Sample candidate from normal distribution
             a = samples[-1]
             b = sample_kernel(a)
             p = [0, 0, 0, 0, 0, 0, 0]
@@ -35,7 +35,6 @@ def MH(
             if invalid:
                 reject = True
             else:
-                # log_p = np.log(proposal(b)) - np.log(proposal(a)) + likelihood_kernel(b) - likelihood_kernel(a)
                 p = (
                     proposal(b)
                     * np.exp(likelihood_kernel(b))
@@ -56,12 +55,12 @@ def MH(
 
     elif version == "refl_bound":
         for _ in range(n):
-            # sample candidate from normal distribution
+            # Sample candidate from normal distribution
             a = samples[-1]
             b = sample_kernel(a)
             p = [0, 0, 0, 0, 0, 0, 0]
 
-            # calculate probability of accepting this candidate
+            # Calculate probability of accepting this candidate
             for i in range(len(b)):
                 if b[i] < lower_bound[i] or b[i] > upper_bound[i]:
                     temp = 2 * a[i] - b[i]
@@ -84,12 +83,12 @@ def MH(
 
     elif version == "aggr":
         for _ in range(n):
-            # sample candidate from normal distribution
+            # Sample candidate from normal distribution
             a = samples[-1]
             b = sample_kernel(a)
             p = [0, 0, 0, 0, 0, 0, 0]
 
-            # calculate probability of accepting this candidate
+            # Calculate probability of accepting this candidate
             for i in range(len(b)):
                 if b[i] < lower_bound[i]:
                     b[i] = lower_bound[i]

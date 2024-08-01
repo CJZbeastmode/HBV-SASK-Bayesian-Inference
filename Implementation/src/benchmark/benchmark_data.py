@@ -85,7 +85,7 @@ if __name__ == "__main__":
         for case in test_case:
             model = get_model(case[0], case[1])
 
-            chain_iterations = 1250 # TODO
+            chain_iterations = 1250
             nchains = 8
             total_iterations = chain_iterations * nchains
 
@@ -114,10 +114,9 @@ if __name__ == "__main__":
                 sampled_params, columns=["TT", "C0", "beta", "ETF", "FC", "FRAC", "K2"]
             )
 
-            # Sampling Meanprint(sampled_params.shape)
             param_vec = []
             for i in range(7):
-                param_vec.append(np.random.choice(samples.iloc[:, i], 1000)) # TODO
+                param_vec.append(np.random.choice(samples.iloc[:, i], 1000))
             param_vec = np.array(param_vec).T
 
             testing_data = testing_data_special if test_name == 'data_train' else testing_data_regular

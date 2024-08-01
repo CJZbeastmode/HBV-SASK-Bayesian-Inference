@@ -103,7 +103,6 @@ def run_mcmc_dream(iterations=1250, chains=8, **kwargs):
     param_lower = []
     param_upper = []
     for param in configurationObject["parameters"]:
-        # for now the Uniform distribution is only supported
         if param["distribution"] == "Uniform":
             param_names.append(param["name"])
             param_lower.append(param["lower"])
@@ -151,6 +150,7 @@ def run_mcmc_dream(iterations=1250, chains=8, **kwargs):
                 l_k = likelihood_i8
 
     randomStart = False
+    
     # Initial state
     if init_method == "random" or init_method == "not specified":
         state = param_lower

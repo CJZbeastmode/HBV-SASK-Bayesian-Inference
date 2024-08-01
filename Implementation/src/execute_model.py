@@ -30,6 +30,7 @@ def run_model_single_parameter_node(
         take_direct_value=True,
         merge_output_with_measured_data=True,
     )
+    
     # extract y_t produced by the model
     y_t_model = results_list[0][0]["result_time_series"][qoi_column_name].to_numpy()
     if (
@@ -39,7 +40,6 @@ def run_model_single_parameter_node(
         y_t_observed = results_list[0][0]["result_time_series"][
             qoi_column_name_measured
         ].to_numpy()
-        # y_t_observed = model.time_series_measured_data_df[qoi_column_name_measured].values
     else:
         y_t_observed = None
     return unique_index_model_run, y_t_model, y_t_observed, parameter_value_dict

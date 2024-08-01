@@ -86,7 +86,7 @@ def run_mcmc_mh_parallel(
     param_lower = np.array(param_lower)
     param_upper = np.array(param_upper)
 
-    # Initialize random states for each chain
+    # Initialize states
     if init_method != "default":
         init_states = custom_init_states
     else:
@@ -94,7 +94,7 @@ def run_mcmc_mh_parallel(
             np.random.uniform(low=param_lower, high=param_upper) for _ in range(chains)
         ]
 
-    # Set up a multiprocessing pool
+    # Set up pool
     with mp.Pool(chains) as pool:
         results = pool.starmap(
             run_single_chain,
@@ -114,5 +114,4 @@ def run_mcmc_mh_parallel(
             ],
         )
 
-    # results will be a list of arrays (chains)
     return results, iterations * chains

@@ -8,7 +8,3 @@ def likelihood_independent(y_model, y_observed, sd=1):
     if np.isnan(logp):
         logp = -np.inf
     return logp
-
-
-# independant
-# dependent scale: Vrugt

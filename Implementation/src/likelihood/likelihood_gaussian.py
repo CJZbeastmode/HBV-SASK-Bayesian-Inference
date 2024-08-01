@@ -12,14 +12,4 @@ def likelihood_gaussian(y_model, y_observed):
         term = t1 * t2
         prod = prod * term
     return prod
-
-
-"""
-def calculate_gaussian_likelihood(y_t_observed, y_t_model, error_variance=5.0):
-    if y_t_observed is not None and y_t_model is not None:
-        exponent = -0.5 * ((y_t_observed - y_t_model) ** 2) / error_variance
-        likelihood = np.exp(exponent) / np.sqrt(2 * np.pi * error_variance)
-        return likelihood  # in case when y_t_observed and y_t_model are lists the likelihood will be a list as well
-    else:
-        return 0
-"""
+    

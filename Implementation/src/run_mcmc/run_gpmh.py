@@ -37,7 +37,6 @@ def run_mcmc_gpmh(
     param_lower = []
     param_upper = []
     for param in configurationObject["parameters"]:
-        # for now the Uniform distribution is only supported
         if param["distribution"] == "Uniform":
             param_names.append(param["name"])
             param_lower.append(param["lower"])
@@ -106,8 +105,9 @@ def run_mcmc_gpmh(
     samples = []
     for iter in range(iterations):
         accepted_states = gmh_kernel.step(state)
-        if accepted_states:  # Only update state if there are accepted states
-            state = accepted_states[-1]  # Update state to the last accepted state
+        # Update states
+        if accepted_states: 
+            state = accepted_states[-1]
         samples.extend(accepted_states)
         print(f"{iter} done")
 

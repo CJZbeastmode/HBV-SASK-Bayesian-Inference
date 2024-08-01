@@ -39,7 +39,6 @@ def run_mcmc_mh(
     param_lower = []
     param_upper = []
     for param in configurationObject["parameters"]:
-        # for now the Uniform distribution is only supported
         if param["distribution"] == "Uniform":
             param_names.append(param["name"])
             param_lower.append(param["lower"])
