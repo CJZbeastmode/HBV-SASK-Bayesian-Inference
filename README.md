@@ -89,5 +89,5 @@ After storing the data in the root, run the Jupyter notebook from Implementation
 
 https://pydream.readthedocs.io/en/latest/pydream.html
 
-
-## License
+## Additional Remarks
+The HBV-SASK model and dataset are not included in this git repository, as they are private files that are not allowed to be shared in public.
