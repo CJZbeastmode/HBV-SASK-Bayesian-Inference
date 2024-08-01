@@ -20,8 +20,8 @@ configPath = run_config["configPath"]
 basis = run_config["basis"]
 model = get_model(configPath, basis)
 
-niterations = 1250 
-nchains = 8 
+niterations = 1250
+nchains = 8
 monte_carlo_number = 1000
 
 DEpairs = [1, 2, 3]
@@ -47,8 +47,36 @@ init_method = [
     "median_posterior",
     "q3_posterior",
 ]
-to_benchmark = [DEpairs, multitry, hardboundaries, crossover_burnin, adapt_crossover, nCR, snooker, p_gamma_unity, sensitivity_likelihood_independent, sensitivity_likelihood_dependent, burnin_factor, effective_sample_size, init_method]
-benchmark_data = ['DEpairs', 'multitry', 'hardboundaries', 'crossover_burnin', 'adapt_crossover', 'nCR', 'snooker', 'p_gamma_unity', 'sensitivity_likelihood_independent', 'sensitivity_likelihood_dependent', 'burnin_factor', 'effective_sample_size', 'init_method']
+to_benchmark = [
+    DEpairs,
+    multitry,
+    hardboundaries,
+    crossover_burnin,
+    adapt_crossover,
+    nCR,
+    snooker,
+    p_gamma_unity,
+    sensitivity_likelihood_independent,
+    sensitivity_likelihood_dependent,
+    burnin_factor,
+    effective_sample_size,
+    init_method,
+]
+benchmark_data = [
+    "DEpairs",
+    "multitry",
+    "hardboundaries",
+    "crossover_burnin",
+    "adapt_crossover",
+    "nCR",
+    "snooker",
+    "p_gamma_unity",
+    "sensitivity_likelihood_independent",
+    "sensitivity_likelihood_dependent",
+    "burnin_factor",
+    "effective_sample_size",
+    "init_method",
+]
 
 
 def rmse(result, target):

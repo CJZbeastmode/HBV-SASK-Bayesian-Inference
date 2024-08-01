@@ -110,7 +110,7 @@ if __name__ == "__main__":
         MAEs_max = []
         RMSEs_mean = []
         RMSEs_max = []
-        
+
         # Mean Accuracy of each case
         for i in range(chains):
             samples = pd.DataFrame(results[i])

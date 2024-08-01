@@ -109,7 +109,7 @@ def run_mcmc_gpmh(
     for iter in range(iterations):
         accepted_states = gmh_kernel.step(state)
         # Update states
-        if accepted_states: 
+        if accepted_states:
             state = accepted_states[-1]
         samples.extend(accepted_states)
         print(f"{iter} done")

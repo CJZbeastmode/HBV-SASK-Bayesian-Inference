@@ -7,9 +7,7 @@ root = "/Users/jay/Desktop/Bachelorarbeit"
 sys.path.append(root)
 from Implementation.dependencies.hbv_sask.model import HBVSASKModel as hbvmodel
 
-hbv_model_data_path = pathlib.Path(
-    f"{root}/Implementation/dependencies/hbv_sask/data"
-)
+hbv_model_data_path = pathlib.Path(f"{root}/Implementation/dependencies/hbv_sask/data")
 inputModelDir = hbv_model_data_path
 
 

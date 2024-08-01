@@ -12,4 +12,3 @@ def likelihood_gaussian(y_model, y_observed):
         term = t1 * t2
         prod = prod * term
     return prod
-    

@@ -30,7 +30,7 @@ def run_model_single_parameter_node(
         take_direct_value=True,
         merge_output_with_measured_data=True,
     )
-    
+
     # extract y_t produced by the model
     y_t_model = results_list[0][0]["result_time_series"][qoi_column_name].to_numpy()
     if (

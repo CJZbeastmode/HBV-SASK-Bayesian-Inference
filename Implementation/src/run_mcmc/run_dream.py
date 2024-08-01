@@ -153,7 +153,7 @@ def run_mcmc_dream(iterations=1250, chains=8, **kwargs):
                 l_k = likelihood_i8
 
     randomStart = False
-    
+
     # Initial state
     if init_method == "random" or init_method == "not specified":
         state = param_lower

@@ -36,26 +36,34 @@ Training
 5, tuning phase: 25%, 50%, and 100%: 2000-08 O
 """
 
-make_file_struct_oldman = lambda filename : [f'{root}/Implementation/configurations/benchmark_configs/{filename}.json', 'Oldman_Basin', filename]
-make_file_struct_banff = lambda filename : [f'{root}/Implementation/configurations/benchmark_configs/{filename}.json', 'Banff_Basin', filename]
+make_file_struct_oldman = lambda filename: [
+    f"{root}/Implementation/configurations/benchmark_configs/{filename}.json",
+    "Oldman_Basin",
+    filename,
+]
+make_file_struct_banff = lambda filename: [
+    f"{root}/Implementation/configurations/benchmark_configs/{filename}.json",
+    "Banff_Basin",
+    filename,
+]
 
-short_no_floods = make_file_struct_oldman('short_no_floods')
-short_floods = make_file_struct_oldman('short_floods')
-long_no_floods = make_file_struct_oldman('long_no_floods')
-long_floods = make_file_struct_oldman('long_floods')
-oldman_train = make_file_struct_oldman('oldman_train')
-banff_train = make_file_struct_banff('banff_train')
-su25 = make_file_struct_oldman('su25')
-su50 = make_file_struct_oldman('su50')
-su100 = make_file_struct_oldman('su100')
+short_no_floods = make_file_struct_oldman("short_no_floods")
+short_floods = make_file_struct_oldman("short_floods")
+long_no_floods = make_file_struct_oldman("long_no_floods")
+long_floods = make_file_struct_oldman("long_floods")
+oldman_train = make_file_struct_oldman("oldman_train")
+banff_train = make_file_struct_banff("banff_train")
+su25 = make_file_struct_oldman("su25")
+su50 = make_file_struct_oldman("su50")
+su100 = make_file_struct_oldman("su100")
 
-test_oldman_long = make_file_struct_oldman('test_oldman_long')
-test_oldman_short = make_file_struct_oldman('test_oldman_short')
-test_banff = make_file_struct_banff('test_banff')
+test_oldman_long = make_file_struct_oldman("test_oldman_long")
+test_oldman_short = make_file_struct_oldman("test_oldman_short")
+test_banff = make_file_struct_banff("test_banff")
 testing_data_regular = [test_oldman_long, test_oldman_short]
-testing_data_regular_name = ['test_oldman_long', 'test_oldman_short']
+testing_data_regular_name = ["test_oldman_long", "test_oldman_short"]
 testing_data_special = [test_oldman_long, test_banff]
-testing_data_special_name = ['test_oldman_long', 'test_banff']
+testing_data_special_name = ["test_oldman_long", "test_banff"]
 
 short_train = [short_no_floods, short_floods]
 long_train = [long_no_floods, long_floods]
@@ -63,7 +71,13 @@ length_train = [short_floods, long_floods]
 data_train = [oldman_train, banff_train]
 spin_up_train = [su25, su50, su100]
 to_benchmark = [short_train, long_train, length_train, data_train, spin_up_train]
-benchmark_data = ['short_train', 'long_train', 'length_train', 'data_train', 'spin_up_train']
+benchmark_data = [
+    "short_train",
+    "long_train",
+    "length_train",
+    "data_train",
+    "spin_up_train",
+]
 
 
 def rmse(result, target):
@@ -122,20 +136,39 @@ if __name__ == "__main__":
                 param_vec.append(np.random.choice(samples.iloc[:, i], 1000))
             param_vec = np.array(param_vec).T
 
-            testing_data = testing_data_special if test_name == 'data_train' else testing_data_regular
-            testing_data_name = testing_data_special_name if test_name == 'data_train' else testing_data_regular_name
+            testing_data = (
+                testing_data_special
+                if test_name == "data_train"
+                else testing_data_regular
+            )
+            testing_data_name = (
+                testing_data_special_name
+                if test_name == "data_train"
+                else testing_data_regular_name
+            )
 
             for scenario in range(len(testing_data)):
-                test_model = get_model(testing_data[scenario][0], testing_data[scenario][1])
+                test_model = get_model(
+                    testing_data[scenario][0], testing_data[scenario][1]
+                )
                 posterior = []
                 for _, vec in enumerate(param_vec):
-                    _, y_model, measured_data, _ = run_model_single_parameter_node(test_model, np.array(vec))
+                    _, y_model, measured_data, _ = run_model_single_parameter_node(
+                        test_model, np.array(vec)
+                    )
                     posterior.append(y_model)
                 posterior_mean = np.mean(np.array(posterior), axis=0)
                 rmse_mean = rmse(posterior_mean, measured_data)
                 mae_mean = mae(posterior_mean, measured_data)
                 results.append(
-                    [test_name, case[2], testing_data_name[scenario], rmse_mean, mae_mean, timed]
+                    [
+                        test_name,
+                        case[2],
+                        testing_data_name[scenario],
+                        rmse_mean,
+                        mae_mean,
+                        timed,
+                    ]
                 )
 
                 # Backup
@@ -156,18 +189,18 @@ if __name__ == "__main__":
                 results,
                 delimiter=",",
                 fmt=fmt,
-                    header="Test_Name,Train_Data,Test_Data,MAE_Mean,Time",
+                header="Test_Name,Train_Data,Test_Data,MAE_Mean,Time",
                 comments="",
             )
 
-        # Backup
+            # Backup
             fmt = "%s,%s,%s,%s,%s,%s"
             np.savetxt(
                 "backup.txt",
                 results,
                 delimiter=",",
                 fmt=fmt,
-                    header="Test_Name,Train_Data,Test_Data,MAE_Mean,Time",
+                header="Test_Name,Train_Data,Test_Data,MAE_Mean,Time",
                 comments="",
             )
 

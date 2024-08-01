@@ -36,28 +36,46 @@ Training
 5, tuning phase: 25%, 50%, and 100%: 2000-08 O
 """
 
-make_file_struct_oldman = lambda filename : [f'{root}/Implementation/configurations/benchmark_configs/{filename}.json', 'Oldman_Basin', filename]
-make_file_struct_banff = lambda filename : [f'{root}/Implementation/configurations/benchmark_configs/{filename}.json', 'Banff_Basin', filename]
+make_file_struct_oldman = lambda filename: [
+    f"{root}/Implementation/configurations/benchmark_configs/{filename}.json",
+    "Oldman_Basin",
+    filename,
+]
+make_file_struct_banff = lambda filename: [
+    f"{root}/Implementation/configurations/benchmark_configs/{filename}.json",
+    "Banff_Basin",
+    filename,
+]
 
-short_no_floods = make_file_struct_oldman('short_no_floods')
-short_floods = make_file_struct_oldman('short_floods')
-long_no_floods = make_file_struct_oldman('long_no_floods')
-long_floods = make_file_struct_oldman('long_floods')
-oldman_train = make_file_struct_oldman('oldman_train')
-banff_train = make_file_struct_banff('banff_train')
-su25 = make_file_struct_oldman('su25')
-su50 = make_file_struct_oldman('su50')
-su100 = make_file_struct_oldman('su100')
-all_files = [short_no_floods, short_floods, long_no_floods, long_floods, oldman_train, banff_train, su25, su50, su100]
+short_no_floods = make_file_struct_oldman("short_no_floods")
+short_floods = make_file_struct_oldman("short_floods")
+long_no_floods = make_file_struct_oldman("long_no_floods")
+long_floods = make_file_struct_oldman("long_floods")
+oldman_train = make_file_struct_oldman("oldman_train")
+banff_train = make_file_struct_banff("banff_train")
+su25 = make_file_struct_oldman("su25")
+su50 = make_file_struct_oldman("su50")
+su100 = make_file_struct_oldman("su100")
+all_files = [
+    short_no_floods,
+    short_floods,
+    long_no_floods,
+    long_floods,
+    oldman_train,
+    banff_train,
+    su25,
+    su50,
+    su100,
+]
 
 
-test_oldman_long = make_file_struct_oldman('test_oldman_long')
-test_oldman_short = make_file_struct_oldman('test_oldman_short')
-test_banff = make_file_struct_banff('test_banff')
+test_oldman_long = make_file_struct_oldman("test_oldman_long")
+test_oldman_short = make_file_struct_oldman("test_oldman_short")
+test_banff = make_file_struct_banff("test_banff")
 testing_data_regular = [test_oldman_long, test_oldman_short]
-testing_data_regular_name = ['test_oldman_long', 'test_oldman_short']
+testing_data_regular_name = ["test_oldman_long", "test_oldman_short"]
 testing_data_special = [test_oldman_long, test_banff]
-testing_data_special_name = ['test_oldman_long', 'test_banff']
+testing_data_special_name = ["test_oldman_long", "test_banff"]
 
 
 if __name__ == "__main__":

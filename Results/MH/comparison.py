@@ -6,13 +6,9 @@ import json
 # TODO: Change root path
 root = "/Users/jay/Desktop/Bachelorarbeit"
 
-primary_output = pd.read_csv(
-    f"{root}/Results/Fundamental/primary_output.out"
-)
+primary_output = pd.read_csv(f"{root}/Results/Fundamental/primary_output.out")
 
-tuned_output = pd.read_csv(
-    f"{root}/Results/Fundamental/tuned_output.out"
-)
+tuned_output = pd.read_csv(f"{root}/Results/Fundamental/tuned_output.out")
 
 sys.path.append(f"{root}/Implementation/src")
 from execute_model import run_model_single_parameter_node
