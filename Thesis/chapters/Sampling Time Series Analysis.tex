@@ -131,7 +131,7 @@ Being trained on the Oldman basin instead of the Banff basin, the posterior is m
     \label{fig:enter-label}
 \end{figure}
 
-The spin-up phase is investigated for the last comparison. The efficiency is more optimized for the models with shorter spin-up phases, which is logical since spin-up phases require model executions and simulations as well. For the accuracy metrics, on the other hand, the results show a certain complexity for analysis. Testing the sampled posterior on the short test data frame results in a proportional relationship, in which shorter spin-up phases result in better accuracy scores. This might be because longer spin-up phases consider too much historical data, which might potentially be a disturbing factor for the Bayesian inference. For the long test data frame, there is no discernible pattern regarding the relationship between the accuracy score and the spin-up length. Since the longer data frame contains more anomalies, the behavior of the posterior sampling can be unpredictable. Therefore, the spin-up length may not consistently influence the accuracy score.
+The spin-up phase is investigated for the last comparison. The efficiency is more optimized for the models with shorter spin-up phases, which is logical since spin-up phases require model executions and simulations as well. For the accuracy metrics, on the other hand, the results show a certain complexity for analysis. Testing the sampled posterior on the short test data frame results in a proportional relationship, in which shorter spin-up phases result in better accuracy scores. This might be because longer spin-up phases consider too much historical data, which might potentially be a disturbing factor for the Bayesian inference. For the long test data frame, there is no pattern that can be distinguished regarding the relationship between the accuracy score and the spin-up length. Since the longer data frame contains more anomalies, the behavior of the posterior sampling can be unpredictable. Therefore, the spin-up length may not consistently influence the accuracy score.
 
 \begin{figure}[H]
     \centering
@@ -141,5 +141,4 @@ The spin-up phase is investigated for the last comparison. The efficiency is mor
     \label{fig:enter-label}
 \end{figure}
 
-In conclusion, focusing on
-
+In conclusion, focusing on sampling from data where more peaks are present allows the Markov chain Monte Carlo algorithm to perform more precise predictions for anomalies, whereas concentrating on sampling from data that are calmer and contain fewer anomalies allows the Markov chain Monte Carlo algorithm to perform generally better forecasts in terms of accuracy metrics. A selection of training data that balances both aspects is crucial for optimal inferred results.
