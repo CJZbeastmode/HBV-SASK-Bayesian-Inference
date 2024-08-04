@@ -4,29 +4,28 @@ In this chapter, we focus on the hydrological model that is used in this thesis.
 
 
 \section{Overview of the Hydrological Model}
-The HBV-SASK conceptual model is a renowned mathematical model that is commonly used in the field of hydrology. HBV is a model that describes the subroutines for snow accumulation and melts, for soil moisture accounting and river routing.\cite{hbv} SASK stands for the province of Saskatchewan, the province in Canada in which the model is developed. The creation of the HBV-SASK model is therefore based on the HBV model but involves local data calibration and integration with local water management needs.\cite{sask}
+The HBV-SASK conceptual model is a renowned mathematical model that is commonly used in the field of hydrology. HBV is a model that describes the subroutines for snow accumulation and melts, for soil moisture accounting and river routing~\cite{hbv}. SASK stands for the province of Saskatchewan, the province in Canada in which the model is developed. The creation of the HBV-SASK model is therefore based on the HBV model but involves local data calibration and integration with local water management needs~\cite{sask}.
 
-The HBV-SASK model has twelve different hyperparameters, of which seven are relevant to this thesis.\cite{ivana_relevant_params} All of these These include:\cite{hydrology}
+The HBV-SASK model has twelve different hyperparameters, of which seven are relevant to this thesis~\cite{ivana_relevant_params}. All of these These include~\cite{hydrology}:
 
 \begin{itemize}
-  \item TT: ranges from -4 to 4, stands for the air temperature threshold in °C for melting/freezing and separating rain and snow
-  \item C0: ranges from 0 to 10, describes the base melt factor in mm/°C per day
-  \item $\beta$ (beta): ranges from 0 to 3, depicts the shape parameter (exponent) for the soil release equation
-  \item ETF: ranges from 0 to 1, describes the temperature anomaly correction in 1/°C of potential evapotranspiration
-  \item FC: ranges from 50 to 500, depicts the field capacity of soil in mm.
-  \item FRAC: ranges from 0.1 to 0.9, stands for the fraction of soil release entering the fast reservoir
-  \item K2: the slow reservoir coefﬁcient ranges from 0 to 0.05, which determines what proportion of the storage is released per day
+  \item TT: Ranges from -4 to 4. It stands for the air temperature threshold in °C for melting/freezing and separating rain and snow.
+  \item C0: Ranges from 0 to 10. It describes the base melt factor in mm/°C per day.
+  \item $\beta$ (beta): Ranges from 0 to 3. It depicts the shape parameter (exponent) for the soil release equation.
+  \item ETF: Ranges from 0 to 1. It describes the temperature anomaly correction in 1/°C of potential evapotranspiration.
+  \item FC: Ranges from 50 to 500. It depicts the field capacity of soil in mm.
+  \item FRAC: Ranges from 0.1 to 0.9. It stands for the fraction of soil release entering the fast reservoir.
+  \item K2: The slow reservoir coefﬁcient ranges from 0 to 0.05, which determines what proportion of the storage is released per day.
 \end{itemize}
 
-To run this model, these hyperparameters need to be determined. Since the only prior information given is the lowest and the highest bound of each hyperparameter, uncertainty quantification of these hyperparameters is, therefore, necessary to gain posterior information. Apart from these hyperparameters, the starting and the end date of the period that is used for uncertainty quantification are also required to be specified.\cite{hydrology} However, the very first phase at the start is used for the spin-up phase, in which the model runs for some time using historical data. This phase stabilizes internal model states such as soil moisture and groundwater levels, which are important for accurate simulation.\cite{hydrology}
-TODO: states
+To run this model, these hyperparameters need to be determined. Since the only prior information given is the lowest and the highest bound of each hyperparameter, uncertainty quantification of these hyperparameters is, therefore, necessary to gain posterior information. Apart from these hyperparameters, the starting and the end date of the period that is used for uncertainty quantification are also required to be specified~\cite{hydrology}. However, the very first phase at the start is used for the spin-up phase, in which the model runs for some time using historical data. This phase stabilizes internal model states such as soil moisture and groundwater levels, which are important for accurate simulation~\cite{hydrology}.
 
 \section{Overview of the Data Set}
-There are two existing data sets to the hydrological model, which are respectively called Oldman Basin and Banff Basin, since they are each measured at the Oldman River and in the town of Banff in Alberta, Canada.\cite{hydrology_dataset} The value that is measured is called streamflow. It describes the movement of water within a river or stream channel and is the combined result of all climatological and geographical factors that operate in a drainage basin.\cite{streamflow} Both of these data sets are presented in the format of a time series, in which the value of each measurement is collected against the dates over a long period. The Oldman basin data set is available from 1979 to 2008, whereas the Banff basin data set is available from 1950 to 2011.\cite{hydrology} 
+There are two existing data sets to the hydrological model, which are respectively called Oldman Basin and Banff Basin, since they are each measured at the Oldman River and in the town of Banff in Alberta, Canada~\cite{hydrology_dataset}. The value that is measured is called streamflow. It describes the movement of water within a river or stream channel and is the combined result of all climatological and geographical factors that operate in a drainage basin~\cite{streamflow}. Both of these data sets are presented in the format of a time series, in which the value of each measurement is collected against the dates over a long period. The Oldman basin data set is available from 1979 to 2008, whereas the Banff basin data set is available from 1950 to 2011~\cite{hydrology}.
 
-Since the data is presented in a format of time series, a time series decomposition is required to present more information on trends, and seasonal and regression effects.\cite{time_series} After the decomposition, the trend, seasonal, and residue of the dataset over the whole period can be observed. For the time series decomposition in this section, the function TSA.seasonal.seasonal\_decompose from the python framework stats models is used.\cite{stat_models_decompose}
+Since the data is presented in a format of time series, a time series decomposition is required to present more information on trends, and seasonal and regression effects~\cite{time_series}. After the decomposition, the trend, seasonal, and residue of the dataset over the whole period can be observed. For the time series decomposition in this section, the function TSA.seasonal.seasonal\_decompose from the python framework stats models is used~\cite{stat_models_decompose}.
 
-First, we take a look at the result of the decomposition of the Oldman basin data set. It is shown in Figure 3.1. The seasonal component of this time series is regular over the years. However, there were significant peaks around the early 1980s, mid-1990s, and around 2005. The streamflow in these periods is higher than anytime else, which indicates that there might be possible heavy rainfalls, floods\cite{hydrology}, or even ecologic disasters. Anomalies in this period can be also found in the residue component, which confirms that there might be odd behaviors happening in these periods. Therefore, quantifying the uncertainty of these three periods would be a challenging task.
+First, we take a look at the result of the decomposition of the Oldman basin data set. It is shown in Figure 3.1. The seasonal component of this time series is regular over the years. However, there were significant peaks around the early 1980s, mid-1990s, and around 2005. The streamflow in these periods is higher than anytime else, which indicates that there might be possible heavy rainfalls, floods~\cite{hydrology}, or even ecologic disasters. Anomalies in this period can be also found in the residue component, which confirms that there might be odd behaviors happening in these periods. Therefore, quantifying the uncertainty of these three periods would be a challenging task.
 
 \begin{figure}
     \centering

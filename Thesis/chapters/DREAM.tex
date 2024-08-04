@@ -1,26 +1,24 @@
 \chapter{The DREAM Algorithm}
-The DREAM algorithm is a Markov Chain Monte Carlo method that is designed for efficient sampling from complex and high-dimensional probability distributions. 
-
-In this chapter, the algorithm is applied to the hydrological model. The output will then be analyzed and compared to the models from the chapters above.
+The DREAM algorithm is a Markov Chain Monte Carlo method that is designed for efficient sampling from complex and high-dimensional probability distributions. In this chapter, the algorithm is applied to the hydrological model. The output will then be analyzed and compared to the models from the chapters above.
 
 \section{Algorithm Introduction}
 The DREAM algorithm is designed based on the fundamental Metropolis-Hastings algorithm and the possibility of parallel execution of the algorithm. It applies differential evolution. It utilizes multiple Markov chains running in parallel to explore the parameter space. Proposals for new sample points are generated using the differences between pairs of chains. This differential evolution property helps to enhance sampling efficiency and convergence. 
 
 
-In the first section, we break down the DREAM algorithm step by step with details explained for individual components.\cite{dream} First, we take a look at the function header. Information regarding input parameter requirements should be provided.
+In the first section, we break down the DREAM algorithm step by step with details explained for individual components~\cite{dream}. First, we take a look at the function header. Information regarding input parameter requirements should be provided.
 
 \begin{algorithm}[H]
-function $[x, p_X]$ \gets \textbf{DREAM}$(prior, pdf, N, n, T, d)$
+function $[x, p\_X]$ \gets \textbf{DREAM}$(prior, pdf, N, n, T, d)$
 \end{algorithm}
 
 The DREAM algorithm takes in several parameters as input. These include:
 \begin{itemize}
-    \item $prior$: The prior distribution of the parameter space
-    \item $pdf$: The probability density function
-    \item $N$: Number of chains
-    \item $n$: Number of generations
-    \item $T$: Thinning factor, which is the implementation of effective sample size in the DREAM algorithm. Only the $T$-th sample will be retained in order to reduce autocorrelation\cite{dream}
-    \item $d$: Dimension of the inferred parameter space
+    \item $prior$: The prior distribution of the parameter space.
+    \item $pdf$: The probability density function.
+    \item $N$: Number of chains.
+    \item $n$: Number of generations.
+    \item $T$: Thinning factor, which is the implementation of effective sample size in the DREAM algorithm. Only the $T$-th sample will be retained in order to reduce autocorrelation~\cite{dream}.
+    \item $d$: Dimension of the inferred parameter space.
 \end{itemize}
 The output would include $x$, which is the sampled chains positions, and their probabilities, which is denoted by $p_X$.
 
@@ -40,15 +38,15 @@ $pCR \gets ones(1, n\_CR) / n\_CR$\\
 
 In this part, most variables that are internally used in this algorithm and not passed as the input parameters are initialized. These include:
 \begin{itemize}
-    \item $delta$: Number chain pairs proposal. As mentioned in the introduction of this chapter, this value is used for observing the differential evolution of the sample space
-    \item $p\_g$: The probability of selecting a specific number of pairs of chains for generating the proposals
-    \item $c$: The scaling factor that controls the step size of the proposal distribution
-    \item $c\_star$: The parameter that is used to adaptively update the scaling factor $c$ during sampling, so that an optimal acceptance rate can be controlled
-    \item $J$: The jump rate. It measures the average distance between successive samples in the parameter space and thus quantifies the effectiveness of the parameter space exploration
-    \item $id$: Chain indices that correspond the jump rate
-    \item $CR$: The crossover rate. It is used to determine the proportion of dimensions in which the state of the generated sample differs from the current state
-    \item $n\_CR$: The number of different crossover values. It allows for adaptive updating of the crossover rates during sampling
-    \item $pCR$: The probability of each crossover rate being selected
+    \item $delta$: Number chain pairs proposal. As mentioned in the introduction of this chapter, this value is used for observing the differential evolution of the sample space.
+    \item $p\_g$: The probability of selecting a specific number of pairs of chains for generating the proposals.
+    \item $c$: The scaling factor that controls the step size of the proposal distribution.
+    \item $c\_star$: The parameter that is used to adaptively update the scaling factor $c$ during sampling, so that an optimal acceptance rate can be controlled.
+    \item $J$: The jump rate. It measures the average distance between successive samples in the parameter space and thus quantifies the effectiveness of the parameter space exploration.
+    \item $id$: Chain indices that correspond the jump rate.
+    \item $CR$: The crossover rate. It is used to determine the proportion of dimensions in which the state of the generated sample differs from the current state.
+    \item $n\_CR$: The number of different crossover values. It allows for adaptive updating of the crossover rates during sampling.
+    \item $pCR$: The probability of each crossover rate being selected.
 \end{itemize}
 
 Next up, we initialize the sample states and probabilities.\\
@@ -57,10 +55,10 @@ $X \gets \textbf{prior}(X, d)$\\
 \For{$i \gets 1$ \kwTo $N$}{
     $p\_X(i, 1) \gets pdf(X(i, :))$
 }
-$x(1, :, 1:d) = \textbf{reshape}(X', [1, N, d]); p\_X(1, 1:N) = p_X'$
+$x(1, :, 1:d) = \textbf{reshape}(X', [1, N, d]); p\_X(1, 1:N) = p\_X'$
 \end{algorithm}
 
-In this segment, the initial states are generated from the prior distribution and stored in $X$. The initial probability of each chain is also computed using the $pdf$ function and stored in $p_X$. They are then reshaped correspondingly.
+In this segment, the initial states are generated from the prior distribution and stored in $X$. The initial probability of each chain is also computed using the $pdf$ function and stored in $p\_X$. They are then reshaped correspondingly.
 
 From now on, the algorithm enters the sample generation phase. It repeats itself until the completion of sample generation. All of the segments below are wrapped inside of a for loop that repeats until $n$ cycles, which is the number of generation steps. The first segment inside of the loop looks like this:
 
@@ -73,10 +71,10 @@ $std\_X = std(X)$
 
 The $\textbf{unifrnd}$ function is a function that generates random numbers from a uniform distribution. Here, we instantiated another few internal variables.
 \begin{itemize}
-    \item $draw$: A list of random numbers, used to determine the order of chain updates
+    \item $draw$: A list of random numbers. They are used to determine the order of chain updates.
     \item $dX$: An array to store proposal differences.
     \item $lambda$: A random variable sampled from a uniform distribution between \(-c\) and \(c\), used for adaptive scaling of the proposal step size.
-    \item $std_X$: The standard deviation of $X$, used later for adaptive scaling.
+    \item $std\_X$: The standard deviation of $X$. It is used later for adaptive scaling.
 \end{itemize}
 
 Moving on to the next segment, we generate the proposals.
@@ -86,7 +84,7 @@ Moving on to the next segment, we generate the proposals.
     $D \gets \textbf{randsample}([1:delta], 1)$\\
     $a = R(i, draw(D, 1))$\\
     $b = R(i, draw(D+1:2*D, 1))$\\
-    $d = \textbf{randsample}(1:n_CR, 1, pCR)$\\
+    $d = \textbf{randsample}(1:n\_CR, 1, pCR)$\\
     $z = \textbf{rand}(1, d)$
     $A = find(z <= CR(d))$
     \If{$len(A) == 0$}{
@@ -98,11 +96,11 @@ Moving on to the next segment, we generate the proposals.
 
 The algorithm loops through every single chain and draws proposals.
 \begin{itemize}
-    \item $D$: Selects a number of differences for the proposal generation
-    \item $a$, $b$: Chain indices, used in the differential evolution proposal
-    \item $d$: Selects a crossover rate using probabilities $pCR$
-    \item $A$: Determines the dimensions that are involved in the crossover. If the dimension turns out to be $0$, we enforce $1$ to be the minimum dimension size
-    \item $gamma\_d$: The scaling factor for the differential evolution proposal. The calculation is based on the number of dimensions and a probability factor $p_g$.
+    \item $D$: Selects a number of differences for the proposal generation.
+    \item $a$, $b$: Chain indices. They are used in the differential evolution proposal.
+    \item $d$: Selects a crossover rate using probabilities $pCR$.
+    \item $A$: Determines the dimensions that are involved in the crossover. If the dimension turns out to be $0$, we enforce $1$ to be the minimum dimension size.
+    \item $gamma\_d$: The scaling factor for the differential evolution proposal. The calculation is based on the number of dimensions and a probability factor $p\_g$.
 \end{itemize}
 
 For the next step, the algorithm focuses on the differential evolution proposal. This is one of the most crucial steps of the DREAM algorithm, making it different from other Markov chain Monte Carlo algorithms.
@@ -118,11 +116,11 @@ $p\_acc \gets \textbf{min}(1, p\_Xp(i, 1) / p\_X(i, 1))$
 In this segment, a few calculations is done to decide whether to accept the proposed move. This is done by generating a uniformly distributed random number and accepting the proposed state if this number is less than or equal to the calculated acceptance probability, namely $p_{acc}$.
 
 \begin{itemize}
-    \item $g$: Selects a number from $gamma_d$ or 1
-    \item $dX$: The actual differential evolution proposal, calculated based on the dimension count of $A$, the variability term $lambda$ that is defined above, and the $g$ selected in the row above
-    \item $Xp$: The newly proposed positions
-    \item $p\_Xp$: Density of the newly proposed positions
-    \item $p\_acc$: The acceptance probability, calculated based on the newly proposed positions and their corresponding probabilities using the Metropolis criterion as the fundamental Metropolis Hastings algorithm
+    \item $g$: Selects a number from $gamma\_d$ or 1.
+    \item $dX$: The actual differential evolution proposal, calculated based on the dimension count of $A$, the variability term $lambda$ that is defined above, and the $g$ selected in the row above.
+    \item $Xp$: The newly proposed positions.
+    \item $p\_Xp$: Density of the newly proposed positions.
+    \item $p\_acc$: The acceptance probability, calculated based on the newly proposed positions and their corresponding probabilities using the Metropolis criterion as the fundamental Metropolis-Hastings algorithm.
 \end{itemize}
 
 Afterward, we accept or reject the samples that are generated, the same as any other Markov chain Monte Carlo algorithm.
@@ -135,7 +133,7 @@ Afterward, we accept or reject the samples that are generated, the same as any o
 \Else{
     $dX(i, 1:d) \gets 0$
 }
-$J(i) \gets J(i) sum((dX(i, 1:d) ./ std_X).^2)$
+$J(i) \gets J(i) sum((dX(i, 1:d) ./ std\_X).^2)$
 $id(i) \gets id(i) + 1$
 \end{algorithm}
 
@@ -156,13 +154,13 @@ What the algorithm does in this part is to reshape and update the density of the
 
 The loop is then ended. The final step of the algorithm is self-explanatory, namely the return phase. It returns the sampled values in the form of chains and ends itself.
 \begin{algorithm}
-    $\textbf{return}\  x, p\_x$
+    $\textbf{return}\  x, p\_X$
 \end{algorithm}
 
-The algorithm itself is originally implemented using MATLAB, though it is later rewritten and offered in multiple packages with different implementation variants. For this thesis, the PyDREAM library\footnote{https://pydream.readthedocs.io/en/latest/index.html} is selected for use. The PyDREAM library brings the DREAM algorithm to the platform of Python with easy installation and usage,\cite{pydream} which is optimal for the use case of this thesis.
+The algorithm itself is originally implemented using MATLAB, though it is later rewritten and offered in multiple packages with different implementation variants. For this thesis, the PyDREAM library\footnote{\url{https://pydream.readthedocs.io/en/latest/index.html}} is selected for use. The PyDREAM library brings the DREAM algorithm to the platform of Python with easy installation and usage~\cite{pydream}, which is optimal for the use case of this thesis.
 
 \section{Evaluation Based on Chains}
-For the DREAM algorithm, there is a set of default input parameters. Therefore, before exploring the influence of the input parameters on the actual output, we first use this set of default input parameters to run the algorithm to observe how the output of the Bayesian inference looks. Since it is an algorithm based on chains, we analyze the sampled results both with and without regard to chains, analogous to the parallel Metropolis-Hastings algorithm. For the test cases, we test the algorithm using $10$, $8$, $5$, and $4$ chains. Numbers of chains lower than $4$ are not possible due to the policy of the DREAM algorithm, stating that the chain amount must be greater than twice the value of DEpairs + 1. The DEpairs parameter describes the pair of differential evolution and ensures there are enough chains to form the required number of DE pairs for proposal generation.
+For the DREAM algorithm, there is a set of default input parameters. Therefore, before exploring the influence of the input parameters on the actual output, we first use this set of default input parameters to run the algorithm to observe how the output of the Bayesian inference looks. Since it is an algorithm based on chains, we analyze the sampled results both with and without regard to chains, analogous to the parallel Metropolis-Hastings algorithm. For the test cases, we test the algorithm using $10$, $8$, $5$, and $4$ chains. Numbers of chains lower than $4$ are not possible due to the policy of the DREAM algorithm, stating that the chain amount must be greater than twice the value of DEpairs + 1. The DEpairs parameter describes the pair of differential evolution and ensures there are enough chains to form the required number of DEpairs for proposal generation.
 
 
 \subsection{Efficiency}
@@ -182,7 +180,7 @@ Unlike the observation made for the parallel Metropolis-Hastings algorithm, the 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/dream/tp_rand_10_3.png}
+    \includegraphics[width=0.8\textwidth]{figures/dream/tp_rand_10_3.png}
     \captionsetup{width=.8\textwidth}
     \caption{Trace plot of the third chain from the DREAM algorithm with 10 chains}
     \label{fig:enter-label}
@@ -190,7 +188,7 @@ Unlike the observation made for the parallel Metropolis-Hastings algorithm, the 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/dream/tp_rand_10_7.png}
+    \includegraphics[width=0.8\textwidth]{figures/dream/tp_rand_10_7.png}
     \captionsetup{width=.8\textwidth}
     \caption{Trace plot of the seventh chain from the DREAM algorithm with 10 chains}
     \label{fig:enter-label}
@@ -198,7 +196,7 @@ Unlike the observation made for the parallel Metropolis-Hastings algorithm, the 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/dream/tp_rand_4_1.png}
+    \includegraphics[width=0.8\textwidth]{figures/dream/tp_rand_4_1.png}
     \captionsetup{width=.8\textwidth}
     \caption{Trace plot of the first chain from the DREAM algorithm with 4 chains}
     \label{fig:enter-label}
@@ -206,7 +204,7 @@ Unlike the observation made for the parallel Metropolis-Hastings algorithm, the 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/dream/tp_rand_4_3.png}
+    \includegraphics[width=0.8\textwidth]{figures/dream/tp_rand_4_3.png}
     \captionsetup{width=.8\textwidth}
     \caption{Trace plot of the third chain from the DREAM algorithm with 4 chains}
     \label{fig:enter-label}
@@ -343,7 +341,7 @@ For the boxplot displayed in Figures 7.17 and 7.19, however, the visualization s
 The last part of this chapter is the input parameter exploration for the DREAM algorithm. Being different from the other Markov chain Monte Carlo algorithms, the DREAM algorithm has a few input parameters that are unique to itself, with another few that are identical to the ones that the other Markov chain Monte Carlo algorithms possess. Explanation alongside analysis of benchmark data are listed below in smaller sections. 
 
 \subsection{Sampling out of Bounds}
-The first input parameter that is investigated is the handling of the sampling out of bounds, which also exists for all of the other algorithms mentioned in this thesis. For the DREAM algorithm, this parameter is called HardBoundaries, which determines whether the samples that are generated out of bounds are going to be reflected or ignored. The result is listed in figure 7.20, where both results show relatively close accuracy and efficiency scores to each other. Even though not by much, the method of reflection performs generally better than the method of ignoring, which makes it a better choice for most use cases of the DREAM algorithm.
+The first input parameter that is investigated is the handling of the sampling out of bounds, which also exists for all of the other algorithms mentioned in this thesis. For the DREAM algorithm, this parameter is called HardBoundaries, which determines whether the samples that are generated out of bounds are going to be reflected or ignored. The result is listed in Figure 7.20, where both results show relatively close accuracy and efficiency scores to each other. Even though not by much, the method of reflection performs generally better than the method of ignoring, which makes it a better choice for most use cases of the DREAM algorithm.
 
 \begin{figure}[H]
     \centering
@@ -355,7 +353,7 @@ The first input parameter that is investigated is the handling of the sampling o
 
 \subsection{Crossover}
 
-In the DREAM algorithm, the concept of crossover is adapted from evolutionary algorithms and specifically implemented to enhance the proposal mechanism in comparison to other Markov chain Metropolis-Hastings algorithms. It is a process of combining information from multiple chains to create new proposal candidates, during which the components of the proposal vector are selectively swapped with corresponding components from other chains based on a crossover probability.\cite{dream} This method helps the algorithm explore the parameter space more efficiently by utilizing differences between chains.
+In the DREAM algorithm, the concept of crossover is adapted from evolutionary algorithms and specifically implemented to enhance the proposal mechanism in comparison to other Markov chain Metropolis-Hastings algorithms. It is a process of combining information from multiple chains to create new proposal candidates, during which the components of the proposal vector are selectively swapped with corresponding components from other chains based on a crossover probability~\cite{dream}. This method helps the algorithm explore the parameter space more efficiently by utilizing differences between chains.
 
 The crossover burn-in is one of the aspects of the crossover concept. It denotes the number of iterations to fit the crossover values, ensuring the algorithm sufficiently adjusts and optimizes the crossover probabilities for effective parameter space exploration. The default value of this input parameter in PyDREAM is 10\%. For testing purposes, however, the algorithm is also run with 0\% (which is denoted as NaN in PyDREAM), 20\%, and 50\%. From the figure shown in 7.21, however, not much differences between the metric scores of all of the configurations are shown, apart from the slightly worse efficiency score of the 0\% case against all of the other cases. This input parameter has, therefore, not that much influence on the Bayesian inference result.
 \begin{figure}[H]
@@ -366,7 +364,7 @@ The crossover burn-in is one of the aspects of the crossover concept. It denotes
     \label{fig:enter-label}
 \end{figure}
 
-Another aspect would be the adaptive crossover, which is responsible for the decision to adjust the crossover probabilities based on the performance of the chains.\cite{dream} This adaptation helps maintain an optimal balance between exploration and exploitation of the parameter space. By default, this option is set, even though we can also turn it off. The algorithm is therefore run in both variants, with the benchmark visualization displayed in figure 7.22. However, there is only minimal difference between the metric scores of both variants, which is completely neglectable. 
+Another aspect would be the adaptive crossover, which is responsible for the decision to adjust the crossover probabilities based on the performance of the chains~\cite{dream}. This adaptation helps maintain an optimal balance between exploration and exploitation of the parameter space. By default, this option is set, even though we can also turn it off. The algorithm is therefore run in both variants, with the benchmark visualization displayed in Figure 7.22. However, there is only minimal difference between the metric scores of both variants, which is completely neglectable. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{figures/dream/adaptive_crossover.png}
@@ -455,7 +453,7 @@ Another mechanism in terms of differential evolution that is applied in the DREA
 \end{figure}
 
 \subsection{Burn In Phase}
-Burn-in phase is another crucial topic for all Markov chain Monte Carlo algorithms. From the analysis in the chapters above, the burn-in phase poses a great influence on the outcome of the Bayesian inference, therefore it is also investigated here. The benchmark result is visualized in Figure 7.30. For the aspect of accuracy, pick the factor over 5, which is the 20\% burn-in phase. The relationship between the efficiency metrics and the configuration is, on the other hand, the complete opposite of the relationship between accuracy metrics and the configuration. The lower factor, which is the 50\% burn-in phase, results in a more efficient run time than the higher factor, which is the 20\% burn-in phase. The selection of the burn-in phase amount then also becomes a trade-off between accuracy and efficiency.
+Burn-in phase is another crucial topic for all Markov chain Monte Carlo algorithms. From the analysis in the chapters above, the burn-in phase poses a great influence on the outcome of the Bayesian inference, therefore it is also investigated here. The benchmark result is visualized in Figure 7.30. For the aspect of accuracy, we pick the factor over 5, which is the 20\% burn-in phase. The relationship between the efficiency metrics and the configuration is, on the other hand, the complete opposite of the relationship between accuracy metrics and the configuration. The lower factor, which is the 50\% burn-in phase, results in a more efficient run time than the higher factor, which is the 20\% burn-in phase. The selection of the burn-in phase amount then also becomes a trade-off between accuracy and efficiency.
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{figures/dream/burn_in.png}
@@ -465,7 +463,7 @@ Burn-in phase is another crucial topic for all Markov chain Monte Carlo algorith
 \end{figure}
 
 \subsection{Effective Sample Size}
-Unlike the burn-in input parameter, the effective sample size shows no patterns that can be found. From the graph shown in figure 7.31, the only information that is presented is the most optimal configuration for accuracy score, namely the effective sample size of $5$, and also the best configuration in terms of efficiency, namely the effective sample size of $2$, $4$ and $5$.
+Unlike the burn-in input parameter, the effective sample size shows no patterns that can be found. From the graph shown in Figure 7.31, the only information that is presented is the most optimal configuration for accuracy score, namely the effective sample size of $5$, and also the best configuration in terms of efficiency, namely the effective sample size of $2$, $4$ and $5$.
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{figures/dream/ess.png}

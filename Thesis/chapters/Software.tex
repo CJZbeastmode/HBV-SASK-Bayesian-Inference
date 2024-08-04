@@ -2,33 +2,33 @@
 In this chapter, a brief documentation of the software implementation of this thesis is given. An overview of the structure will be documented, as well as how to use the implemented framework to perform Bayesian inference using different algorithms.
 
 \section{Structure and Usage}
-The repository\footnote{https://github.com/CJZbeastmode/HBV-SASK-Bayesian-Inference} contains three main subfolders. "Thesis" includes the source file of the actual thesis and "result" includes the benchmarked data and visualization for the thesis. The most important folder regarding the actual software is "implementation", where the implemented algorithm and the data are stored.
+The repository\footnote{\url{https://github.com/CJZbeastmode/HBV-SASK-Bayesian-Inference}} contains three main subfolders. "Thesis" includes the source file of the actual thesis and "Results" includes the benchmarked data and visualization for the thesis. The most important folder regarding the actual software is "Implementation", where the implemented algorithm and the data are stored.
 
 The structure of the algorithm is as follows: the main file that is executed is called "run.py" under the src subfolder. This file is responsible for calling the selected implemented algorithm and executing the Bayesian inference with specified parameters. Specifying the arguments that configure the run time environment can be done by editing the file "run\_config.json" on the root level. This file uses the JSON format to configure the run-time parameters of the software. The requirements or options are documented below:
 
 \begin{itemize}
-    \item configPath (required): the config file that is used for the model
-    \item basis (required): the basis of the data that is used for the model
-    \item mode (required): the mode of the algorithm, options: mh, parallel\_mh, gpmh, dream
-    \item separate\_chains (optional, default=false): to determine whether the output file is supposed to record the data separately by chains, only relevant for algorithms that sample data using multiple chains, including parallel\_mh and dream
-    \item burnin\_fac (optional, default=5): the burn in factor that is used for the result of the MCMC algorithm. The first 1/burnin\_fac percentage of the entire data is going to be discarded
-    \item effective\_sample\_size (optional, default=1): only the every n\_th data is going to be collected. Default 1: no data point is going to be discarded
-    \item output\_file\_name (optional, default="mcmc\_data.out"): the file name of the saved output result
-    \item kwargs (optional): a dictionary in form of JSON that is used for specific algorithm input parameters
+    \item configPath (required): The config file that is used for the model.
+    \item basis (required): The basis of the data that is used for the model.
+    \item mode (required): The mode of the algorithm. Options: mh, parallel\_mh, gpmh, dream.
+    \item separate\_chains (optional, default=false): Determine whether the output file is supposed to record the data separately by chains. They are only relevant for algorithms that sample data using multiple chains, including parallel\_mh and dream.
+    \item burnin\_fac (optional, default=5): The burn in factor that is used for the result of the MCMC algorithm. The first 1/burnin\_fac percentage of the entire data is going to be discarded.
+    \item effective\_sample\_size (optional, default=1): Only the every n\_th data is going to be collected. Default 1: no data point is going to be discarded.
+    \item output\_file\_name (optional, default="mcmc\_data.out"): The file name of the saved output result.
+    \item kwargs (optional): A dictionary in form of JSON that is used for specific algorithm input parameters.
 \end{itemize}
 
 The first parameter, configPath, leads to another configuration file that is used for the hydrological model instantiation. This configuration file for the hydrological model is typically stored in the configuration subfolder under implementation.
 
-After configuring the configuration file, we execute the software by running "run.py". The software then fetches the data from the configuration file, loading the model via model initialization files, which are "construction\_model.py" and "execute\_model.py", and selecting the corresponding algorithm and likelihood function. The algorithm initialization files are stored in the folder run\_mcmc, acting as a preparation for executing the actual algorithms, all of which are stored in the dependencies subfolder on the level before. The different implementations of likelihood functions are stored in the likelihood subfolder. The samples that are generated will be stored as a CSV file as output.
+After configuring the configuration file, we execute the software by running "run.py". The software then fetches the data from the configuration file, loading the model via model initialization functions, which are implemented in "construction\_model.py" and "execute\_model.py", and selecting the corresponding algorithm and likelihood function. The algorithm initialization files are stored in the folder run\_mcmc, acting as a preparation for executing the actual algorithms, all of which are stored in the dependencies subfolder on the level before. The different implementations of likelihood functions are stored in the likelihood subfolder. The samples that are generated will be stored as a CSV file as output.
 
 For the visualization part, the Jupyter notebook file "visualization.ipynb" is provided under the "src" folder. To configure the visualization, the file "viz\_config.json" is used. Individual parameters for configurations are listed below.
 
 \begin{itemize}
-    \item configPath (required): the config file that is used for the model
-    \item basis (required): the basis of the data that is used for the model
-    \item input\_file (required): the data in the input file. It could be seperately recorded or merged
-    \item sep\_viz (optional, default=False): the option to visualize the data by chains. If false, then the entire dataframe is going to be visualized. If true, different chains are going to be visualized individually, before a comparison visualization is going to be given
-    \item monte\_carlo\_repetition (optional, default=1000): the number of iterations for the monte carlo method for the comparison of the Bayesian inference result 
+    \item configPath (required): The config file that is used for the model.
+    \item basis (required): The basis of the data that is used for the model.
+    \item input\_file (required): The data in the input file. It could be seperately recorded or merged.
+    \item sep\_viz (optional, default=False): The option to visualize the data by chains. If false, then the entire dataframe is going to be visualized. If true, different chains are going to be visualized individually, before a comparison visualization is going to be given.
+    \item monte\_carlo\_repetition (optional, default=1000): The number of iterations for the monte carlo method for the comparison of the Bayesian inference result.
 \end{itemize}
 
 \section{Algorithm Specification}
@@ -36,52 +36,52 @@ As mentioned in the parameter explanation in the last section, "kwargs" indicate
 
 Configurations for the fundamental Metropolis-Hastings algorithm include:
 \begin{itemize}
-    \item version (optional, default="ignoring"): version of the MH algorithm. Options: ignoring, refl\_bound, aggr
-    \item sd\_transition\_factor (optional, default=6): the standard deviation factor of the transition kernel. The standard deviation is given by (upper bound - lower bound) / sd\_transition\_factor
-    \item likelihood\_sd (optional, default=1): the standard deviation parameter for independent likelihood function, or the standard deviation parameter factor for dependent likelihood function (standard deviation: likelihood\_sd * y\_error)
-    \item likelihood\_dependence (optional, required if likelihood\_sd is present, default=False): to select whether to use the dependent likelihood function or the independent likelihood function
-    \item max\_probability (optional, default=False): the acceptance rate will take the maximum probability value of the acceptance rate array if set true, otherwise the mean
-    \item iterations (optional, default=10000): number of iterations
-    \item init\_method (optional, default="random"): specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior
+    \item version (optional, default="ignoring"): Version of the MH algorithm. Options: ignoring, refl\_bound, aggr.
+    \item sd\_transition\_factor (optional, default=6): The standard deviation factor of the transition kernel. The standard deviation is given by (upper bound - lower bound) / sd\_transition\_factor.
+    \item likelihood\_sd (optional, default=1): The standard deviation parameter for independent likelihood function, or the standard deviation parameter factor for dependent likelihood function (standard deviation: likelihood\_sd * y\_error).
+    \item likelihood\_dependence (optional, required if likelihood\_sd is present, default=False): To select whether to use the dependent likelihood function or the independent likelihood function.
+    \item max\_probability (optional, default=False): The acceptance rate will take the maximum probability value of the acceptance rate array if set true, otherwise the mean.
+    \item iterations (optional, default=10000): Number of iterations.
+    \item init\_method (optional, default="random"): Specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior.
 \end{itemize}
 
 Configurations for the parallel Metropolis-Hastings algorithm include:
 \begin{itemize}
-    \item version (optional, default="ignoring"): version of the MH algorithm. Options: ignoring, refl\_bound, aggr
-    \item chains (optional, default=4): number of chains
-    \item sd\_transition\_factor (optional, default=6): the
-    standard deviation factor of the transition kernel. The standard deviation is given by (upper bound - lower bound) / sd\_transition\_factor
-    \item likelihood\_sd (optional, default=1): the standard deviation parameter for independent likelihood function, or the standard deviation parameter factor for dependent likelihood function (standard deviation: likelihood\_sd * y\_error).
-    \item likelihood\_dependence (optional, required if likelihood\_sd is present, default=False): to select whether to use the dependent likelihood function or the independent likelihood function
-    \item max\_probability (optional, default=False): the acceptance rate will take the maximum probability value of the acceptance rate array if set true, otherwise the mean
-    \item iterations (optional, default=2500): number of iterations
-    \item init\_method (optional, default="random"): specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior
+    \item version (optional, default="ignoring"): Version of the MH algorithm. Options: ignoring, refl\_bound, aggr.
+    \item chains (optional, default=4): Number of chains.
+    \item sd\_transition\_factor (optional, default=6): The
+    standard deviation factor of the transition kernel. The standard deviation is given by (upper bound - lower bound) / sd\_transition\_factor.
+    \item likelihood\_sd (optional, default=1): The standard deviation parameter for independent likelihood function, or the standard deviation parameter factor for dependent likelihood function (standard deviation: likelihood\_sd * y\_error).
+    \item likelihood\_dependence (optional, required if likelihood\_sd is present, default=False): Selects whether to use the dependent likelihood function or the independent likelihood function.
+    \item max\_probability (optional, default=False): The acceptance rate will take the maximum probability value of the acceptance rate array if set true, otherwise the mean.
+    \item iterations (optional, default=2500): Number of iterations.
+    \item init\_method (optional, default="random"): Specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior.
 \end{itemize}
 
 Configurations for the general parallel Metropolis-Hastings algorithm include:
 \begin{itemize}
-    \item num\_proposals (optional, default=8): the numbers of proposal points in each iteration
-    \item num\_accepted (optional, default=4): the numbers of accepted points in each iteration
-    \item likelihood\_sd (optional, default=1): the standard deviation parameter for independent likelihood function, or the standard deviation parameter factor for dependent likelihood function (standard deviation: likelihood\_sd * y\_error).
-    \item likelihood\_dependence (optional, required if likelihood\_sd is present, default=False): to select whether to use the dependent likelihood function or the independent likelihood function
-    \item sd\_transition\_factor (optional, default=6): the standard deviation factor of the transition kernel. The standard deviation is given by (upper bound - lower bound) / sd\_transition\_factor
-    \item version (optional, default="ignoring"): version of the MH algorithm. Options: ignoring, refl\_bound, aggr
-    \item iterations (optional, default=2500): number of iterations
-    \item init\_method (optional, default="random"): specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior
+    \item num\_proposals (optional, default=8): The numbers of proposal points in each iteration.
+    \item num\_accepted (optional, default=4): The numbers of accepted points in each iteration.
+    \item likelihood\_sd (optional, default=1): The standard deviation parameter for independent likelihood function, or the standard deviation parameter factor for dependent likelihood function (standard deviation: likelihood\_sd * y\_error).
+    \item likelihood\_dependence (optional, required if likelihood\_sd is present, default=False): Selects whether to use the dependent likelihood function or the independent likelihood function.
+    \item sd\_transition\_factor (optional, default=6): The standard deviation factor of the transition kernel. The standard deviation is given by (upper bound - lower bound) / sd\_transition\_factor.
+    \item version (optional, default="ignoring"): Version of the MH algorithm. Options: ignoring, refl\_bound, aggr.
+    \item iterations (optional, default=2500): Number of iterations.
+    \item init\_method (optional, default="random"): Specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior.
 \end{itemize}
 
-Configurations for the DREAM algorithm include\footnote{More information regarding specifications can be found on https://pydream.readthedocs.io/en/latest/pydream.html}:
+Configurations for the DREAM algorithm include\footnote{More information regarding specifications can be found on \url{https://pydream.readthedocs.io/en/latest/pydream.html}}:
 \begin{itemize}
-    \item iterations (optional, default=1250): number of iterations
-\item chains (optional, default=8): number of chains
-\item DEpairs (optional, default=1)
-\item multitry (optional, default=False)
-\item hardboundaries (optional, default=True)
-\item crossover\_burnin (optional, default=0)
-\item nCR (optional, default=3)
-\item snooker (optional, default=0)
-\item p\_gamma\_unity (optional, default=0)
-\item init\_method (optional, default="random"): specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior
+    \item iterations (optional, default=1250): Number of iterations.
+\item chains (optional, default=8): Number of chains.
+\item DEpairs (optional, default=1): Number of chain pairs to use for crossover and selection of next point.
+\item multitry (optional, default=False): Whether to utilize multi-try sampling. It takes boolean or integer values.
+\item hardboundaries (optional, default=True): Whether to relect point back into bounds of hard prior.
+\item crossover\_burnin (optional, default=0): Number of iterations to fit the crossover values.
+\item nCR (optional, default=3): Number of crossover values to sample from during run.
+\item snooker (optional, default=0): Probability of proposing a snooker update.
+\item p\_gamma\_unity (optional, default=0): Probability of proposing a point with gamma=unity.
+\item init\_method (optional, default="random"): specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior.
 \item likelihood\_sd (optional, default=1): the standard deviation parameter for independent likelihood function, or the standard deviation parameter factor for dependent likelihood function (standard deviation: likelihood\_sd * y\_error).
-\item likelihood\_dependence (optional, required if likelihood\_sd is present, default=False): to select whether to use the dependent likelihood function or the independent likelihood function  
+\item likelihood\_dependence (optional, required if likelihood\_sd is present, default=False): to select whether to use the dependent likelihood function or the independent likelihood function.
 \end{itemize}
