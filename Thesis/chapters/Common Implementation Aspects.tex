@@ -1,0 +1,44 @@
+\chapter{Common Implementation Aspects}
+In the next four chapters, four different algorithms of Markov chain Monte Carlo are discussed in this thesis. Different setups are going to be tested for different algorithms so that the gathered results can be analyzed. However, certain common aspects are shared among the background and analysis of all these four algorithms. These are detailed in this chapter.
+
+\section{Hardware Specification and Required Frameworks}
+All of the code that is run and tested in this thesis is run on a single computation machine, namely the MacBook Pro 2021 by Apple Inc. It has an Apple M1 Pro chip, which has an ARM architecture. It has 10 CPU cores, 8 of which are for performance and the rest are for efficiency. It has a RAM of 32 GB and also 16 GPUs available\footnote{\url{https://support.apple.com/en-us/111902}}. The entire code is run on macOS Sonama 14.4.1.
+
+The software implementation of the fundamental Metropolis-Hastings algorithm is rather basic. Since the sample space is multivariate, the calculation involves operation between vectors. To ease the process of these calculations, the popular software package of Numpy is used~\cite{numpy}. Additionally, the Tensorflow Probability package is used. It does not only offer implemented probability distribution functions, but also randomness and sampling functions~\cite{tfp}. To use the Tensorflow Probability framework, the software package Tensorflow is required to be installed\footnote{\url{https://www.tensorflow.org/probability}}. For the visualization part, standard data visualization libraries including Matplotlib and Seaborn are used for the creation of histograms, kernel density estimation, and boxplots~\cite{plt}.
+
+\section{Evaluation Metrics}
+To determine which configuration of the algorithm delivers better results, evaluation metrics need to be set up. All of the algorithms run in this thesis are evaluated in accuracy and efficiency. The accuracy measures how closely the outcome of the algorithm aligns with the actual measured data, whereas the efficiency keeps track of the run time of each algorithm run.
+
+To quantify the accuracy, we need to introduce metrics that can calculate the accuracy of the Bayesian inference results. First, we calculate the mean of the absolute difference between the calculated time series run by the model and the measured time series. By calculating the absolute difference, the similarity of the times series could be well quantified. Afterward, two metrics that are used to test the goodness of fit are calculated, namely root mean square error (RMSE) and mean absolute error (MAE). The RMSE is a metric that is often used to evaluate the model performance in climate research studies and ecology. The calculation is as follows: 
+
+\begin{align}
+\text{RMSE} = \sqrt{\frac 1 n \sum_{i=1}^n (y_i - \hat{y_i})^2}
+\end{align}
+
+The square root in RMSE plays an important role. On the one hand, RMSE penalizes larger discrepancies more severely by squaring the errors~\cite{RMSE_discrepency_penalty}. Moreover, it helps to stabilize the variance of the error terms, making it particularly useful in the use case of this paper, since the usage of standard deviation and variances are present in the implementation~\cite{RMSE_MAE}.
+
+The MAE is another widely used metric for model performance evaluation~\cite{RMSE_MAE}.
+
+\begin{align}
+\text{MAE} = \frac 1 n \sum_{i=1}^n |y_i - \hat{y_i}|
+\end{align}
+
+Calculating the average of absolute errors means that it is easier to understand and interpret the calculation directly. Besides, due to the less impact of anomalies on the metric~\cite{RMSE_MAE}, MAE can offer a more robust estimate in contexts when extreme values are expected to be anomalies.
+
+The whole process of evaluation of the results is going to look like this. 
+To collect this result, we first randomly generate 1000 samples from the given posterior using the Monte Carlo simulation~\cite{monte_carlo_simulation} and take the mean. The results of the calculation are saved as "posterior mean". Calculating the mean value, which generalizes the entire results, would allow us to observe the actual accuracy of the result since every single individual time series contributes to the calculation process. Next, the maximum value of each timestamp is also found, so that we can observe how extreme the posterior samples could be. The result is then saved as "posterior max", which would indicate how stable the sampling process is. If the posterior max does not differ much from the posterior mean, then the entire sampling space is stable. Otherwise, the individual samples vary too much from each other, causing destabilization. These two time series are then compared to the "prior mean" time series, which is the mean of all the calculated time series of the model that takes samples from prior as input, to observe how much the prior distribution influences the result. After calculating all of the above, a visualization is going to be done so that these results can be compared to each other. 
+
+For simplicity, we only use the Oldman Basin dataset for the algorithm to perform sampling. For the exploration phase, the model will be run and evaluated on the same training dataset, so that we can observe how well the trained posterior fits the data on which it is trained. For the actual evaluation, the model will be run on the training dataset, whereas the accuracy score will be evaluated from a testing data set. The year 2005 of the Oldman Basin dataset is selected, not only because the data is recent enough, but also because the data contain both calm periods and anomalies. 
+
+Apart from the accuracy test, efficiency also plays an important role in the MCMC algorithms~\cite{MCMC_efficiency}. To test the efficiency, the run times of different implementations are going to be recorded, so that a comparison can be done later and we can infer which factors have impacts on the computation time.
+
+\section{Visualization}
+Visualizations directly improve our understanding of the results and play an indispensable role in this thesis, where different plotting mechanisms are applied. In this section, all of the plots that are used in this thesis are described.
+
+For the use case of the Bayesian inference problem, two types of visualizations are necessary. First, we need to know how the individual parameter distributes in the posterior probability. The result of the Metropolis-Hastings is a multidimensional list of values, representing the calculated posterior. For each parameter, a separate histogram is generated. Alongside the histogram is the Kernel Density Estimation (KDE) graph. It is used to estimate the probability density function of a random variable based on a data sample by averaging contributions from specific kernel functions that are centered at each data point~\cite{kde}. By combining the histogram and the KDE graph, an overview of the general distribution of the posterior can be understood.
+
+However, if the histogram and the KDE plot resemble the prior distribution, little or no useful information can be retrieved. Therefore, we can visualize the data using boxplots to get specific information on the distributions of the posterior of each parameter. The data we can read from the boxplot are the locations of different samples so that we can know how many samples are located under the first quantile, above the third quantile, or the median. It provides us with an easier understanding by explaining the locations of all of the samples in the posterior distribution.
+
+At the very end of the parameters visualization, the calculated results are going to be compared. The four times series including posterior mean, posterior max, prior mean and measured data, which are mentioned before, are going to be plotted on the same graph so that the results can be visually compared.
+
+The other type of visualization is presented during the exploration phase of the input algorithm parameters. The charts present the relations between the input algorithm parameter configurations and the metrics results. If the configuration is the form of numeric values, the line plot is drawn, so that a possible existing trend could be detected. If the configuration contains categorical values, then a bar chart is drawn instead. By plotting the metrics against the configuration, a clear comparison of the results calculated by different sets of input algorithm parameters is provided.
