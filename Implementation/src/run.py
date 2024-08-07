@@ -64,15 +64,14 @@ if __name__ == "__main__":
     burnin = int(total_iterations / nchains / burnin_fac)
     if chain_algo:
         for i in range(nchains):
-            sampled_params[i] = np.array(sampled_params[i])[burnin:]
+            sampled_params[i] = sampled_params[i][burnin:]
     else:
-        sampled_params = np.array(sampled_params)[burnin:]
+        sampled_params = sampled_params[burnin:]
 
     if "effective_sample_size" in run_config:
         ess = run_config["effective_sample_size"]
     else:
         ess = 1
-    sampled_params = sampled_params[::ess]
     if chain_algo:
         for i in range(nchains):
             sampled_params[i] = sampled_params[i][::ess]

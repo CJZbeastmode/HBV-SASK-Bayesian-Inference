@@ -129,5 +129,33 @@ For the rest of the input algorithm parameters, detailed explanations are spared
     \item Effective Sample Size: No big differences of both metrics across different input values.
 \end{itemize}
 
-\section{Comparison of General Parallel Metropolis-Hastings with the Fundamental Implementation}
-After performing an analysis of the general parallel Metropolis-Hastings algorithm, a comparison of it and the fundamental Metropolis-Hastings algorithm is made here. For most cases, the RMSE score of the algorithm is around $12$ and the MAE score is around $5$. This improves significantly from the fundamental Metropolis-Hastings algorithm, which delivers an RMSE score of around $20$ and an MAE score of around $9$. However, the fastest run of the fundamental Metropolis-Hastings algorithm is around $1400$ seconds in comparison to around $4000$ seconds of the general parallel Metropolis-Hastings algorithm. Between better efficiency and better accuracy, there is a trade-off that needs to be considered.
+\section{Parameter Overview and Comparison with the Fundamental Implementation}
+After performing a detailed analysis, the general parallel Metropolis-Hastings algorithm is run for one more time, so that the data output is gathered and used to be visualized. The Bayesian inference is run on the same dataset as one of the fundamental Metropolis-Hastings algorithms so that a direct comparison can be made. 
+
+The first graph gives an overview of the posterior distribution after the calibration. More information can be extracted from this posterior than one of the fundamental Metropolis-Hastings since there are regions for each parameter that gather more samples than others. Obvious peaks are presented so that the general shape of the posterior can be observed. The boxplots of all dimensions also display an aggregation of values from certain regions, making the parameters appear more concentrated and potentially indicating regions of higher posterior density. Therefore, we can conclude that the general parallel Metropolis-Hastings is a better choice than the fundamental Metropolis-Hastings in terms of the parameter calibration under uncertainty.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/gpmh/parameter_overview.png}
+    \captionsetup{width=.8\textwidth}
+    \caption{Overview of the posterior distribution of the parameters calibrated by the general parallel Metropolis-Hastings algorithm}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{figures/gpmh/boxplot.png}
+    \captionsetup{width=.8\textwidth}
+    \caption{Boxplots of the generated posterior samples of each parameter calibrated by the general parallel Metropolis-Hastings algorithm}
+    \label{fig:enter-label}
+\end{figure}
+
+In terms of accuracy, the RMSE score of the algorithm is around $19$ and the MAE score is around $8.5$ for most cases. This improves from the fundamental Metropolis-Hastings algorithm to a certain extent, which delivers an RMSE score of around $22$ and an MAE score of around $11$. However, the fastest run of the fundamental Metropolis-Hastings algorithm is around $1400$ seconds in comparison to around $4000$ seconds of the general parallel Metropolis-Hastings algorithm. Between better efficiency and better accuracy, there is a trade-off that needs to be considered.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{figures/gpmh/inferred.png}
+    \captionsetup{width=.8\textwidth}
+    \caption{Comparison of Bayesian inference results of the general parallel Metropolis-Hastings with tuned input algorithm parameters}
+    \label{fig:enter-label}
+\end{figure}
