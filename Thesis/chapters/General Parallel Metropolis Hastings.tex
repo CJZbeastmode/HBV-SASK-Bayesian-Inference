@@ -20,7 +20,7 @@ We then calculate the stationary acceptance distribution. It is denoted as $\pi$
 M\pi = b
 \end{equation}
 
-After acquiring the acceptance rate vector, we construct a probability space using it, in which we calculate the sum of the vector and then normalize it. Using this vector, we generate $n$ samples from it, including the sample that was generated before. We iterate this process for a certain amount of time and receive the result. To sum up the entire process, we use pseudo-code to illustrate it.
+After acquiring the acceptance probability vector, we construct a probability space using it, in which we calculate the sum of the vector and then normalize it. Using this vector, we generate $n$ samples from it, including the sample that was generated before. We iterate this process for a certain amount of time and receive the result. To sum up the entire process, we use pseudo-code to illustrate it.
 \\
 
 
@@ -48,7 +48,7 @@ After acquiring the acceptance rate vector, we construct a probability space usi
         acceptance\_rates = acceptance\_rate\_calculation(generated\_samples)
         
         \tcp{Decide to accept or reject the new sample}
-        \tcp{random\_sampling is a function that takes two parameters, sampling randomly the number of times given in the first parameter from the array given in the second parameter using the acceptance rate provided in the third parameter}
+        \tcp{random\_sampling is a function that takes two parameters, sampling randomly the number of times given in the first parameter from the array given in the second parameter using the acceptance probability provided in the third parameter}
         res $\leftarrow$ random\_sampling(num\_accepted, num\_proposed, acceptance\_rates)\\
         samples.append(res)\\
         old = random(res)

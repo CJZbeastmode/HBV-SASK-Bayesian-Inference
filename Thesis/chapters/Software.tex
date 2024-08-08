@@ -40,7 +40,7 @@ Configurations for the fundamental Metropolis-Hastings algorithm include:
     \item sd\_transition\_factor (optional, default=6): The standard deviation factor of the transition kernel. The standard deviation is given by (upper bound - lower bound) / sd\_transition\_factor.
     \item likelihood\_sd (optional, default=1): The standard deviation parameter for independent likelihood function, or the standard deviation parameter factor for dependent likelihood function (standard deviation: likelihood\_sd * y\_error).
     \item likelihood\_dependence (optional, required if likelihood\_sd is present, default=False): To select whether to use the dependent likelihood function or the independent likelihood function.
-    \item max\_probability (optional, default=False): The acceptance rate will take the maximum probability value of the acceptance rate array if set true, otherwise the mean.
+    \item max\_probability (optional, default=False): The acceptance probability will take the maximum probability value of the acceptance probability array if set true, otherwise the mean.
     \item iterations (optional, default=10000): Number of iterations.
     \item init\_method (optional, default="random"): Specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior.
 \end{itemize}
@@ -53,7 +53,7 @@ Configurations for the parallel Metropolis-Hastings algorithm include:
     standard deviation factor of the transition kernel. The standard deviation is given by (upper bound - lower bound) / sd\_transition\_factor.
     \item likelihood\_sd (optional, default=1): The standard deviation parameter for independent likelihood function, or the standard deviation parameter factor for dependent likelihood function (standard deviation: likelihood\_sd * y\_error).
     \item likelihood\_dependence (optional, required if likelihood\_sd is present, default=False): Selects whether to use the dependent likelihood function or the independent likelihood function.
-    \item max\_probability (optional, default=False): The acceptance rate will take the maximum probability value of the acceptance rate array if set true, otherwise the mean.
+    \item max\_probability (optional, default=False): The acceptance probability will take the maximum probability value of the acceptance probability array if set true, otherwise the mean.
     \item iterations (optional, default=2500): Number of iterations.
     \item init\_method (optional, default="random"): Specify the starting state of the Dream MCMC algorithm. Options: random, min, max, q1\_prior, mean\_prior, q3\_prior, q1\_posterior, median\_posterior, q3\_posterior.
 \end{itemize}
